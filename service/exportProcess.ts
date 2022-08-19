@@ -49,7 +49,7 @@ export class ExportProcess {
       keys += ') '
       values += '); \n'
       sql += `insert into t_proc_custom ` + keys.replace(',)', ')') + 'values' + values.replace(',)', ')')
-      sql.replace(`"`,`\\\"`)
+      sql = sql.replace('"', '/\"')
       console.log(sql)
     }
     // 2.添加更新状态语句
