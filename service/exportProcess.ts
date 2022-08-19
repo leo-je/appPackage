@@ -26,30 +26,37 @@ export class ExportProcess {
       for (let key in e) {
         keys += `\`${key}\`,`;
         console.log("key: " + key + " type: " + typeof e[key])
-        if (typeof e[key] === 'object') {
+        if (typeof e[key] === 'string') {
+          values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+        } else if (typeof e[key] === 'object') {
           try {
             let time = moment(e[key]).format(
               "YYYY-MM-DD HH:mm:ss"
             );
             if (time === 'Invalid date') {
-              values += `'${e[key]}',`;
+              values += `'${e[key].replace(/\'/g, '\\\'')}',`;
             } else {
               values += `'${time}',`;
             }
           } catch {
-            values += `${e[key]}'',`;
+            if (e[key] === 'NULL') {
+              values += `${e[key]},`;
+            } else {
+              values += `'${e[key]}',`;
+            }
           }
         } else if (typeof e[key] === 'number') {
           values += `${e[key]},`;
         } else {
-          values += `'${e[key]},`;
+          values += `'${e[key].replace(/\'/g, '\\\'')}',`;
         }
 
       }
       keys += ') '
       values += '); \n'
       sql += `insert into t_proc_custom ` + keys.replace(',)', ')') + 'values' + values.replace(',)', ')')
-      sql = sql.replace('"', '/\"')
+      sql = sql.replace(/\"/g, '\\"')
+      // sql = sql.replace(/\'/g, '\\\'')
       console.log(sql)
     }
     // 2.添加更新状态语句
