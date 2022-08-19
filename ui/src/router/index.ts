@@ -8,6 +8,18 @@ const routerInfos: Array<RouterInfo> = [
         path: '/',
         name: 'index',
         componentPath: '../view/index.vue',
+        children: [
+            {
+                path: '/',
+                name: 'exportProcess',
+                componentPath: '../view/exportProcess.vue',
+            },
+            {
+                path: '/appPackage',
+                name: 'appPackage',
+                componentPath: '../view/appPackage.vue',
+            }
+        ]
     },
     {
         path: '/401',

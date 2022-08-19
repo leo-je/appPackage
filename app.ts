@@ -7,6 +7,9 @@ import { FileInfoService } from './service/fileInfoService';
 import { AppPackageSergvice } from './service/appPackageSergvice';
 import { JwtService } from './service/jwtService';
 import { UserService } from './service/userService';
+
+import { ExportProcess } from './service/exportProcess';
+
 import cookieparser  from 'cookie-parser'
 
 
@@ -19,6 +22,7 @@ let wsApp = expressWS(app).app;
 let webSocketService = new WebSocketService(wsApp);
 
 let fileInfoService = new FileInfoService();
+let exportProcess = new ExportProcess();
 let appPackageSergvice = new AppPackageSergvice(webSocketService);
 
 // 中间件
@@ -70,6 +74,10 @@ app.post("/api/delete/:fileName", (req, res) => {
 
 app.post("/api/cancelPackageApp", (req, res) => {
     appPackageSergvice.cancelPackageApp(req, res)
+})
+
+app.post("/api/process/create", async (req, res) => {
+    exportProcess.create(req, res)
 })
 
 app.listen(port, () => {
