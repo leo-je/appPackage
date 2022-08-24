@@ -27,7 +27,9 @@
       <el-col :span="2">
       </el-col>
       <el-col :span="10">
-        <el-input v-model="sql" :rows="10" type="textarea" placeholder="" :disabled="true" />
+        <div style="margin-top: 20px;">
+          <el-input v-model="sql" :rows="10" type="textarea" placeholder="" :readonly="true" />
+        </div>
       </el-col>
       <el-col :span="12">
       </el-col>
@@ -36,9 +38,10 @@
       <el-col :span="10">
       </el-col>
       <el-col :span="2">
-        <el-button type="success" @click="downFile">下载</el-button>
-        <el-button type="success" @click="copySql">复制
-        </el-button>
+        <div style="margin-top: 20px;">
+          <el-button type="success" @click="downFile">下载</el-button>
+          <el-button type="success" @click="copySql">复制</el-button>
+        </div>
       </el-col>
       <el-col :span="12">
       </el-col>
@@ -106,7 +109,7 @@ export default defineComponent({
       // 获取需要复制的元素以及元素内的文本内容
       const text = this.sql
       // 添加一个input元素放置需要的文本内容
-      const copyContent = document.createElement('input');
+      const copyContent = document.createElement('textarea');
       copyContent.value = text;
       document.body.appendChild(copyContent);
       // 选中并复制文本到剪切板

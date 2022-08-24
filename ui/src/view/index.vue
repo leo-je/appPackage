@@ -69,13 +69,9 @@ export default defineComponent({
   background-color: #e9eef3;
   color: var(--el-text-color-primary);
   text-align: center;
-  line-height: 160px;
+  // line-height: 160px;
   height: 100%;
   width: 100%;
-}
-
-body>.el-container> {
-  margin-bottom: 40px;
 }
 
 .el-container>:nth-child(5) .el-aside,

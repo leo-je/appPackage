@@ -1,6 +1,5 @@
 <template>
   <div id="appPackage">
-    <!-- <el-container> -->
       <!-- <el-header class="container-header">package caih App</el-header> -->
       <el-container>
         <el-main class="command-main">
@@ -21,7 +20,7 @@
 
               <el-col :span="4">-->
               <el-button type="primary" @click="openLogWindows">查看日志</el-button>
-              <!-- <el-button type="primary" @click="openSSHWindows">打开cmd</el-button> -->
+              <el-button type="primary" @click="openSSHWindows">打开cmd</el-button>
             </el-col>
           </el-row>
 
@@ -34,6 +33,7 @@
                   }}</el-button>
                 </template>
               </el-table-column>
+              <el-table-column prop="size" label="文件大小" width="180" />
               <el-table-column prop="updateTime" label="更新时间" width="180" />
               <el-table-column prop="addr" label>
                 <template #default="scope">
@@ -46,7 +46,6 @@
           </el-row>
         </el-main>
       </el-container>
-    <!-- </el-container> -->
 
     <el-dialog v-model="sshDialogVisible"  append-to-body="true" title="cmd" width="80%" @opened="onSShOpened">
       <div id="terminal" ref="terminalRef"></div>
@@ -329,10 +328,6 @@ export default defineComponent({
   color: var(--el-text-color-primary);
   text-align: center;
   /* line-height: 160px; */
-}
-
-body>.el-container {
-  margin-bottom: 40px;
 }
 
 .command-button {
