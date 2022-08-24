@@ -4,7 +4,7 @@ const config = {
         loginPath: "/oauth/login",
     },
     appRootDirPath: '/Users/shengte/',
-    appreleaseDirPath: 'java/',
+    appreleaseDirPath: 'logs/',
     db: {
         connection: {
             mysql: {

@@ -1,53 +1,55 @@
 <template>
   <div id="appPackage">
-      <!-- <el-header class="container-header">package caih App</el-header> -->
-      <el-container>
-        <el-main class="command-main">
-          <el-row class="command-button">
-            <el-col :span="2">
-              <el-button type="primary" @click="getFileList">刷新列表</el-button>
-            </el-col>
-            <el-col :span="3">
-              <el-input v-model="branch" placeholder="请输入分支名称" />
-            </el-col>
+    <!-- <el-header class="container-header">package caih App</el-header> -->
+    <el-row class="command-button">
+      <el-col :span="2" />
+      <el-col :span="1">
+        <el-button type="primary" @click="getFileList">刷新列表</el-button>
+      </el-col>
+      <el-col :span="4">
+        <el-input style="margin-left: 22px;" v-model="branch" placeholder="请输入分支名称" />
+      </el-col>
 
-            <el-col :span="10">
-              <el-button type="primary" @click="packageUatApp">uat打包</el-button>
-              <el-button type="primary" @click="packageDebugApp">debug打包</el-button>
-              <el-button type="primary" @click="packageProdApp">prod打包</el-button>
-              <!-- <el-button type="primary" @click="cancelPackageApp">取消打包</el-button> -->
-              <!-- </el-col>
+      <el-col :span="6">
+        <el-button type="primary" @click="packageUatApp">uat打包</el-button>
+        <el-button type="primary" @click="packageDebugApp">debug打包</el-button>
+        <el-button type="primary" @click="packageProdApp">prod打包</el-button>
+        <!-- <el-button type="primary" @click="cancelPackageApp">取消打包</el-button> -->
+        <!-- </el-col>
 
               <el-col :span="4">-->
-              <el-button type="primary" @click="openLogWindows">查看日志</el-button>
-              <el-button type="primary" @click="openSSHWindows">打开cmd</el-button>
-            </el-col>
-          </el-row>
+        <el-button type="primary" @click="openLogWindows">查看日志</el-button>
+        <!-- <el-button type="primary" @click="openSSHWindows">打开cmd</el-button> -->
+      </el-col>
+      <el-col :span="11"></el-col>
+    </el-row>
 
-          <el-row class="file-list">
-            <el-table :data="tableData" border style="width: 100%">
-              <el-table-column prop="fileName" label="文件名" width="240">
-                <template #default="scope">
-                  <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">{{
-                      tableData[scope.$index]["fileName"]
-                  }}</el-button>
-                </template>
-              </el-table-column>
-              <el-table-column prop="size" label="文件大小" width="180" />
-              <el-table-column prop="updateTime" label="更新时间" width="180" />
-              <el-table-column prop="addr" label>
-                <template #default="scope">
-                  <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">下载</el-button>
-                  <el-button type="text" size="small" @click.prevent="deleteRow(scope.$index, tableData)">删除
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-row>
-        </el-main>
-      </el-container>
+    <el-row class="file-list">
+      <el-col :span="2"></el-col>
+      <el-col :span="10">
+        <el-table :data="tableData" border style="width: 100%">
+          <el-table-column prop="fileName" label="文件名" width="240">
+            <template #default="scope">
+              <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">{{
+                  tableData[scope.$index]["fileName"]
+              }}</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column prop="size" label="文件大小" width="180" />
+          <el-table-column prop="updateTime" label="更新时间" width="180" />
+          <el-table-column prop="addr" label>
+            <template #default="scope">
+              <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">下载</el-button>
+              <el-button type="text" size="small" @click.prevent="deleteRow(scope.$index, tableData)">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+      <el-col :span="12"></el-col>
+    </el-row>
 
-    <el-dialog v-model="sshDialogVisible"  append-to-body="true" title="cmd" width="80%" @opened="onSShOpened">
+    <el-dialog v-model="sshDialogVisible" append-to-body="true" title="cmd" width="80%" @opened="onSShOpened">
       <div id="terminal" ref="terminalRef"></div>
     </el-dialog>
 
@@ -57,7 +59,8 @@
           'background-color': 'black',
           color: 'white',
           'font-size': '14px',
-          'font-weight': 'bold'
+          'font-weight': '400',
+          'font-family': 'monospace'
         }"></el-input>
     </el-dialog>
   </div>
@@ -322,27 +325,10 @@ export default defineComponent({
 
 
 <style lang="scss"  scoped>
-
-.command-main {
-  background-color: #e9eef3;
-  color: var(--el-text-color-primary);
-  text-align: center;
-  /* line-height: 160px; */
-}
-
-.command-button {
-  line-height: 20px;
-}
-
 .file-list {
   margin-top: 20px;
   /* line-height: 600px; */
 }
 
-.logtext {
-  background-color: black;
-  color: white;
-  font-size: 14px;
-  font-weight: bold;
-}
+
 </style>

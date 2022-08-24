@@ -11,6 +11,15 @@ const headers = {
   'Content-Type': 'application/json;charset=UTF-8'
 }
 
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
 export class FileInfoService {
   getFileList = async (request: Request, response: Response) => {
     // 获取资源文件的绝对路径
@@ -34,16 +43,18 @@ export class FileInfoService {
             for (let i = 0; i < files.length; i++) {
               let stat = fs.statSync(path.join(filePath, files[i]));
               if (stat.isFile()) {
+                // console.log(stat)
                 data.push({
                   fileName: files[i],
                   updateTime: stat.mtime,
-                  addr: '/' + files[i]
+                  addr: '/' + files[i],
+                  size: formatBytes(stat.size)
                 });
               }
 
             }
             json["data"] = data
-            console.log(json)
+            // console.log(json)
             response.send(json)
           }
         })

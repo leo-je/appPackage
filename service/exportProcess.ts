@@ -32,7 +32,7 @@ export class ExportProcess {
     }
     // 2.添加更新状态语句
     let sql2 = `UPDATE t_proc_custom set state = '0' WHERE proc_def_key = '${processKey}';`
-    sql += sql2 + '\n'
+    sql += sql2 + '\n\n'
 
     // 3.查询	t_form_templet 导出为插入语句
     let sql3 = `
@@ -71,7 +71,7 @@ function getKeyValuseForInsert(e) {
   let time = '';
   for (let key in e) {
     keys += `\`${key}\`,`;
-    console.log("key: " + key + " type: " + typeof e[key])
+    // console.log("key: " + key + " type: " + typeof e[key])
     if (typeof e[key] === 'string') {
       type = '1';
       // values += `'${e[key].replace(/\'/g, '\\\'')}',`;
