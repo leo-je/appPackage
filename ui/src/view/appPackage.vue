@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-container>
+  <div id="appPackage">
+    <!-- <el-container> -->
       <!-- <el-header class="container-header">package caih App</el-header> -->
       <el-container>
         <el-main class="command-main">
@@ -21,7 +21,7 @@
 
               <el-col :span="4">-->
               <el-button type="primary" @click="openLogWindows">查看日志</el-button>
-              <el-button type="primary" @click="openSSHWindows">打开cmd</el-button>
+              <!-- <el-button type="primary" @click="openSSHWindows">打开cmd</el-button> -->
             </el-col>
           </el-row>
 
@@ -29,54 +29,37 @@
             <el-table :data="tableData" border style="width: 100%">
               <el-table-column prop="fileName" label="文件名" width="240">
                 <template #default="scope">
-                  <el-button
-                    type="text"
-                    size="small"
-                    @click.prevent="down(scope.$index, tableData)"
-                  >{{ tableData[scope.$index]["fileName"] }}</el-button>
+                  <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">{{
+                      tableData[scope.$index]["fileName"]
+                  }}</el-button>
                 </template>
               </el-table-column>
               <el-table-column prop="updateTime" label="更新时间" width="180" />
               <el-table-column prop="addr" label>
                 <template #default="scope">
-                  <el-button
-                    type="text"
-                    size="small"
-                    @click.prevent="down(scope.$index, tableData)"
-                  >下载</el-button>
-                  <el-button
-                    type="text"
-                    size="small"
-                    @click.prevent="deleteRow(scope.$index, tableData)"
-                  >删除</el-button>
+                  <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">下载</el-button>
+                  <el-button type="text" size="small" @click.prevent="deleteRow(scope.$index, tableData)">删除
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
           </el-row>
         </el-main>
       </el-container>
-    </el-container>
+    <!-- </el-container> -->
 
-    <el-dialog v-model="sshDialogVisible" title="cmd" width="80%" @opened="onSShOpened">
+    <el-dialog v-model="sshDialogVisible"  append-to-body="true" title="cmd" width="80%" @opened="onSShOpened">
       <div id="terminal" ref="terminalRef"></div>
     </el-dialog>
 
-    <el-dialog v-model="dialogVisible" title="日志" width="60%" @opened="onOpened">
-      <el-input
-        :id="'textlog'"
-        v-model="packageLog"
-        :autosize="{ minRows: 2, maxRows: 25 }"
-        :readonly="true"
-        type="textarea"
-        placeholder
-        @input="onOpened"
-        :input-style="{
+    <el-dialog v-model="dialogVisible" append-to-body="true" title="日志" width="60%" @opened="onOpened">
+      <el-input :id="'textlog'" v-model="packageLog" :autosize="{ minRows: 2, maxRows: 25 }" :readonly="true"
+        type="textarea" placeholder @input="onOpened" :input-style="{
           'background-color': 'black',
           color: 'white',
           'font-size': '14px',
           'font-weight': 'bold'
-        }"
-      ></el-input>
+        }"></el-input>
     </el-dialog>
   </div>
 </template>
@@ -124,12 +107,12 @@ export default defineComponent({
         this.wsShell()
         term = new Terminal({
           rendererType: "canvas", //渲染类型
-         rows: 40,//parseInt(_this.rows), //行数
-         // cols: 180, // 不指定行数，自动回车后光标从下一行开始
-        //  convertEol: true, //启用时，光标将设置为下一行的开头
-            scrollback: 500, //终端中的回滚量
-        //  disableStdin: false, //是否应禁用输入。
-         cursorStyle: "underline", //光标样式
+          rows: 40,//parseInt(_this.rows), //行数
+          // cols: 180, // 不指定行数，自动回车后光标从下一行开始
+          //  convertEol: true, //启用时，光标将设置为下一行的开头
+          scrollback: 500, //终端中的回滚量
+          //  disableStdin: false, //是否应禁用输入。
+          cursorStyle: "underline", //光标样式
           cursorBlink: true, //光标闪烁
           theme: {
             foreground: "#7e9192", //字体
@@ -158,6 +141,7 @@ export default defineComponent({
       this.initTerm()
     },
     initWs() {
+      this.ws = {};
       let _this = this;
       let wsPath = "ws://" + _this.wsHost + "/api/ws";
       console.log(wsPath);
@@ -176,6 +160,7 @@ export default defineComponent({
       };
       ws.onclose = function (evt) {
         console.log("Connection closed.");
+        _this.initWs()
       };
       this.ws = ws;
     },
@@ -337,13 +322,7 @@ export default defineComponent({
 </script>
 
 
-<style>
-.container-header {
-  background-color: #b3c0d1;
-  color: var(--el-text-color-primary);
-  text-align: center;
-  line-height: 60px;
-}
+<style lang="scss"  scoped>
 
 .command-main {
   background-color: #e9eef3;
@@ -352,17 +331,19 @@ export default defineComponent({
   /* line-height: 160px; */
 }
 
-body > .el-container {
+body>.el-container {
   margin-bottom: 40px;
 }
 
 .command-button {
   line-height: 20px;
 }
+
 .file-list {
   margin-top: 20px;
   /* line-height: 600px; */
 }
+
 .logtext {
   background-color: black;
   color: white;

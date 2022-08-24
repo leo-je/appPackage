@@ -12,13 +12,20 @@ export class ExportProcess {
   create = async (req: Request, response: Response) => {
     console.log(req.body)
     let processKey = req.body.processKey
+    let data
     let sql = '\n'
     let sql1 = `
     select 
     * -- 替换字段
     from t_proc_custom   t where t.tenant_id='caih'  and  t.proc_version = (SELECT max(a.proc_version) FROM t_proc_custom a WHERE a.proc_def_key = t.proc_def_key
           and a.tenant_id = 'caih') and t.proc_def_key  in ('${processKey}','');`
-    let data = await mysqlService.sqlQuery(req.body.environment, sql1);
+    try {
+      data = await mysqlService.sqlQuery(req.body.environment, sql1);
+    } catch (e) {
+      console.error(e)
+      response.send(e)
+      return
+    }
     if (data && data.length > 0) {
       let e = data[0];
       sql += `insert into t_proc_custom ` + getKeyValuseForInsert(e) + '\n'
@@ -51,7 +58,7 @@ export class ExportProcess {
       let e = data[0];
       sql += `insert into t_form_bytearray ` + getKeyValuseForInsert(e) + '\n'
     }
-    
+
     response.send(sql)
   }
 }
@@ -60,34 +67,65 @@ export class ExportProcess {
 function getKeyValuseForInsert(e) {
   let keys = '(';
   let values = '(';
+  let type = '';// 1:string 2:Date 3:number 4:NULL/null 5:Buffer
+  let time = '';
   for (let key in e) {
     keys += `\`${key}\`,`;
     console.log("key: " + key + " type: " + typeof e[key])
     if (typeof e[key] === 'string') {
-      values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+      type = '1';
+      // values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+    } else if (!e[key]) {
+      type = '4'
+      // values += `${e[key]},`;
+    } else if (typeof e[key] === 'object' && Buffer.isBuffer(e[key])) {
+      type = '5'
     } else if (typeof e[key] === 'object') {
       try {
-        let time = moment(e[key]).format(
+        time = moment(e[key]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
+        type = '2'
         if (time === 'Invalid date') {
-          values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+          // values += `'${e[key].replace(/\'/g, '\\\'')}',`;
         } else {
-          values += `'${time}',`;
+          // values += `'${time}',`;
         }
       } catch {
-        if (e[key] === 'NULL') {
-          values += `${e[key]},`;
+        console.log('catch:' + e[key])
+        if (e[key] === 'NULL' || e[key] === 'null') {
+          type = '4'
+          // values += `${e[key]},`;
         } else {
-          values += `'${e[key]}',`;
+          type = '1'
+          // values += `'${e[key]}',`;
         }
       }
     } else if (typeof e[key] === 'number') {
-      values += `${e[key]},`;
+      type = '3'
+      // values += `${e[key]},`;
     } else {
+      type = '1'
+      // values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+    }
+    //
+    if (type == '1' || type == '') {
       values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+    } else if (type == '2') {
+      if (time === 'Invalid date') {
+        console
+        values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+      } else {
+        values += `'${time}',`;
+      }
+    } else if (type == '5') {
+      const str = '0x' + Buffer.from(e[key]).toString('hex').toUpperCase();
+      values += `${str},`;
+    } else {
+      values += `${e[key]},`;
     }
   }
+
   keys += ') '
   values += '); \n'
   let sql = keys.replace(',)', ')') + 'values' + values.replace(',)', ')')

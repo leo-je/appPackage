@@ -1,54 +1,65 @@
 import mysql from 'mysql';
 import { config } from './config'
-let dbType: mysql.Connection = null;
+let dbType: mysql.Pool = null;
 let mysqlService = {
-    devDb: dbType,
-    uatDb: dbType,
-    initDb: function () {
-        if (!this.devDb) {
-            this.devDb = mysql.createConnection(config.db.connection.mysql.dev)
+    devDbPool: dbType,
+    uatDbPool: dbType,
+    initDb: function (dbType) {
+        if (!this.devDbPool && dbType == 'dev') {
+            console.log("dev initDb")
+            this.devDbPool = mysql.createPool(config.db.connection.mysql.dev)
         }
-        if (!this.uatDb) {
-            this.uatDb = mysql.createConnection(config.db.connection.mysql.uat)
+        if (!this.uatDbPool && dbType == 'uat') {
+            console.log("uat initDb")
+            this.uatDbPool = mysql.createPool(config.db.connection.mysql.uat)
         }
     },
-    sqlQuery: function (dbType, sql):any {
+    sqlQuery: function (dbType, sql): any {
         let _this = this;
+        _this.initDb(dbType)
         return new Promise(function (resolve, reject) {
-            // pool.getConnection(function(err,connection){
-            //   if(err){
-            //     reject(err);
-            //     return; 
-            //   }
-            //   connection.query( sql , params , function(error,res){
-            //     connection.release();
-            //     if(error){
-            //       reject(error);
-            //       return;
-            //     }
-            //     resolve(res);
-            //   });
-            // });
             if (dbType === 'dev') {
-                _this.devDb.query(sql, (err, result) => {
+                _this.devDbPool.getConnection((err, conn) => {
                     if (err) {
-                        reject(err)
+                        console.error(err)
+                        reject(null)
+                    } else {
+                        conn.query(sql, (err2, results, fields) => {
+                            //事件驱动回调
+                            if (err2) {
+                                _this.devDbPool = null;
+                                console.log("dev mysql 错误")
+                                console.error(err2)
+                                reject(null)
+                            }
+                            // console.log(fields)
+                            resolve(results)
+                        })
                     }
-                    resolve(result)
                 })
             }
             if (dbType === 'uat') {
-                _this.uatDb.query(sql, (err, result) => {
+                _this.uatDbPool.getConnection((err, conn) => {
                     if (err) {
-                        return console.log("错误")
-                        reject(err)
+                        console.error(err)
+                        reject(null)
+                    } else {
+                        conn.query(sql, (err2, results, fields) => {
+                            //事件驱动回调
+                            if (err2) {
+                                _this.uatDbPool = null;
+                                console.log("uat mysql 错误")
+                                console.error(err2)
+                                reject(null)
+                            }
+                            // console.log(fields)
+                            resolve(results)
+                        })
                     }
-                    resolve(result)
                 })
             }
         });
-    }
+    },
 }
 
-mysqlService.initDb()
 export { mysqlService }

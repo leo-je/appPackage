@@ -10,7 +10,7 @@ const routerInfos: Array<RouterInfo> = [
         componentPath: '../view/index.vue',
         children: [
             {
-                path: '/',
+                path: '/exportProcess',
                 name: 'exportProcess',
                 componentPath: '../view/exportProcess.vue',
             },
@@ -38,7 +38,8 @@ const getRow = (routerInfo: RouterInfo): RouteRecordRaw => {
     const row: RouteRecordRaw = {
         path: routerInfo.path ? routerInfo.path : "",
         name: routerInfo.name,
-        component: view
+        component: view,
+        children: []
     }
     if (routerInfo.children != null && routerInfo.children.length > 0) {
         const ch: RouteRecordRaw[] = []
