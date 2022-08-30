@@ -55,11 +55,11 @@
       <!-- <el-col :span="12"></el-col> -->
     </el-row>
 
-    <el-dialog v-model="sshDialogVisible" append-to-body="true" title="cmd" width="80%" @opened="onSShOpened">
+    <el-dialog v-model="sshDialogVisible" :append-to-body=true title="cmd" width="80%" @opened="onSShOpened">
       <div id="terminal" ref="terminalRef"></div>
     </el-dialog>
 
-    <el-dialog v-model="dialogVisible" append-to-body="true" title="日志" width="60%" @opened="onOpened">
+    <el-dialog v-model="dialogVisible" :append-to-body=true title="日志" width="60%" @opened="onOpened">
       <el-input :id="'textlog'" v-model="packageLog" :autosize="{ minRows: 2, maxRows: 25 }" :readonly="true"
         type="textarea" placeholder @input="onOpened" :input-style="{
           'background-color': '#554a4a',
