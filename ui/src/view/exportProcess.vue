@@ -2,7 +2,6 @@
   <div class="">
     <el-row>
       <el-col :span="24">
-        <div class="grid-content ep-bg-purple-dark" />
       </el-col>
     </el-row>
     <el-row>
@@ -20,6 +19,9 @@
         <el-button type="success" @click="create">生成</el-button>
       </el-col>
       <el-col :span="12">
+        <div style="text-align: left;margin-top: 9px;font-size: 14px;color: red;">
+          <span>重要提示:先停用,后导出导入!</span>
+        </div>
       </el-col>
     </el-row>
 
