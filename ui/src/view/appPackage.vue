@@ -7,8 +7,8 @@
         <el-button type="primary" @click="getFileList">刷新列表</el-button>
       </el-col>
       <el-col :span="4">
-        <div style="">
-          <el-input style="margin-left: 22px;" v-model="branch" placeholder="请输入分支名称" />
+        <div style="width: 100%;margin-left: 15px;">
+          <el-input style="width: 90%;" v-model="branch" placeholder="请输入分支名称" />
         </div>
       </el-col>
 
