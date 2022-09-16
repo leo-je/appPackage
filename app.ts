@@ -9,6 +9,7 @@ import { JwtService } from './service/jwtService';
 import { UserService } from './service/userService';
 
 import { ExportProcess } from './service/exportProcess';
+import { ExportDatasource } from './service/exportDatasource';
 
 import cookieparser  from 'cookie-parser'
 
@@ -23,6 +24,7 @@ let webSocketService = new WebSocketService(wsApp);
 
 let fileInfoService = new FileInfoService();
 let exportProcess = new ExportProcess();
+let exportDatasource = new ExportDatasource();
 let appPackageSergvice = new AppPackageSergvice(webSocketService);
 
 // 中间件
@@ -78,6 +80,10 @@ app.post("/api/cancelPackageApp", (req, res) => {
 
 app.post("/api/process/create", async (req, res) => {
     exportProcess.create(req, res)
+})
+
+app.post("/api/dataSource/query", async (req, res) => {
+    exportDatasource.query(req, res)
 })
 
 app.listen(port, () => {

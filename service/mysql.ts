@@ -15,12 +15,14 @@ let mysqlService = {
         }
     },
     sqlQuery: function (dbType, sql): any {
+        console.log("开始sql查询: \n" + sql)
         let _this = this;
         _this.initDb(dbType)
         return new Promise(function (resolve, reject) {
             if (dbType === 'dev') {
                 _this.devDbPool.getConnection((err, conn) => {
                     if (err) {
+                        _this.devDbPool = null;
                         console.error(err)
                         reject(null)
                     } else {
@@ -33,6 +35,8 @@ let mysqlService = {
                                 reject(null)
                             }
                             // console.log(fields)
+                            console.log("sql查询结束.")
+                            _this.devDbPool.releaseConnection(conn)
                             resolve(results)
                         })
                     }
@@ -41,6 +45,7 @@ let mysqlService = {
             if (dbType === 'uat') {
                 _this.uatDbPool.getConnection((err, conn) => {
                     if (err) {
+                        _this.uatDbPool = null;
                         console.error(err)
                         reject(null)
                     } else {
@@ -53,6 +58,8 @@ let mysqlService = {
                                 reject(null)
                             }
                             // console.log(fields)
+                            console.log("sql查询结束.")
+                            _this.uatDbPool.releaseConnection(conn)
                             resolve(results)
                         })
                     }

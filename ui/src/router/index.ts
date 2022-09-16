@@ -18,6 +18,11 @@ const routerInfos: Array<RouterInfo> = [
                 path: '/appPackage',
                 name: 'appPackage',
                 componentPath: '../view/appPackage.vue',
+            },
+            {
+                path: '/exportDataSource',
+                name: 'exportDataSource',
+                componentPath: '../view/exportDataSource.vue',
             }
         ]
     },
