@@ -1,10 +1,13 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 const config = {
     jwt: {
         secret: "hahaha",
         loginPath: "/oauth/login",
     },
-    appRootDirPath: '/Users/shengte/',
-    appreleaseDirPath: 'logs/',
+    appRootDirPath: process.env.appRootDirPath,
+    appreleaseDirPath: process.env.appreleaseDirPath,
     db: {
         connection: {
             mysql: {
