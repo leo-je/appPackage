@@ -26,6 +26,7 @@ export class ExportDatasource {
     if (sourceName && sourceName != '') {
       sql1 += `where source_Name like '%${sourceName}%'`
     }
+    sql1 += ' order by gmt_Create desc '
     try {
       data = await mysqlService.sqlQuery(req.body.environment, `select count(*) count from (${sql1}\n) a`);
       if (data && data.length > 0) {
@@ -36,7 +37,7 @@ export class ExportDatasource {
       response.send(e)
       return
     }
-    sql1 = `select * from (${sql1}\n) a limit ${startRows},${pageSize}`
+    sql1 = `${sql1} limit ${startRows},${pageSize}`
     try {
       data = await mysqlService.sqlQuery(req.body.environment, sql1);
     } catch (e) {

@@ -17,7 +17,7 @@ import cookieparser  from 'cookie-parser'
 import expressWS from 'express-ws';
 
 const app: Express = express()
-const port = 3002
+const port = process.env.appPort
 app.use(cookieparser());
 let wsApp = expressWS(app).app;
 let webSocketService = new WebSocketService(wsApp);
