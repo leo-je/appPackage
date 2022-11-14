@@ -21,8 +21,6 @@ import controllerStore from './ioc';
 
 const app: Express = express()
 
-register(controllerStore, '/', app);
-
 const port = process.env.appPort
 app.use(cookieparser());
 let wsApp = expressWS(app).app;
@@ -50,7 +48,7 @@ app.options('*', function (req, res, next) {
 });
 
 new JwtService().enableVerify(app, new UserService());
-
+register(controllerStore, '/', app);
 app.post('/api/getFileList', function (req, res) {
     fileInfoService.getFileList(req, res);
 })

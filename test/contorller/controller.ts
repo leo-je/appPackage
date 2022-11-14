@@ -1,13 +1,13 @@
 
-import { Controller, Get, Query, Post, Body, Parse } from '../../core/decorator/decorator';
+import { Controller, Get, Query, Post, Body, Parse } from '../../core/decorator/reflect-metadata/decorator';
 import { Request, Response } from "express"
 
 @Controller("/test")
 export default class TestController {
 
     @Get("/home")
-    home(req: Request, res: Response) {
+    home() {
         let data = {a:122222}
-        res.json(data)
+       return data;
     }
 }
