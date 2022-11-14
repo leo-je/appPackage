@@ -16,6 +16,7 @@
     "cookie-parser": "^1.4.6",
     "cpu-features": "^0.0.4",
     "dotenv": "^16.0.2",
+    "esprima": "^4.0.1",
     "express": "^4.18.1",
     "express-jwt": "^6.1.0",
     "express-oauth-server": "^2.0.0",
@@ -25,10 +26,12 @@
     "moment": "^2.29.4",
     "mysql": "^2.18.1",
     "node-xlsx": "^0.21.0",
+    "reflect-metadata": "^0.1.13",
     "shelljs": "^0.8.4",
     "ssh2": "^1.5.0",
     "ts-node-dev": "^2.0.0",
-    "utf8": "^3.0.0"
+    "utf8": "^3.0.0",
+    "utils": "^0.3.1"
   },
   "devDependencies": {
     "@types/mysql": "^2.15.21",

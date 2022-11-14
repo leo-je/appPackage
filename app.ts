@@ -16,7 +16,13 @@ import cookieparser  from 'cookie-parser'
 
 import expressWS from 'express-ws';
 
+import register from './core/decorator/reflect-metadata/register';
+import controllerStore from './ioc';
+
 const app: Express = express()
+
+register(controllerStore, '/', app);
+
 const port = process.env.appPort
 app.use(cookieparser());
 let wsApp = expressWS(app).app;
