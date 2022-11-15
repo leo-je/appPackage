@@ -82,10 +82,6 @@ app.post("/api/cancelPackageApp", (req, res) => {
     appPackageSergvice.cancelPackageApp(req, res)
 })
 
-app.post("/api/process/create", async (req, res) => {
-    exportProcess.create(req, res)
-})
-
 app.post("/api/dataSource/query", async (req, res) => {
     exportDatasource.query(req, res)
 })

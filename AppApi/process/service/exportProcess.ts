@@ -59,7 +59,8 @@ export class ExportProcess {
       sql += `insert into t_form_bytearray ` + getKeyValuseForInsert(e) + '\n'
     }
 
-    response.send(sql)
+    // response.send(sql)
+    return sql;
   }
 }
 
@@ -110,10 +111,11 @@ function getKeyValuseForInsert(e) {
     }
     //
     if (type == '1' || type == '') {
-      values += `'${e[key].replace(/\'/g, '\\\'')}',`;
+      // 处理单引号
+       values += `'${e[key].replace(/\'/g, '\\\'').replace(/\\n/g,"\\\\\\n")}',`;
     } else if (type == '2') {
       if (time === 'Invalid date') {
-        console
+        // 处理单引号
         values += `'${e[key].replace(/\'/g, '\\\'')}',`;
       } else {
         values += `'${time}',`;
@@ -129,6 +131,7 @@ function getKeyValuseForInsert(e) {
   keys += ') '
   values += '); \n'
   let sql = keys.replace(',)', ')') + 'values' + values.replace(',)', ')')
+  // 处理双引号
   sql = sql.replace(/\"/g, '\\"')
   return sql;
 }
