@@ -1,8 +1,10 @@
 
 import { Controller, Get, Query, Post, Body, Parse } from '../../../core/decorator/reflect-metadata/decorator';
 import { Request, Response } from "express"
-import { ExportProcess } from '../service/exportProcess';
 import { AutoWired, Inject } from '../../../core/decorator/Component/Component';
+import { ExportProcess } from '../service/ExportProcess';
+
+
 
 @Controller("/api/process")
 class ProcessController {

@@ -5,7 +5,7 @@ import { WebSocketService } from './service/webSocketService'
 import path from 'path'
 import { FileInfoService } from './service/fileInfoService';
 import { AppPackageSergvice } from './service/appPackageSergvice';
-import { JwtService } from './service/jwtService';
+import { JwtService } from './sys/jwtService';
 import { UserService } from './service/userService';
 
 import { ExportDatasource } from './service/exportDatasource';

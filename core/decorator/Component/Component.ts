@@ -1,7 +1,7 @@
 export const autoWiringComponents = []
 
 const Component = (componentName): ClassDecorator => {
-    return originClass => {
+    return (originClass:any) => {
         var _componentName;
         componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
         autoWiringComponents[componentName] = {
@@ -9,8 +9,8 @@ const Component = (componentName): ClassDecorator => {
         };
         autoWiringComponents[componentName].value = originClass;
         autoWiringComponents[componentName].status = 'wired';
-        autoWiringComponents[componentName].instance = null;
-        console.log("注册Component-", _componentName)
+        autoWiringComponents[componentName].instance = new originClass();
+        console.log("注册Component-", originClass.name)
 
     };
 };
