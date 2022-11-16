@@ -42,7 +42,7 @@ app.options('*', function (req, res, next) {
 });
 
 new JwtService().enableVerify(app, new UserService());
-enableIoc(app, __dirname, ["/AppApi"])
+enableIoc(app, __dirname, ["/busi"])
 app.post('/api/getFileList', function (req, res) {
     fileInfoService.getFileList(req, res);
 })
