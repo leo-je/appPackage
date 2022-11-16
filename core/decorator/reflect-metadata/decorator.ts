@@ -6,9 +6,13 @@ const ROUTE_METADATA = 'method';
 const PARAM_METADATA = 'param';
 const PARSE_METADATA = 'parse';
 
+export const Controllers = {}
+
 function Controller(path = ''): ClassDecorator {
-    return (target: object) => {
-        Reflect.defineMetadata(CONTROLLER_METADATA, path, target);
+    return (targetClass: any) => {
+        Reflect.defineMetadata(CONTROLLER_METADATA, path, targetClass);
+        console.log("add Controller:", targetClass.name)
+        Controllers[targetClass.name] = new targetClass()
     };
 }
 
@@ -82,5 +86,5 @@ export {
     Controller,
     createMethodDecorator,
     createParamDecorator,
-    Parse,
+    Parse
 }

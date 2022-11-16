@@ -5,7 +5,7 @@ import { Request, Response } from "express"
 @Controller("/test")
 export default class TestController {
 
-    @Get("/home")
+    @Get("/index")
     home() {
         let data = {a:122222}
        return data;

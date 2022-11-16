@@ -8,16 +8,11 @@ import { AppPackageSergvice } from './service/appPackageSergvice';
 import { JwtService } from './service/jwtService';
 import { UserService } from './service/userService';
 
-import { ExportProcess } from './service/exportProcess';
 import { ExportDatasource } from './service/exportDatasource';
 
-import cookieparser  from 'cookie-parser'
-
-
+import cookieparser from 'cookie-parser'
 import expressWS from 'express-ws';
-
-import register from './core/decorator/reflect-metadata/register';
-import controllerStore from './ioc';
+import { enableIoc } from './core/ioc';
 
 const app: Express = express()
 
@@ -27,7 +22,6 @@ let wsApp = expressWS(app).app;
 let webSocketService = new WebSocketService(wsApp);
 
 let fileInfoService = new FileInfoService();
-let exportProcess = new ExportProcess();
 let exportDatasource = new ExportDatasource();
 let appPackageSergvice = new AppPackageSergvice(webSocketService);
 
@@ -48,7 +42,7 @@ app.options('*', function (req, res, next) {
 });
 
 new JwtService().enableVerify(app, new UserService());
-register(controllerStore, '/', app);
+enableIoc(app, __dirname, ["/AppApi"])
 app.post('/api/getFileList', function (req, res) {
     fileInfoService.getFileList(req, res);
 })

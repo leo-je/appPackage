@@ -1,13 +1,16 @@
 
 import { Request, Response } from "express"
-import { mysqlService } from './mysql'
+import { mysqlService } from '../../../service/mysql'
 import moment from "moment";
+import { Component } from "../../../core/decorator/Component/Component";
+
 
 const headers = {
   'Access-Control-Allow-Origin': '*', // 允许跨域
   'Content-Type': 'application/json;charset=UTF-8'
 }
 
+@Component("exportProcess")
 export class ExportProcess {
   create = async (req: Request, response: Response) => {
     console.log(req.body)

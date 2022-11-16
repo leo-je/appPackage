@@ -32,15 +32,17 @@ export interface ParseType {
 }
 
 export function handlerFactory(
-  func: (...args: any[]) => any,
+  instance,
+  functionName,
   paramList: ParamType[],
   parseList: ParseType[],
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const args = extractParameters(req, res, next, paramList, parseList);
-      const result = await func(...args);
-
+      // const result = await func(...args);
+      // const fun = instance[functionName]
+      const result = await instance[functionName](...args);
       res.send(result);
     } catch (err) {
       next(err);

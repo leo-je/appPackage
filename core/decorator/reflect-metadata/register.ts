@@ -17,30 +17,33 @@ function register(
   const router = Router();
 
   Object.values(controllerStore).forEach(instance => {
-    const controllerMetadata: string = Reflect.getMetadata(
+    // 获取Controller注解的入参--路径
+    const controllerRootPath: string = Reflect.getMetadata(
       CONTROLLER_METADATA,
       instance.constructor,
     );
-
+    console.log(`[${__filename}]-controller:`, instance, controllerRootPath)
+    // 实例属性
     const proto = Object.getPrototypeOf(instance);
-    const routeNameArr = Object.getOwnPropertyNames(proto).filter(
+    // 方法数组
+    const functionNameArr = Object.getOwnPropertyNames(proto).filter(
       n => n !== 'constructor' && typeof proto[n] === 'function',
     );
-
-    routeNameArr.forEach(routeName => {
+    functionNameArr.forEach(functionName => {
       const routeMetadata: RouteType = Reflect.getMetadata(
         ROUTE_METADATA,
-        proto[routeName],
+        proto[functionName],
       );
-
+      if (!routeMetadata) return;
       const { type, path } = routeMetadata;
+      console.log(`[${__filename}]-load ${type.toUpperCase()}:${path}`)
       const handler = handlerFactory(
-        proto[routeName],
-        Reflect.getMetadata(PARAM_METADATA, instance, routeName),
-        Reflect.getMetadata(PARSE_METADATA, instance, routeName),
+        instance,
+        functionName,
+        Reflect.getMetadata(PARAM_METADATA, instance, functionName),
+        Reflect.getMetadata(PARSE_METADATA, instance, functionName),
       );
-
-      router[type](controllerMetadata + path, handler);
+      router[type](controllerRootPath + path, handler);
     });
   });
 
