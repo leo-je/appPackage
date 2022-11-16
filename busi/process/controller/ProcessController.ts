@@ -12,7 +12,7 @@ class ProcessController {
     @Inject
     public exportProcess:ExportProcess
 
-    @AutoWired('exportProcess')
+    @AutoWired("exportProcess")
     public exportProcess2:ExportProcess
 
     @Post("/create")
