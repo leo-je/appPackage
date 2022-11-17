@@ -3,8 +3,6 @@ import path from 'path'
 import { Controllers } from './decorator/reflect-metadata/decorator';
 import register from './decorator/reflect-metadata/register';
 
-const requireMap = {}
-
 export const enableIoc = (app, rootPath: string, scanDirPaths: string[]) => {
     for (let i in scanDirPaths) {
         readDir((rootPath + "/" + scanDirPaths[i]).replace('//', '/'), rootPath);
@@ -48,12 +46,7 @@ function readDir(dirPath: string, _rootPath: string) {
 function requireComponent(filePath: string, className: string) {
     // console.log(filePath)
     console.log(`requireComponent`, className)
-    // let _t = require(filePath)
+    require(filePath)
     // console.log(`requireComponent-add`, className)
     // requireMap[className.replace('.js','').replace('.ts','')] = _t
-    import(filePath).then(_t => {
-        console.log(_t)
-        console.log(`requireComponent-add`, className)
-        requireMap[className.replace('.js', '').replace('.ts', '')] = _t
-    })
 }
