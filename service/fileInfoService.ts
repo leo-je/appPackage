@@ -73,8 +73,9 @@ export class FileInfoService {
     pathName = decodeURI(pathName)
     // 获取资源文件的绝对路径
     let filePath = '';//path.resolve(__dirname + '/fileDir/' + pathName)
-    filePath = filePath = config.appRootDirPath + config.appreleaseDirPath + pathName
-
+    filePath = filePath = config.appRootDirPath + config.appreleaseDirPath + "/"+pathName
+    filePath = filePath.replace(`//`,'/')
+    console.log("downFile:"+filePath)
     // 文件后缀名
     let ext = path.extname(pathName)
     ext = ext ? ext.slice(1) : 'unknown'

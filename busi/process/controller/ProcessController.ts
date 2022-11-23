@@ -17,9 +17,9 @@ class ProcessController {
 
     @Post("/create")
     async create(req:Request,res:Response) {
-        console.log(this)
-        console.log(this.exportProcess)
-        console.log(this.exportProcess2)
+        // console.log(this)
+        // console.log(this.exportProcess)
+        // console.log(this.exportProcess2)
        let sql = this.exportProcess2.create(req,res)
         return sql;
     }
