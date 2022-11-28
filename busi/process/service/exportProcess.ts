@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import { mysqlService } from '../../../service/mysql'
 import moment from "moment";
-import { Component } from "../../../core/decorator/Component/Component";
+import { Component } from "../../../core/decorator";
 
 
 const headers = {

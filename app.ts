@@ -12,7 +12,7 @@ import { ExportDatasource } from './service/exportDatasource';
 
 import cookieparser from 'cookie-parser'
 import expressWS from 'express-ws';
-import { enableIoc } from './core/ioc';
+import { enableIoc } from './core';
 
 const app: Express = express()
 
