@@ -50,4 +50,4 @@ function register(
   app.use(rootPath, router);
 }
 
-export default register;
+export {register} ;

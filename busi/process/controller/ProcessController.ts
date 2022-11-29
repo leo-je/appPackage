@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
-import { AutoWired, Inject } from '../../../core/decorator/Component/Component';
 import { ExportProcess } from '../service/ExportProcess';
-import { Controller, Post } from '../../../core/decorator';
+import { Controller, Post ,AutoWired, Inject} from '@/core';
 
 
 

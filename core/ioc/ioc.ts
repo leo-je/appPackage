@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path'
-import { Controllers } from './decorator/reflect-metadata/decorator';
-import register from './decorator/reflect-metadata/register';
+import { Controllers } from '../decorator/reflect-metadata/decorator';
+import {register} from '../decorator/reflect-metadata/register';
 
-export const enableIoc = (app, rootPath: string, scanDirPaths: string[]) => {
+export const enableIoc = (app, scanDirPaths: string[]) => {
+    let rootPath = __dirname.replace('/core/ioc','')
     for (let i in scanDirPaths) {
         readDir((rootPath + "/" + scanDirPaths[i]).replace('//', '/'), rootPath);
     }
@@ -25,7 +26,8 @@ function readDir(dirPath: string, _rootPath: string) {
                     if (fileName == 'app.js' || fileName == 'app.ts' || fileName == 'ioc.ts' || fileName.indexOf('.') == 0) {
                         // 忽略文件
                     } else if (/\.(js|ts)$/.test(fileName)) {
-                        requireComponent(`..${_path.replace(_rootPath, '')}`, fileName)
+                        requireComponent(`@${_path.replace(_rootPath, '')}`, fileName)
+                        // requireComponent(`@${_path}`, fileName)
                     }
                 } else if (/(\.git|ui|dist|core|node_modules)/.test(fileName)) {
 

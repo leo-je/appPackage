@@ -6,7 +6,16 @@
       "es2016",
       "dom"
     ],
-    "types": ["reflect-metadata", "node"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": [
+        "*",
+      ]
+    },
+    "types": [
+      "reflect-metadata",
+      "node"
+    ],
     "outDir": "./dist",
     "esModuleInterop": true,
     "experimentalDecorators": true,

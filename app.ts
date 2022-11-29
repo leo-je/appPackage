@@ -14,6 +14,14 @@ import cookieparser from 'cookie-parser'
 import expressWS from 'express-ws';
 import { enableIoc } from './core';
 
+// module-alias 别名包
+require('module-alias/register')
+// require中用@替代根路径
+// require('node-require-alias').setAlias({
+//     "@": path.join(__dirname, "")
+// })
+// or require('node-require-alias').setAlias("@", path.join(__dirname, "this/is/a/path"))
+
 const app: Express = express()
 
 const port = process.env.appPort
@@ -42,7 +50,7 @@ app.options('*', function (req, res, next) {
 });
 
 new JwtService().enableVerify(app, new UserService());
-enableIoc(app, __dirname, ["/busi"])
+enableIoc(app, ["/busi"])
 app.post('/api/getFileList', function (req, res) {
     fileInfoService.getFileList(req, res);
 })
