@@ -1,21 +1,27 @@
 import { getFormatDateTime } from "@/core/utils/DateUtils";
 
 export const autoWiringComponents = []
+export const WsServiceComponents = []
 
-const Component = (componentName?:string): ClassDecorator => {
-    return (originClass:any) => {
-        var _componentName;
-        componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
-        autoWiringComponents[componentName] = {
-            status: 'wiring'
-        };
-        autoWiringComponents[componentName].value = originClass;
-        autoWiringComponents[componentName].status = 'wired';
-        autoWiringComponents[componentName].instance = new originClass();
-        autoWiringComponents[originClass] = autoWiringComponents[componentName]
-        console.log(`[${getFormatDateTime()}][info][Component]-load component:`, originClass.name)
+
+const Component = (componentName?: string): ClassDecorator => {
+    return (originClass: any) => {
+        addBean(componentName, originClass, new originClass())
     };
 };
+
+const addBean = (componentName: string, originClass: any, instance: any) => {
+    var _componentName;
+    componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
+    autoWiringComponents[componentName] = {
+        status: 'wiring'
+    };
+    autoWiringComponents[componentName].value = originClass;
+    autoWiringComponents[componentName].status = 'wired';
+    autoWiringComponents[componentName].instance = instance;
+    autoWiringComponents[originClass] = autoWiringComponents[componentName]
+    console.log(`[${getFormatDateTime()}][info][Component]-load component:`, originClass.name)
+}
 
 export function Inject(_constructor: any, propertyName: string): any {
     // 元数据反射 获取当前装饰的元素的类型
@@ -74,5 +80,5 @@ const getComponentInstance = async (componentName) => {
 }
 
 export {
-    Component, AutoWired,getComponentInstance
+    Component, AutoWired, getComponentInstance, addBean
 }

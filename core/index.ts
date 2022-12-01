@@ -8,7 +8,8 @@ import {
     createParamDecorator,
     Parse, Get, Query, Post, Body
 } from "./decorator/reflect-metadata/decorator";
-import { Component, AutoWired, Inject } from "./decorator/Component/Component";
+import { Component, AutoWired, Inject,getComponentInstance } from "./decorator/Component/Component";
+import { WsService,EndPoint,registerWs } from "./decorator/Component/WsComponent";
 import { enableIoc, enableJwt, enableRouter } from './ioc/ioc';
 
 export {
@@ -20,6 +21,7 @@ export {
     createMethodDecorator,
     createParamDecorator,
     Parse,
-    Get, Query, Post, Body, Component, AutoWired, Inject,
+    Get, Query, Post, Body, Component, AutoWired, Inject,getComponentInstance,
     enableIoc, enableJwt, enableRouter,
+    WsService,EndPoint,registerWs,
 }

@@ -27,4 +27,9 @@ class AppPackageController {
         this.appPackageSergvice.packageDebugApp(req, res);
     }
 
+    @Post("/api/cancelPackageApp")
+    cancelPackageApp(req, res) {
+        this.appPackageSergvice.cancelPackageApp(req, res)
+    }
+
 }

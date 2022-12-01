@@ -1,9 +1,9 @@
 
 import { exec, cd } from 'shelljs';
 import { config } from '../../../service/config';
-import { WebSocketService } from '../../../service/webSocketService';
+import { WebSocketService } from './WebSocketService';
 import { Request, Response } from "express"
-import { Component } from '@/core';
+import { AutoWired, Component, getComponentInstance } from '@/core';
 
 let log = ''
 let logHistory = ''
@@ -13,11 +13,17 @@ let childProcessId = null
 
 @Component("appPackageSergvice")
 export class AppPackageSergvice {
-    
-    webSocketService: WebSocketService = null
-    constructor(webSocketService: WebSocketService) {
-        this.webSocketService = webSocketService
-    }
+
+    @AutoWired('webSocketService')
+    private webSocketService: WebSocketService
+
+    // constructor() {
+    //     getComponentInstance('webSocketService').then(component => {
+    //         this.webSocketService = component
+    //     }).catch(e => {
+    //         console.error(`[${__filename}] get component fail`, e)
+    //     })
+    // }
     cancelPackageApp = (req: Request, res: Response) => {
         if (childProcess != null && childProcessId) {
             exec("kill -9 " + childProcessId, function (code, stdout, stderr) {

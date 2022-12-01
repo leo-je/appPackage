@@ -2,16 +2,17 @@
 require('module-alias/register')
 import { Express } from 'express'
 import express from 'express'
-import { WebSocketService } from './service/webSocketService'
+import { WebSocketService } from './busi/appPackage/service/WebSocketService'
 import path from 'path'
-import { FileInfoService } from './service/fileInfoService';
+import { FileInfoService } from './busi/fileInfo/service/FileInfoService';
 import { AppPackageSergvice } from './busi/appPackage/service/AppPackageSergvice';
 
 import { ExportDatasource } from './service/exportDatasource';
 import cookieparser from 'cookie-parser'
-import expressWS from 'express-ws';
+
 import { enableIoc, enableJwt, enableRouter } from './core';
 import { getFormatDateTime } from './core/utils/DateUtils'
+import { enableWs } from './core/ioc/ioc'
 
 
 
@@ -37,8 +38,9 @@ class App {
         });
 
 
-        enableIoc(["/busi", "/sys"])
-        enableJwt(this.app, "jwtService")
+        enableIoc(this.app,["/busi", "/sys"])
+        enableWs(this.app)
+        enableJwt(this.app,'jwtService')
         enableRouter(this.app)
         this.router();
         this.app.listen(port, () => {
@@ -47,29 +49,7 @@ class App {
     }
 
     public router() {
-        let wsApp = expressWS(this.app).app;
-        let webSocketService = new WebSocketService(wsApp);
-        let fileInfoService = new FileInfoService();
         let exportDatasource = new ExportDatasource();
-        let appPackageSergvice = new AppPackageSergvice(webSocketService);
-        this.app.post('/api/getFileList', function (req, res) {
-            fileInfoService.getFileList(req, res);
-        })
-
-
-
-        this.app.get("/api/down/:fileName", (req, res) => {
-            fileInfoService.downFile(req, res)
-        })
-
-        this.app.post("/api/delete/:fileName", (req, res) => {
-            fileInfoService.delete(req, res)
-        })
-
-        this.app.post("/api/cancelPackageApp", (req, res) => {
-            appPackageSergvice.cancelPackageApp(req, res)
-        })
-
         this.app.post("/api/dataSource/query", async (req, res) => {
             exportDatasource.query(req, res)
         })

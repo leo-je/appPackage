@@ -8,7 +8,7 @@ import { AutoWired, Component } from '@/core';
 export class JwtService {
 
     @AutoWired("userService")
-    private userService:UserService;
+    private userService: UserService;
 
     secret = config.jwt.secret;
     loginPath = config.jwt.loginPath;
@@ -23,7 +23,7 @@ export class JwtService {
         });
     }
 
-    enable = function (app: Express) {
+    enable(app: Express) {
         let _this = this;
         app.use(function (req, res, next) {
             console.log("path verify ----> path: " + req.path)

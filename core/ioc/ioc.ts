@@ -2,21 +2,32 @@ import { JwtService } from '@/sys/service/JwtService';
 import { Express } from 'express'
 import fs from 'fs';
 import path from 'path'
-import { getComponentInstance } from '../decorator/Component/Component';
+import { autoWiringComponents, getComponentInstance } from '../decorator/Component/Component';
+import { registerWs } from '../decorator/Component/WsComponent';
 import { Controllers } from '../decorator/reflect-metadata/decorator';
 import { register } from '../decorator/reflect-metadata/register';
 
-export const enableIoc = (scanDirPaths: string[]) => {
+export const enableIoc = (app, scanDirPaths: string[]) => {
+    autoWiringComponents['app'] = {}
+    autoWiringComponents['app'].instance = app
+    autoWiringComponents['app'].value = 'app';
+    autoWiringComponents['app'].status = 'wired';
+    autoWiringComponents[app.className] = autoWiringComponents['app']
+
     let rootPath = __dirname.replace('/core/ioc', '')
     for (let i in scanDirPaths) {
         readDir((rootPath + "/" + scanDirPaths[i]).replace('//', '/'), rootPath);
     }
 }
+export const enableWs = (app: Express) => {
+    registerWs(app)
+}
 
-export const enableJwt = async (app: Express, componentName) => {
-    let jwtService = await getComponentInstance(componentName);
+export const enableJwt = (app: Express, componentName) => {
+    let jwtService = autoWiringComponents[componentName];
     if (jwtService) {
-        jwtService.enable(app)
+        console.error(`enable jwt`)
+        jwtService.instance.enable(app)
     } else {
         console.error(`${componentName} is undefined`)
     }

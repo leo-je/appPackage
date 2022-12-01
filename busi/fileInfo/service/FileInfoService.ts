@@ -3,8 +3,9 @@ import { Request, Response } from "express"
 // mock/server.js
 import fs from 'fs'
 import path from 'path'
-import { mime } from './mime'
-import { config } from './config'
+import { mime } from '../../../service/mime'
+import { config } from '../../../service/config'
+import { Component } from "@/core"
 
 const headers = {
   'Access-Control-Allow-Origin': '*', // 允许跨域
@@ -20,48 +21,41 @@ function formatBytes(bytes, decimals = 2) {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
+@Component('fileInfoService')
 export class FileInfoService {
-  getFileList = async (request: Request, response: Response) => {
+
+  getFileList = (request: Request, response: Response) => {
     // 获取资源文件的绝对路径
     let filePath = '';//path.resolve(__dirname + '/fileDir/' + pathName)
     filePath = config.appRootDirPath + config.appreleaseDirPath
     console.log(filePath)
-    fs.stat(filePath, (err, stats) => {
-      // 目录
-      if (!err && stats.isDirectory()) {
-        var json = {}
-        fs.readdir(filePath, (err, files) => {
-          if (err) {
-            json["msg"] = "err"
-            response.writeHead(500, headers)
-            response.end(json)
+    let stats = fs.statSync(filePath);
+    // 目录
+    if (stats.isDirectory()) {
+      console.log('isDirectory')
+      var json = {}
+      let files = fs.readdirSync(filePath)
+      //   headers['Content-Type'] = 'text/html'
+      // response.writeHead(200, headers)
+      let data = []
+      for (let i = 0; i < files.length; i++) {
+        let stat = fs.statSync(path.join(filePath, files[i]));
+        if (stat.isFile()) {
+          // console.log(stat)
+          data.push({
+            fileName: files[i],
+            updateTime: stat.mtime,
+            addr: '/' + files[i],
+            size: formatBytes(stat.size)
+          });
+        }
 
-          } else {
-            //   headers['Content-Type'] = 'text/html'
-            // response.writeHead(200, headers)
-            let data = []
-            for (let i = 0; i < files.length; i++) {
-              let stat = fs.statSync(path.join(filePath, files[i]));
-              if (stat.isFile()) {
-                // console.log(stat)
-                data.push({
-                  fileName: files[i],
-                  updateTime: stat.mtime,
-                  addr: '/' + files[i],
-                  size: formatBytes(stat.size)
-                });
-              }
-
-            }
-            json["data"] = data
-            // console.log(json)
-            response.send(json)
-          }
-        })
-      } else {
-        response.send({})
       }
-    })
+      json["data"] = data
+      // console.log(json)
+      return json
+    }
+    return {}
   }
 
 
@@ -73,14 +67,14 @@ export class FileInfoService {
     pathName = decodeURI(pathName)
     // 获取资源文件的绝对路径
     let filePath = '';//path.resolve(__dirname + '/fileDir/' + pathName)
-    filePath = filePath = config.appRootDirPath + config.appreleaseDirPath + "/"+pathName
-    filePath = filePath.replace(`//`,'/')
-    console.log("downFile:"+filePath)
+    filePath = filePath = config.appRootDirPath + config.appreleaseDirPath + "/" + pathName
+    filePath = filePath.replace(`//`, '/')
+    console.log("downFile:" + filePath)
     // 文件后缀名
     let ext = path.extname(pathName)
     ext = ext ? ext.slice(1) : 'unknown'
     // 未知类型一律用 "text/plain" 类型
-    headers['Content-Type'] = (mime[ext] || "'text/plain'")+";charset=UTF-8"
+    headers['Content-Type'] = (mime[ext] || "'text/plain'") + ";charset=UTF-8"
 
     // 301重定向
     if (!pathName.endsWith('/') && path.extname(pathName) === '') {
@@ -150,24 +144,18 @@ export class FileInfoService {
     let filePath = '';//path.resolve(__dirname + '/fileDir/' + pathName)
     filePath = filePath = config.appRootDirPath + config.appreleaseDirPath + pathName
 
-    fs.stat(filePath, (err, stats) => {
+    let stat = fs.statSync(filePath)
+    if (stat.isFile) {
       // 未找到文件
       // 文件
-      if (!err && stats.isFile()) {
-        //fs.unlink删除文件  
-        fs.unlink(filePath, function (error) {
-          if (error) {
-            console.log(error);
-            return false;
-          }
-          console.log('删除文件成功');
-          response.send({
-            msg: 'ok'
-          })
-        })
+      //fs.unlink删除文件  
+      fs.unlinkSync(filePath);
+      console.log('删除文件成功');
+      return {
+        msg: 'ok'
       }
       // 目录
-    })
+    }
   }
 }
 

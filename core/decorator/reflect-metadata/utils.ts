@@ -43,7 +43,9 @@ export function handlerFactory(
       // const result = await func(...args);
       // const fun = instance[functionName]
       const result = await instance[functionName](...args);
-      res.send(result);
+      if (result) {
+        res.send(result);
+      }
     } catch (err) {
       next(err);
     }
