@@ -23,3 +23,17 @@ brew install ghostscript
 
 yarn add gm
 ```
+
+# 用@替代根路径
+```sh
+# 1.tsconfig.json
+"baseUrl": "./",
+"paths": {
+    "@/*": [
+    "*",
+    ]
+},
+# 2.1添加包 module-alias
+# 2.2入口文件 
+require('module-alias/register')
+```
