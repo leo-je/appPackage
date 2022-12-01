@@ -73,7 +73,7 @@ function getKeyValuseForInsert(e) {
   let type = '';// 1:string 2:Date 3:number 4:NULL/null 5:Buffer
   let time = '';
   for (let key in e) {
-    keys += `\`${key}\`,`;
+    keys += `${key},`;
     // console.log("key: " + key + " type: " + typeof e[key])
     if (typeof e[key] === 'string') {
       type = '1';
@@ -114,7 +114,7 @@ function getKeyValuseForInsert(e) {
     //
     if (type == '1' || type == '') {
       // 处理单引号
-       values += `'${e[key].replace(/\'/g, '\\\'').replace(/\\n/g,"\\\\\\n")}',`;
+      values += `'${e[key].replace(/\'/g, '\'\'').replace(/\\n/g, "\\\\n")}',`;
     } else if (type == '2') {
       if (time === 'Invalid date') {
         // 处理单引号
@@ -134,7 +134,7 @@ function getKeyValuseForInsert(e) {
   values += '); \n'
   let sql = keys.replace(',)', ')') + 'values' + values.replace(',)', ')')
   // 处理双引号
-  sql = sql.replace(/\"/g, '\\"')
+  //sql = sql.replace(/\"/g, '\\"')
   return sql;
 }
 
