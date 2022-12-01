@@ -1,4 +1,6 @@
+import { Component } from "@/core"
 
+@Component("userService")
 export class UserService {
 
     getUserByUsername = (username: string) => {

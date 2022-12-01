@@ -8,8 +8,8 @@ import {
     createParamDecorator,
     Parse, Get, Query, Post, Body
 } from "./decorator/reflect-metadata/decorator";
-import { Component,AutoWired, Inject  } from "./decorator/Component/Component";
-import { enableIoc } from './ioc/ioc';
+import { Component, AutoWired, Inject } from "./decorator/Component/Component";
+import { enableIoc, enableJwt, enableRouter } from './ioc/ioc';
 
 export {
     CONTROLLER_METADATA,
@@ -20,6 +20,6 @@ export {
     createMethodDecorator,
     createParamDecorator,
     Parse,
-    Get, Query, Post, Body, Component,AutoWired, Inject ,
-    enableIoc,
+    Get, Query, Post, Body, Component, AutoWired, Inject,
+    enableIoc, enableJwt, enableRouter,
 }

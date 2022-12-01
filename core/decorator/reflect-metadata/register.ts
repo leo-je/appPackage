@@ -1,3 +1,4 @@
+import { getFormatDateTime } from '@/core/utils/DateUtils';
 import { Express, Router } from 'express';
 import 'reflect-metadata';
 
@@ -17,12 +18,13 @@ function register(
   const router = Router();
 
   Object.values(controllerStore).forEach(instance => {
+    let time = getFormatDateTime()
     // 获取Controller注解的入参--路径
     const controllerRootPath: string = Reflect.getMetadata(
       CONTROLLER_METADATA,
       instance.constructor,
     );
-    console.log(`[${__filename}]-controller:`, instance, controllerRootPath)
+    console.log(`[${time}][info][register]-controller:`, instance, controllerRootPath)
     // 实例属性
     const proto = Object.getPrototypeOf(instance);
     // 方法数组
@@ -36,7 +38,7 @@ function register(
       );
       if (!routeMetadata) return;
       const { type, path } = routeMetadata;
-      console.log(`[${__filename}]-load ${type.toUpperCase()}:${path}`)
+      console.log(`[${time}][info][register]-load ${type.toUpperCase()}:${path}`)
       const handler = handlerFactory(
         instance,
         functionName,

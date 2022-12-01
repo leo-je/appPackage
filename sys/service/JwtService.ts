@@ -1,8 +1,15 @@
 import jwt from 'jsonwebtoken'
 import { Express } from 'express'
-import { UserService } from '../service/userService'
-import { config } from '../service/config'
+import { UserService } from '../../busi/user/service/UserService'
+import { config } from '../../service/config'
+import { AutoWired, Component } from '@/core';
+
+@Component("jwtService")
 export class JwtService {
+
+    @AutoWired("userService")
+    private userService:UserService;
+
     secret = config.jwt.secret;
     loginPath = config.jwt.loginPath;
     // 生成token
@@ -16,9 +23,8 @@ export class JwtService {
         });
     }
 
-    enableVerify = function (app: Express, userService: UserService) {
+    enable = function (app: Express) {
         let _this = this;
-        this.userService = userService
         app.use(function (req, res, next) {
             console.log("path verify ----> path: " + req.path)
             let upgrade = req.headers.upgrade
@@ -58,7 +64,7 @@ export class JwtService {
         // 登陆接口
         app.post(_this.loginPath, (req, res) => {
             // console.log(req.body)
-            let user = userService.getUserByUsername(req.body.username)
+            let user = _this.userService.getUserByUsername(req.body.username)
             if (req.body.password != user.password) {
                 res.send({
                     msg: 'login fail',

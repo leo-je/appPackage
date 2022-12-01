@@ -1,6 +1,8 @@
+import { getFormatDateTime } from "@/core/utils/DateUtils";
+
 export const autoWiringComponents = []
 
-const Component = (componentName): ClassDecorator => {
+const Component = (componentName?:string): ClassDecorator => {
     return (originClass:any) => {
         var _componentName;
         componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
@@ -10,8 +12,8 @@ const Component = (componentName): ClassDecorator => {
         autoWiringComponents[componentName].value = originClass;
         autoWiringComponents[componentName].status = 'wired';
         autoWiringComponents[componentName].instance = new originClass();
-        console.log("注册Component-", originClass.name)
-
+        autoWiringComponents[originClass] = autoWiringComponents[componentName]
+        console.log(`[${getFormatDateTime()}][info][Component]-load component:`, originClass.name)
     };
 };
 
@@ -25,6 +27,7 @@ export function Inject(_constructor: any, propertyName: string): any {
         console.log(`[${__filename}]-Inject: new a ${propertyName}`)
         providerInsntance = new providerInsntanceClass()
         autoWiringComponents[propertyName].instance = providerInsntance
+        autoWiringComponents[providerInsntanceClass] = autoWiringComponents[propertyName]
     }
     _constructor[propertyName] = providerInsntance
     return (_constructor as any)[propertyName];
@@ -71,5 +74,5 @@ const getComponentInstance = async (componentName) => {
 }
 
 export {
-    Component, AutoWired
+    Component, AutoWired,getComponentInstance
 }

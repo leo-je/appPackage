@@ -1,13 +1,28 @@
+import { JwtService } from '@/sys/service/JwtService';
+import { Express } from 'express'
 import fs from 'fs';
 import path from 'path'
+import { getComponentInstance } from '../decorator/Component/Component';
 import { Controllers } from '../decorator/reflect-metadata/decorator';
-import {register} from '../decorator/reflect-metadata/register';
+import { register } from '../decorator/reflect-metadata/register';
 
-export const enableIoc = (app, scanDirPaths: string[]) => {
-    let rootPath = __dirname.replace('/core/ioc','')
+export const enableIoc = (scanDirPaths: string[]) => {
+    let rootPath = __dirname.replace('/core/ioc', '')
     for (let i in scanDirPaths) {
         readDir((rootPath + "/" + scanDirPaths[i]).replace('//', '/'), rootPath);
     }
+}
+
+export const enableJwt = async (app: Express, componentName) => {
+    let jwtService = await getComponentInstance(componentName);
+    if (jwtService) {
+        jwtService.enable(app)
+    } else {
+        console.error(`${componentName} is undefined`)
+    }
+}
+
+export const enableRouter = (app: Express) => {
     // 注册 路由
     // console.log('注册路由=============>\n', Controllers)
     register(Controllers, '/', app);
@@ -47,7 +62,7 @@ function readDir(dirPath: string, _rootPath: string) {
 
 function requireComponent(filePath: string, className: string) {
     // console.log(filePath)
-    console.log(`requireComponent`, className)
+    //console.log(`requireComponent`, className)
     require(filePath)
     // console.log(`requireComponent-add`, className)
     // requireMap[className.replace('.js','').replace('.ts','')] = _t

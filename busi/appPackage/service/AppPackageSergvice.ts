@@ -1,15 +1,19 @@
 
 import { exec, cd } from 'shelljs';
-import { config } from './config';
-import { WebSocketService } from './webSocketService';
+import { config } from '../../../service/config';
+import { WebSocketService } from '../../../service/webSocketService';
 import { Request, Response } from "express"
+import { Component } from '@/core';
 
 let log = ''
 let logHistory = ''
 let isProcess = false
 let childProcess = null
 let childProcessId = null
+
+@Component("appPackageSergvice")
 export class AppPackageSergvice {
+    
     webSocketService: WebSocketService = null
     constructor(webSocketService: WebSocketService) {
         this.webSocketService = webSocketService
