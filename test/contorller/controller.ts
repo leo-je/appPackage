@@ -1,6 +1,5 @@
 
-import { Controller, Get, Query, Post, Body, Parse } from '../../core/decorator/reflect-metadata/decorator';
-import { Request, Response } from "express"
+import { Controller, Get } from '../../core/decorator/reflect-metadata/decorator';
 
 @Controller("/test")
 export default class TestController {

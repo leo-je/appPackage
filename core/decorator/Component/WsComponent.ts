@@ -60,11 +60,28 @@ export function registerWs(
             const { type, path } = routeMetadata;
             console.log(`[${time}][info][registerWs]-load ${type.toUpperCase()}:${path}`)
 
-            wsArr[wsArr.length] = { path: controllerRootPath + path, handler: instance[functionName] };
+            wsArr[wsArr.length] = {
+                path: controllerRootPath + path, handler: createWsHandler(instance,
+                    functionName)
+            };
         });
     });
     for (let i = 0; i < wsArr.length; i++) {
         let ws = wsArr[i];
         wsApp.ws(ws.path, ws.handler)
+    }
+
+
+}
+
+function createWsHandler(instance,
+    functionName,): any {
+    return async (ws, req, next) => {
+        try {
+            await instance[functionName](ws, req, next)
+        } catch (e) {
+            console.error(e)
+        }
+
     }
 }

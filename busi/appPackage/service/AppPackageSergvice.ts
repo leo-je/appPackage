@@ -55,7 +55,6 @@ export class AppPackageSergvice {
             let branch = req.body.branch
             console.log(branch)
             if (!isProcess) {
-                _this.webSocketService.sendCmd('start package', null)
                 logHistory = ''
                 isProcess = true
                 log = cd(config.appRootDirPath)

@@ -6,7 +6,7 @@ export class WebSocketService {
     private clients = [];
 
     @EndPoint('/api/ws')
-    ws(ws, req) {
+    ws(ws, req, next) {
         let _this = this
         console.log("client connect to server successful!");
         _this.clients.push(ws);
@@ -36,7 +36,7 @@ export class WebSocketService {
     }
 
 
-    receiveCmd = function (msg) {
+    receiveCmd(msg) {
 
     }
 
