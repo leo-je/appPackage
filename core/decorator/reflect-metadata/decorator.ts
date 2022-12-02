@@ -1,7 +1,7 @@
 import { HttpMethod, Param, Parse } from 'utils';
 import { parseScript } from 'esprima';
 import { getFormatDateTime } from '@/core/utils/DateUtils';
-import { application } from '@/core/ioc/ApplicationContext';
+import { application } from '../../ioc/ApplicationContext';
 
 
 const CONTROLLER_METADATA = 'controller';

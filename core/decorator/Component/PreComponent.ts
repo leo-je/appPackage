@@ -1,5 +1,5 @@
-import { application } from "@/core/ioc/ApplicationContext";
-import { getFormatDateTime } from "@/core/utils/DateUtils";
+import { application } from "../../ioc/ApplicationContext";
+import { getFormatDateTime } from "../../utils/DateUtils";
 import { addBean } from "./Component";
 
 

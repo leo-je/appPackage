@@ -1,4 +1,4 @@
-import { getFormatDateTime } from '@/core/utils/DateUtils';
+import { getFormatDateTime } from '../../utils/DateUtils';
 import { Express, Router } from 'express';
 import 'reflect-metadata';
 
