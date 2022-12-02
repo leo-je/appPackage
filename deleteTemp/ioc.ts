@@ -1,18 +1,17 @@
-import { JwtService } from '@/sys/service/JwtService';
 import { Express } from 'express'
 import fs from 'fs';
 import path from 'path'
-import { autoWiringComponents, getComponentInstance } from '../decorator/Component/Component';
+
 import { registerWs } from '../decorator/Component/WsComponent';
-import { Controllers } from '../decorator/reflect-metadata/decorator';
 import { register } from '../decorator/reflect-metadata/register';
+import { application } from './ApplicationContext';
 
 export const enableIoc = (app, scanDirPaths: string[]) => {
-    autoWiringComponents['app'] = {}
-    autoWiringComponents['app'].instance = app
-    autoWiringComponents['app'].value = 'app';
-    autoWiringComponents['app'].status = 'wired';
-    autoWiringComponents[app.className] = autoWiringComponents['app']
+    // autoWiringComponents['app'] = {}
+    // autoWiringComponents['app'].instance = app
+    // autoWiringComponents['app'].value = 'app';
+    // autoWiringComponents['app'].status = 'wired';
+    // autoWiringComponents[app.className] = autoWiringComponents['app']
 
     let rootPath = __dirname.replace('/core/ioc', '')
     for (let i in scanDirPaths) {
@@ -24,7 +23,7 @@ export const enableWs = (app: Express) => {
 }
 
 export const enableJwt = (app: Express, componentName) => {
-    let jwtService = autoWiringComponents[componentName];
+    let jwtService = application.getComponent(componentName);
     if (jwtService) {
         console.error(`enable jwt`)
         jwtService.instance.enable(app)
@@ -36,7 +35,7 @@ export const enableJwt = (app: Express, componentName) => {
 export const enableRouter = (app: Express) => {
     // 注册 路由
     // console.log('注册路由=============>\n', Controllers)
-    register(Controllers, '/', app);
+    register(application.controllers, '/', application.app);
 }
 
 function readDir(dirPath: string, _rootPath: string) {

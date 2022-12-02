@@ -11,13 +11,13 @@ import {
 import { RouteType, handlerFactory } from './utils';
 
 function register(
-  controllerStore: Record<string, any>,
+  controllerStore: Map<string, any>,
   rootPath: string,
   app: Express,
 ) {
   const router = Router();
 
-  Object.values(controllerStore).forEach(instance => {
+  controllerStore.forEach((instance: any, key: string, map: Map<string, any>) => {
     let time = getFormatDateTime()
     // 获取Controller注解的入参--路径
     const controllerRootPath: string = Reflect.getMetadata(

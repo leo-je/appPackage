@@ -1,14 +1,16 @@
 
 import { Request, Response } from "express"
-import { mysqlService } from './mysql'
+import { mysqlService } from '../../../service/mysql'
 import moment from "moment";
+import { Component } from "@/core";
 
 const headers = {
   'Access-Control-Allow-Origin': '*', // 允许跨域
   'Content-Type': 'application/json;charset=UTF-8'
 }
 
-export class ExportDatasource {
+@Component('exportDatasourceService')
+export class ExportDatasourceService {
   query = async (req: Request, response: Response) => {
     console.log(req.body)
     let sourceName = req.body.sourceName

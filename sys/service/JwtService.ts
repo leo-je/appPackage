@@ -2,9 +2,10 @@ import jwt from 'jsonwebtoken'
 import { Express } from 'express'
 import { UserService } from '../../busi/user/service/UserService'
 import { config } from '../../service/config'
-import { AutoWired, Component } from '@/core';
+import { AutoWired, Component, preComponent } from '@/core';
+import { getFormatDateTime } from '@/core/utils/DateUtils';
 
-@Component("jwtService")
+@preComponent()
 export class JwtService {
 
     @AutoWired("userService")
@@ -24,6 +25,7 @@ export class JwtService {
     }
 
     enable(app: Express) {
+        console.log(`[${getFormatDateTime()}][info][JwtService]-`, "enable JwtService")
         let _this = this;
         app.use(function (req, res, next) {
             console.log("path verify ----> path: " + req.path)

@@ -10,7 +10,8 @@ import {
 } from "./decorator/reflect-metadata/decorator";
 import { Component, AutoWired, Inject,getComponentInstance } from "./decorator/Component/Component";
 import { WsService,EndPoint,registerWs } from "./decorator/Component/WsComponent";
-import { enableIoc, enableJwt, enableRouter } from './ioc/ioc';
+import { preComponent } from "./decorator/Component/PreComponent";
+
 
 export {
     CONTROLLER_METADATA,
@@ -22,6 +23,6 @@ export {
     createParamDecorator,
     Parse,
     Get, Query, Post, Body, Component, AutoWired, Inject,getComponentInstance,
-    enableIoc, enableJwt, enableRouter,
     WsService,EndPoint,registerWs,
+    preComponent,
 }

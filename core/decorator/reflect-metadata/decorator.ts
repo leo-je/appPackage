@@ -1,6 +1,7 @@
 import { HttpMethod, Param, Parse } from 'utils';
 import { parseScript } from 'esprima';
 import { getFormatDateTime } from '@/core/utils/DateUtils';
+import { application } from '@/core/ioc/ApplicationContext';
 
 
 const CONTROLLER_METADATA = 'controller';
@@ -8,12 +9,11 @@ const ROUTE_METADATA = 'method';
 const PARAM_METADATA = 'param';
 const PARSE_METADATA = 'parse';
 
-export const Controllers = {}
 function Controller(path = ''): ClassDecorator {
     return (targetClass: any) => {
         Reflect.defineMetadata(CONTROLLER_METADATA, path, targetClass);
         console.log(`[${getFormatDateTime()}][info][Controller]-`, "add Controller:", targetClass.name)
-        Controllers[targetClass.name] = new targetClass()
+        application.addControllers(targetClass.name, new targetClass())
     };
 }
 

@@ -1,18 +1,19 @@
+import { application } from '@/core/ioc/ApplicationContext';
 import { getFormatDateTime } from '@/core/utils/DateUtils';
 import expressWS from 'express-ws';
 import { addBean } from './Component';
 
-export const WsServices = {}
 const WsService_METADATA = 'WsService';
 export const WsService = (path: string = '', name: string = ''): ClassDecorator => {
     return (targetClass: any) => {
         Reflect.defineMetadata(WsService_METADATA, path, targetClass);
         console.log(`[${getFormatDateTime()}][info][WsService]-`, "add WsService:", targetClass.name)
         let instance = new targetClass();
-        WsServices[targetClass.name] = instance
+        application.addWsControllers(targetClass.name, instance)
         addBean(name, targetClass, instance)
     };
 }
+
 export const EndPoint = (path = '/'): MethodDecorator => {
     return (target: object, name: string, descriptor: any) => {
         // target：当前类实例，name：当前函数名，descriptor：当前属性（函数）的描述符
@@ -35,7 +36,7 @@ export function registerWs(
 ) {
     let wsApp = expressWS(app).app;
     let wsArr = []
-    Object.values(WsServices).forEach(instance => {
+    application.wsControllers.forEach((instance: any, key: string, map: Map<string, any>) => {
         let time = getFormatDateTime()
         // 获取Controller注解的入参--路径
 
