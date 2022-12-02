@@ -1,8 +1,8 @@
 
 import { Request, Response } from "express"
-import { mysqlService } from '../../../service/mysql'
 import moment from "moment";
-import { Component } from "@/core";
+import { AutoWired, Component } from "@/core";
+import { MysqlService } from "@/sys/service/MysqlService";
 
 const headers = {
   'Access-Control-Allow-Origin': '*', // 允许跨域
@@ -11,6 +11,11 @@ const headers = {
 
 @Component('exportDatasourceService')
 export class ExportDatasourceService {
+
+
+  @AutoWired('mysqlService')
+  private mysqlService:MysqlService
+
   query = async (req: Request, response: Response) => {
     console.log(req.body)
     let sourceName = req.body.sourceName
@@ -30,7 +35,7 @@ export class ExportDatasourceService {
     }
     sql1 += ' order by gmt_Create desc '
     try {
-      data = await mysqlService.sqlQuery(req.body.environment, `select count(*) count from (${sql1}\n) a`);
+      data = await this.mysqlService.sqlQuery(req.body.environment, `select count(*) count from (${sql1}\n) a`);
       if (data && data.length > 0) {
         count = data[0]["count"]
       }
@@ -41,7 +46,7 @@ export class ExportDatasourceService {
     }
     sql1 = `${sql1} limit ${startRows},${pageSize}`
     try {
-      data = await mysqlService.sqlQuery(req.body.environment, sql1);
+      data = await this.mysqlService.sqlQuery(req.body.environment, sql1);
     } catch (e) {
       console.error(e)
       response.send(e)

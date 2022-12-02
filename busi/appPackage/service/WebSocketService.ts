@@ -1,10 +1,10 @@
 import { Component, EndPoint, getComponentInstance, WsService } from '@/core';
 const ssh2Service = require('@/service/ssh2Service')
 
-@WsService('','webSocketService')
+@WsService('', 'webSocketService')
 export class WebSocketService {
     private clients = [];
-    
+
     @EndPoint('/api/ws')
     ws(ws, req) {
         let _this = this
@@ -46,7 +46,7 @@ export class WebSocketService {
      * @param msg 
      * @param cb 
      */
-    sendCmd = function (msg: string | string[] | object, cd?: any) {
+    sendCmd(msg: string | string[] | object, cd?: any) {
         let _this = this;
         this.clients.forEach(ws => {
             if (typeof msg != 'string') {

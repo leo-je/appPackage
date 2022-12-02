@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import { mysqlService } from '@/service/mysql'
+import { MysqlService } from '@/sys/service/MysqlService'
 import moment from "moment";
-import { Component } from "@/core";
+import { AutoWired, Component } from "@/core";
 
 
 const headers = {
@@ -11,6 +11,10 @@ const headers = {
 
 @Component("exportProcess")
 export class ExportProcess {
+
+  @AutoWired('mysqlService')
+  private mysqlService: MysqlService
+
   create = async (req: Request, response: Response) => {
     console.log(req.body)
     let processKey = req.body.processKey
@@ -22,7 +26,7 @@ export class ExportProcess {
     from t_proc_custom   t where t.tenant_id='caih'  and  t.proc_version = (SELECT max(a.proc_version) FROM t_proc_custom a WHERE a.proc_def_key = t.proc_def_key
           and a.tenant_id = 'caih') and t.proc_def_key  in ('${processKey}','');`
     try {
-      data = await mysqlService.sqlQuery(req.body.environment, sql1);
+      data = await this.mysqlService.sqlQuery(req.body.environment, sql1);
     } catch (e) {
       console.error(e)
       response.send(e)
@@ -42,7 +46,7 @@ export class ExportProcess {
         * -- 替换字段
         from t_form_templet where form_def_key in (select form_def_key from t_proc_custom   t where t.tenant_id='caih'  and  t.proc_version = (SELECT max(a.proc_version) FROM t_proc_custom a WHERE a.proc_def_key = t.proc_def_key
         and a.tenant_id = 'caih') and t.proc_def_key  in ('${processKey}','') )	and status='1';`
-    data = await mysqlService.sqlQuery(req.body.environment, sql3);
+    data = await this.mysqlService.sqlQuery(req.body.environment, sql3);
     if (data && data.length > 0) {
       let e = data[0];
       sql += `insert into t_form_templet ` + getKeyValuseForInsert(e) + '\n'
@@ -55,7 +59,7 @@ export class ExportProcess {
         from t_form_bytearray where bytearray_id in (
 	      select form_bytearray_id from t_form_templet where form_def_key in (select form_def_key from t_proc_custom   t where t.tenant_id='caih'  and  t.proc_version = (SELECT max(a.proc_version) FROM t_proc_custom a WHERE a.proc_def_key = t.proc_def_key
         and a.tenant_id = 'caih') and t.proc_def_key  in ('${processKey}','') )	and status='1');`
-    data = await mysqlService.sqlQuery(req.body.environment, sql4);
+    data = await this.mysqlService.sqlQuery(req.body.environment, sql4);
     if (data && data.length > 0) {
       let e = data[0];
       sql += `insert into t_form_bytearray ` + getKeyValuseForInsert(e) + '\n'

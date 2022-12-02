@@ -1,10 +1,14 @@
+import { Component } from '@/core';
 import mysql from 'mysql';
-import { config } from './config'
-let dbType: mysql.Pool = null;
-let mysqlService = {
-    devDbPool: dbType,
-    uatDbPool: dbType,
-    initDb: function (dbType) {
+import { config } from '../../service/config'
+
+@Component('mysqlService')
+export class MysqlService {
+    
+    private devDbPool: mysql.Pool | any
+    private uatDbPool: mysql.Pool | any
+
+    initDb(dbType) {
         if (!this.devDbPool && dbType == 'dev') {
             console.log("dev initDb")
             this.devDbPool = mysql.createPool(config.db.connection.mysql.dev)
@@ -13,8 +17,8 @@ let mysqlService = {
             console.log("uat initDb")
             this.uatDbPool = mysql.createPool(config.db.connection.mysql.uat)
         }
-    },
-    sqlQuery: function (dbType, sql): any {
+    }
+    sqlQuery(dbType, sql): any {
         console.log("开始sql查询: \n" + sql)
         let _this = this;
         _this.initDb(dbType)
@@ -66,7 +70,6 @@ let mysqlService = {
                 })
             }
         });
-    },
+    }
 }
 
-export { mysqlService }
