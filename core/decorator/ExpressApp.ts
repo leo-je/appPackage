@@ -16,7 +16,6 @@ export const ExpressApp = (p?: { port?: number, scanPath?: string[] }): ClassDec
             }
 
         }
-        console.log(process.cwd())
         // 实例化一个Expres
         const app: Express = express()
         application.app = app

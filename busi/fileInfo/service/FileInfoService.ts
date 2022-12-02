@@ -3,7 +3,7 @@ import { Request, Response } from "express"
 // mock/server.js
 import fs from 'fs'
 import path from 'path'
-import { mime } from '../../../service/mime'
+import { mime } from './mime'
 import { config } from '../../../service/config'
 import { Component } from "@/core"
 

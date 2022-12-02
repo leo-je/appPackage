@@ -43,7 +43,8 @@ class Application implements ApplicationInterface {
         this.controllers.set(name, con)
     }
     public scanBean() {
-        let rootPath = __dirname.replace('/core/ioc', '')
+        // 项目路口
+        let rootPath = process.cwd()
         for (let i in this.scanPath) {
             this.readDir((rootPath + "/" + this.scanPath[i]).replace('//', '/'), rootPath);
         }
