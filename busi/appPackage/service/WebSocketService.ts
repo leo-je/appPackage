@@ -1,4 +1,4 @@
-import { Component, EndPoint, getComponentInstance, WsService } from '@/core';
+import { EndPoint, WsService } from '@/core';
 const ssh2Service = require('@/service/ssh2Service')
 
 @WsService('', 'webSocketService')
