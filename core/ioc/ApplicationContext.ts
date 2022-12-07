@@ -97,9 +97,9 @@ class Application implements ApplicationInterface {
 
     }
 
-    async requireComponent(filePath: string, className: string) {
-        console.log(`========> import ${filePath}`)
-        await import(filePath)
+    public requireComponent(filePath: string, className: string) {
+        // console.log(`========> import ${filePath}`)
+        require(filePath)
     }
 
     public start(): Express {
