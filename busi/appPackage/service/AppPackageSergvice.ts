@@ -3,7 +3,8 @@ import { exec, cd } from 'shelljs';
 import { config } from '../../../service/config';
 import { WebSocketService } from './WebSocketService';
 import { Request, Response } from "express"
-import { AutoWired, Component, getComponentInstance } from '@/core';
+import { AutoWired, Component } from '@/core';
+import { simpleGit, CleanOptions } from 'simple-git';
 
 let log = ''
 let logHistory = ''
@@ -240,5 +241,12 @@ export class AppPackageSergvice {
             msg: log,
             logArray: logHistory
         })
+    }
+
+    getAllBranch() {
+        const sg = simpleGit(config.appRootDirPath, { binary: 'git' });
+        let bs = sg.branch()
+        console.log(bs)
+        return bs
     }
 }

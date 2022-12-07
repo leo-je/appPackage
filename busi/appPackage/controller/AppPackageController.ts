@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Post } from "@/core";
+import { AutoWired, Controller, Get, Post } from "@/core";
 import { AppPackageSergvice } from "../service/AppPackageSergvice";
 
 
@@ -27,9 +27,14 @@ class AppPackageController {
         this.appPackageSergvice.packageDebugApp(req, res);
     }
 
-    @Post("/api/cancelPackageApp")
+    @Post("/cancelPackageApp")
     cancelPackageApp(req, res) {
         this.appPackageSergvice.cancelPackageApp(req, res)
+    }
+
+    @Get("/getAllBranch")
+    getAllBranch(req, res) {
+        return this.appPackageSergvice.getAllBranch()
     }
 
 }
