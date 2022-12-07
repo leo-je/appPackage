@@ -8,7 +8,9 @@
       </el-col>
       <el-col :span="4">
         <div style="width: 100%;margin-left: 15px;">
-          <el-input style="width: 90%;" v-model="branch" placeholder="请输入分支名称" />
+          <!-- <el-input style="width: 90%;" v-model="branch" placeholder="请输入分支名称" autocomplete="on" /> -->
+          <el-autocomplete v-model="branch" :fetch-suggestions="queryBranchSearch" clearable class="inline-input w-50"
+            placeholder="Please Input" @select="handleBranchSelect" />
         </div>
       </el-col>
 
@@ -35,7 +37,7 @@
           <el-table :data="tableData" border>
             <el-table-column prop="fileName" label="文件名" width="240">
               <template #default="scope">
-                <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">{{
+                <el-button text size="small" @click.prevent="down(scope.$index, tableData)">{{
                     tableData[scope.$index]["fileName"]
                 }}</el-button>
               </template>
@@ -44,8 +46,8 @@
             <el-table-column prop="updateTime" label="更新时间" width="180" />
             <el-table-column prop="addr" label>
               <template #default="scope">
-                <el-button type="text" size="small" @click.prevent="down(scope.$index, tableData)">下载</el-button>
-                <el-button type="text" size="small" @click.prevent="deleteRow(scope.$index, tableData)">删除
+                <el-button text size="small" @click.prevent="down(scope.$index, tableData)">下载</el-button>
+                <el-button text size="small" @click.prevent="deleteRow(scope.$index, tableData)">删除
                 </el-button>
               </template>
             </el-table-column>
@@ -85,6 +87,11 @@ import "xterm/lib/xterm.js";
 
 let term: Terminal | undefined;
 let shellWs: WebSocket;
+
+interface BranchInfo {
+  value: string
+}
+
 export default defineComponent({
   setup() {
     return {
@@ -96,7 +103,8 @@ export default defineComponent({
       dialogVisible: ref(false),
       sshDialogVisible: ref(false),
       packageLog: ref(""),
-      branch: ref("develop")
+      branch: ref("develop"),
+      allBranch: ref<BranchInfo[]>([])
     };
   },
   components: {},
@@ -107,6 +115,7 @@ export default defineComponent({
     //this.timer = setInterval(() => { _this.getLog() }, 1000);
     this.getLog();
     // this.initTerm();
+    this.getAllBranch()
   },
   methods: {
     initTerm() {
@@ -220,6 +229,40 @@ export default defineComponent({
         _this.packageLog = data.log;
       });
     },
+    getAllBranch() {
+      let _this = this;
+      http('get', '/api/getAllBranch').then(data => {
+        if (data && data.all && data.all.length > 0) {
+          let arr = []
+          for (let index in data.all) {
+            let b: BranchInfo = {
+              value: data.all[index]
+            }
+            arr.push(b)
+          }
+          _this.allBranch = arr
+        }
+      })
+
+    },
+    queryBranchSearch(queryString: string, cb: any) {
+      let _this = this
+      const results = queryString
+        ? this.allBranch.filter(this.createFilter(queryString))
+        : this.allBranch
+      // call callback function to return suggestions
+      cb(results)
+    },
+    createFilter(queryString: string) {
+      return (restaurant: BranchInfo) => {
+        return (
+          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        )
+      }
+    },
+    handleBranchSelect(item: BranchInfo) {
+      console.log(item)
+    },
     getFileList() {
       let _this = this;
       http("post", "/api/getFileList")
@@ -231,8 +274,8 @@ export default defineComponent({
             tableData = tableData.sort(function (a: any, b: any) {
               let t1 = new Date(Date.parse(a["updateTime"]));
               let t2 = new Date(Date.parse(b["updateTime"]));
-              console.log(t1);
-              console.log(t2);
+              // console.log(t1);
+              // console.log(t2);
               return a["updateTime"] > b["updateTime"];
             });
             console.log(tableData);
