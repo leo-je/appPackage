@@ -24,7 +24,7 @@ function register(
       CONTROLLER_METADATA,
       instance.constructor,
     );
-    console.log(`[${time}][info][register]-controller:`, instance, controllerRootPath)
+    console.log(`[${time}][info][register]-controller:`, key, controllerRootPath)
     // 实例属性
     const proto = Object.getPrototypeOf(instance);
     // 方法数组

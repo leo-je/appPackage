@@ -24,6 +24,13 @@ class Application implements ApplicationInterface {
 
     scanPath: string[]
 
+    startTime: Date = new Date()
+    finishStartTime: Date
+
+    constructor() {
+        // console.log(`init Application`)
+    }
+
     public addComponents(componentName, component: any) {
         this.components.set(componentName, component)
     }
@@ -42,15 +49,22 @@ class Application implements ApplicationInterface {
     public addControllers(name: string, con: any) {
         this.controllers.set(name, con)
     }
-    public scanBean() {
+    public async scanBean() {
+        console.log(`========================= scan allComponent========================`)
         // 项目路口
         let rootPath = process.cwd()
-        for (let i in this.scanPath) {
-            this.readDir((rootPath + "/" + this.scanPath[i]).replace('//', '/'), rootPath);
-        }
+        await Promise.all(this.scanPath.map(async p => {
+            await this.readDir((rootPath + "/" + p).replace('//', '/'), rootPath);
+        })).then(result => {
+            // console.log('scan finish')
+        }).catch(err => {
+
+        })
+        return true;
     }
-    readDir(dirPath: string, _rootPath: string) {
+    public async readDir(dirPath: string, _rootPath: string) {
         try {
+            // console.log(dirPath)
             let files = fs.readdirSync(dirPath)
             for (let i in files) {
                 let fileName = files[i]
@@ -62,14 +76,16 @@ class Application implements ApplicationInterface {
                         if (fileName == 'app.js' || fileName == 'app.ts' || fileName == 'ioc.ts' || fileName.indexOf('.') == 0) {
                             // 忽略文件
                         } else if (/\.(js|ts)$/.test(fileName)) {
-                            this.requireComponent(`@${_path.replace(_rootPath, '')}`, fileName)
-                            // requireComponent(`@${_path}`, fileName)
+                            // this.requireComponent(`@${_path.replace(_rootPath, '')}`, fileName)
+                            // this.requireComponent(`${_path}`, fileName)
+                            // console.log(`========> import ${_path}`)
+                            await import(_path)
                         }
                     } else if (/(\.git|ui|dist|core|node_modules)/.test(fileName)) {
 
                     } else if (stat.isDirectory()) {
                         // console.log("isDirectory")
-                        this.readDir(_path, _rootPath)
+                        await this.readDir(_path, _rootPath)
                     }
                 } catch (e) {
                     console.error(e)
@@ -81,8 +97,9 @@ class Application implements ApplicationInterface {
 
     }
 
-    requireComponent(filePath: string, className: string) {
-        require(filePath)
+    async requireComponent(filePath: string, className: string) {
+        console.log(`========> import ${filePath}`)
+        await import(filePath)
     }
 
     public start(): Express {
@@ -90,6 +107,8 @@ class Application implements ApplicationInterface {
         this.app.listen(port, () => {
             console.log(`[${getFormatDateTime()}][info][app]:`, `service app listening at \nhttp://0.0.0.0:${port}\nhttp://127.0.0.1:${port}\nhttp://localhost:${port}`)
         })
+        this.finishStartTime = new Date()
+        console.log(`========================= finish start ============================`)
         return this.app
     }
 
@@ -106,6 +125,7 @@ class Application implements ApplicationInterface {
         console.log(`========================= load preComponent=========================`)
         let array = []
         for (let [key, value] of this.preComponents.entries()) {
+            // console.log(key)
             array.push(value)
         }
         // 从小到大的排序 

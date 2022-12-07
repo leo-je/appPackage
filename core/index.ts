@@ -11,7 +11,7 @@ import {
 import { Component, AutoWired, Inject,getComponentInstance } from "./decorator/Component/Component";
 import { WsService,EndPoint,registerWs } from "./decorator/Component/WsComponent";
 import { preComponent } from "./decorator/Component/PreComponent";
-
+import { EnableApplication } from "./decorator/EnableApplication";
 
 export {
     CONTROLLER_METADATA,
@@ -25,4 +25,5 @@ export {
     Get, Query, Post, Body, Component, AutoWired, Inject,getComponentInstance,
     WsService,EndPoint,registerWs,
     preComponent,
+    EnableApplication,
 }

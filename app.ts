@@ -1,8 +1,9 @@
-import { ExpressApp } from "./core/decorator/ExpressApp";
+import { EnableApplication } from "./core";
 import dotenv from 'dotenv'
 dotenv.config()
+require('module-alias/register')
 
-@ExpressApp({ port: +process.env.appPort, scanPath: ['/busi', '/sys'] })
+@EnableApplication({ port: +process.env.appPort, scanPath: ['/busi', '/sys'] })
 class TestApp {
 
 }
