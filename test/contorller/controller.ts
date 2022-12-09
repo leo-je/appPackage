@@ -1,5 +1,5 @@
 
-import { Controller, Get } from '../../core/decorator/reflect-metadata/decorator';
+import { Controller, Get } from '../../core/decorator/Component/web/decorator';
 
 @Controller("/test")
 export default class TestController {

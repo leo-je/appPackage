@@ -2,7 +2,7 @@ import { Express } from 'express'
 import { getFormatDateTime } from '../utils/DateUtils'
 import fs from 'fs';
 import path from 'path'
-import { register } from '../decorator/reflect-metadata/register';
+import { register } from '../decorator/Component/web/register';
 import { registerWs } from '../decorator/Component/WsComponent';
 
 interface ApplicationInterface {
