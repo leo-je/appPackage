@@ -65,6 +65,8 @@ class Application implements ApplicationInterface {
     public async readDir(dirPath: string, _rootPath: string) {
         try {
             // console.log(dirPath)
+            let b = fs.existsSync(dirPath)
+            if(!b) return
             let files = fs.readdirSync(dirPath)
             for (let i in files) {
                 let fileName = files[i]

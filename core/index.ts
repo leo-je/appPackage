@@ -1,29 +1,6 @@
-import {
-    CONTROLLER_METADATA,
-    ROUTE_METADATA,
-    PARAM_METADATA,
-    PARSE_METADATA,
-    Controller,
-    createMethodDecorator,
-    createParamDecorator,
-    Parse, Get, Query, Post, Body
-} from "./decorator/reflect-metadata/decorator";
-import { Component, AutoWired, Inject,getComponentInstance } from "./decorator/Component/Component";
-import { WsService,EndPoint,registerWs } from "./decorator/Component/WsComponent";
-import { preComponent } from "./decorator/Component/PreComponent";
-import { EnableApplication } from "./decorator/EnableApplication";
-
-export {
-    CONTROLLER_METADATA,
-    ROUTE_METADATA,
-    PARAM_METADATA,
-    PARSE_METADATA,
-    Controller,
-    createMethodDecorator,
-    createParamDecorator,
-    Parse,
-    Get, Query, Post, Body, Component, AutoWired, Inject,getComponentInstance,
-    WsService,EndPoint,registerWs,
-    preComponent,
-    EnableApplication,
-}
+export * from "./decorator/reflect-metadata/decorator";
+export * from "./decorator/Component/Component";
+export * from "./decorator/Component/WsComponent";
+export * from "./decorator/Component/PreComponent";
+export * from "./decorator/EnableApplication";
+export * from './catch/CommCatch'
