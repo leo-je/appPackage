@@ -4,4 +4,4 @@ export * from "./decorator/Component/WsComponent";
 export * from "./decorator/Component/PreComponent";
 export * from "./decorator/EnableApplication";
 export * from './catch/CommCatch'
-export * from './aop/Aspect'
+export * from './aop/AopDecorator'

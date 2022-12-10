@@ -4,8 +4,21 @@ import fs from 'fs';
 import path from 'path'
 import { register } from '../decorator/Component/web/register';
 import { registerWs } from '../decorator/Component/WsComponent';
+import { AspectManager } from '../aop/AspectManager';
 
 interface ApplicationInterface {
+    app?: Express // Express 实例
+    appPort?: number// = 8080
+    preComponents?: Map<string, any> //= new Map(); // 添加Controller之前需要添加的组件集合
+    wsControllers?: Map<string, any> //= new Map();  // ws的controller 结合
+    controllers?: Map<string, any> //= new Map();    // controller 结合
+    components?: Map<string, any> //= new Map();    // 普通组件集合
+    scanPath: string[]
+    startTime: Date //= new Date()
+    finishStartTime: Date
+    isEnableAspect: boolean
+    aspectManager: AspectManager
+
     addComponents(componentName, component: any): void
     getComponent(componentName): any
     addPreComponents(name: string, con: any)
@@ -15,21 +28,22 @@ interface ApplicationInterface {
 }
 
 class Application implements ApplicationInterface {
-    app?: Express // Express 实例
-    appPort?: number = 8080
+
+    app?: Express; // Express 实例
+    appPort?: number = 8080;
     preComponents?: Map<string, any> = new Map(); // 添加Controller之前需要添加的组件集合
     wsControllers?: Map<string, any> = new Map();  // ws的controller 结合
     controllers?: Map<string, any> = new Map();    // controller 结合
     components?: Map<string, any> = new Map();    // 普通组件集合
-
-    scanPath: string[]
-
+    scanPath: string[] = ['']
     startTime: Date = new Date()
     finishStartTime: Date
-
+    isEnableAspect = false
+    aspectManager: AspectManager = new AspectManager()
     constructor() {
         // console.log(`init Application`)
     }
+
 
     public addComponents(componentName, component: any) {
         this.components.set(componentName, component)
@@ -66,7 +80,7 @@ class Application implements ApplicationInterface {
         try {
             // console.log(dirPath)
             let b = fs.existsSync(dirPath)
-            if(!b) return
+            if (!b) return
             let files = fs.readdirSync(dirPath)
             for (let i in files) {
                 let fileName = files[i]
@@ -101,7 +115,7 @@ class Application implements ApplicationInterface {
 
     public requireComponent(filePath: string, className: string) {
         // console.log(`========> import ${filePath}`)
-        require(filePath)
+        // require(filePath)
     }
 
     public start(): Express {
@@ -142,6 +156,41 @@ class Application implements ApplicationInterface {
             }
         })
     }
+
+    public enableAspect() {
+        if (this.isEnableAspect) {
+            console.log('========================= register Aspect==========================')
+            // 注册各个切点方法
+            this.aspectManager.registerAspect()
+            // 实例属性
+            let arr = [this.preComponents, this.components, this.wsControllers, this.controllers]
+            arr.forEach(components => {
+                components.forEach((instance: any, key: string, map: Map<string, any>) => {
+                    console.log(key)
+                    // instance.isProxy = true
+                    const proto = Object.getPrototypeOf(instance);
+                    // 方法数组
+                    const methodNameArr = Object.getOwnPropertyNames(proto).filter(
+                        n => n !== 'constructor' && typeof proto[n] === 'function',
+                    );
+                    methodNameArr.forEach(methodName => {
+                        const strArray = ['toString', 'valueOf', '__defineGetter__', '__defineSetter__',
+                            'hasOwnProperty', '__lookupSetter__',
+                            '__lookupGetter__', 'isPrototypeOf',
+                            '__lookupSetter__ ', 'propertyIsEnumerable', 'toLocaleString'];
+                        const hasString = strArray.includes(methodName);
+                        if (hasString) return;
+                        const invokeMethod = this.aspectManager.invoke(instance, methodName)
+                        if (invokeMethod) {
+                            instance[methodName] = invokeMethod
+                        }
+                    })
+                })
+            })
+
+        }
+    }
 }
 
+console.log('========================= new Application==========================')
 export const application = new Application()

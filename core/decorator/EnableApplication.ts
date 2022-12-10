@@ -10,10 +10,7 @@ export const EnableApplication = (p?: { port?: number, scanPath?: string[] }): C
             }
             if (p.scanPath && p.scanPath.length > 0) {
                 application.scanPath = p.scanPath
-            } else {
-                application.scanPath = ['']
-            }
-
+            } 
         }
         console.log(`========================= start Application========================`)
         // 实例化一个Expres
@@ -23,6 +20,7 @@ export const EnableApplication = (p?: { port?: number, scanPath?: string[] }): C
         // 1.扫描路径
         application.scanBean().then(() => {
             // 2.添加wsController
+            application.enableAspect()
             application.LoadWsController();
             // 3.添加前置组件(中间件)
             application.loadPreComponents();

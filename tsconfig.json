@@ -1,23 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
+    "target": "es2020",
+    "module": "CommonJS",
     "lib": [
-      "es2017",
+      "esnext",
       "dom"
     ],
     "baseUrl": "./",
     "paths": {
       "@/*": [
         "*",
-      ]
+      ],
+      "./*": [
+        "*",
+      ],
     },
     "types": [
       "reflect-metadata",
       "node"
     ],
     "outDir": "./dist",
-    "esModuleInterop": true,
+    "esModuleInterop": true, // 允许module.exports=xxx 导出，由import from 导入.因为很多老的js库使用了commonjs的导出方式，并且没有导出default属性
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
   },

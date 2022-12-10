@@ -5,7 +5,7 @@ import { config } from '../../service/config'
 import { AutoWired, Component, preComponent } from '@/core';
 import { getFormatDateTime } from '@/core/utils/DateUtils';
 
-@preComponent()
+//@preComponent()
 export class JwtService {
 
     @AutoWired("userService")
