@@ -166,7 +166,7 @@ class Application implements ApplicationInterface {
             let arr = [this.preComponents, this.components, this.wsControllers, this.controllers]
             arr.forEach(components => {
                 components.forEach((instance: any, key: string, map: Map<string, any>) => {
-                    console.log(key)
+                    // console.log(key)
                     // instance.isProxy = true
                     const proto = Object.getPrototypeOf(instance);
                     // 方法数组

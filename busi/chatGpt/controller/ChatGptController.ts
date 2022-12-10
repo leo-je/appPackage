@@ -10,6 +10,7 @@ class ChatGptController{
     @Get('/send')
     public async send(@Query('msg')msg:string){
         let data = await this.chatGptService.send(msg)
+        return data;
     }
 
 }

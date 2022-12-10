@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "CommonJS",
+    "module": "es2020",
     "lib": [
       "esnext",
       "dom"
@@ -23,6 +23,7 @@
     "esModuleInterop": true, // 允许module.exports=xxx 导出，由import from 导入.因为很多老的js库使用了commonjs的导出方式，并且没有导出default属性
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "moduleResolution":"Node"
   },
   "exclude": [
     "node_modules",

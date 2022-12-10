@@ -66,7 +66,7 @@ export class AspectManager {
             // todo:方法匹配优化
             //console.log(`=========================methodName:${methodName} --- key:${key} =========================`)
             if (methodName == key) {
-                console.log('========================= 符合条件 =========================')
+                // console.log('========================= 符合条件 =========================')
                 for (let i in value) {
                     let ai = value[i]
                     if (ai.type == 'before') {
