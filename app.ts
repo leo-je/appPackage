@@ -1,7 +1,7 @@
 import { EnableApplication, EnableAspect } from "./core";
-// import dotenv from 'dotenv'
-// dotenv.config()
-require('module-alias/register')
+import dotenv from 'dotenv'
+dotenv.config()
+import 'module-alias/register.js'
 
 
 @EnableAspect()

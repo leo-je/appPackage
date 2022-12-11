@@ -91,7 +91,7 @@ class Application implements ApplicationInterface {
                     if (stat.isFile()) {
                         if (fileName == 'app.js' || fileName == 'app.ts' || fileName == 'ioc.ts' || fileName.indexOf('.') == 0) {
                             // 忽略文件
-                        } else if (/\.(js|ts)$/.test(fileName)) {
+                        } else if (/\.(js|ts|mjs)$/.test(fileName)) {
                             // this.requireComponent(`@${_path.replace(_rootPath, '')}`, fileName)
                             // this.requireComponent(`${_path}`, fileName)
                             // console.log(`========> import ${_path}`)
@@ -134,11 +134,11 @@ class Application implements ApplicationInterface {
     }
 
     public LoadWsController(): void {
-        console.log(`========================= Load WsController=========================`)
+        console.log(`========================= Load WsController========================`)
         registerWs(this.app)
     }
     public loadPreComponents(): void {
-        console.log(`========================= load preComponent=========================`)
+        console.log(`========================= load preComponent========================`)
         let array = []
         for (let [key, value] of this.preComponents.entries()) {
             // console.log(key)

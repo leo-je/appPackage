@@ -13,7 +13,7 @@ class WebConfig{
         // 中间件
         app.use(express.json({ limit: '5mb' }));
         app.use(express.urlencoded({ extended: true }));
-        let s_path = path.join(__dirname.replace('sys/service',''), 'ui/dist')
+        let s_path = path.join(process.cwd(), 'ui/dist')
         app.use(express.static(s_path));
 
         app.options('*', function (req, res, next) {

@@ -1,10 +1,10 @@
 {
-  "name": "caih develop tool",
+  "name": "adt",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "tsup",
     "dev": "npx tsx app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -50,6 +50,7 @@
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.2.0"
+    "eslint-plugin-promise": "^5.2.0",
+    "tsup": "^6.5.0"
   }
 }
