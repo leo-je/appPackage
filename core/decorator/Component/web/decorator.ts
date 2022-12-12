@@ -1,4 +1,4 @@
-import { HttpMethod, Param, Parse } from 'utils';
+import { HttpMethod, Param, Parse } from './utils';
 import { parseScript } from 'esprima';
 import { getFormatDateTime } from '../../../utils/DateUtils';
 import { application } from '../../../ioc/ApplicationContext';

@@ -17,7 +17,7 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/express": "^4.17.13",
     "axios": "^0.27.2",
-    "chatgpt": "^2.0.5",
+    "chatgpt": "^2.1.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.2",
     "esprima": "^4.0.1",

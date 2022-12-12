@@ -756,10 +756,10 @@ character-entities@^2.0.0:
   resolved "https://registry.npmmirror.com/character-entities/-/character-entities-2.0.2.tgz#2d09c2e72cd9523076ccb21157dff66ad43fcc22"
   integrity sha512-shx7oQ0Awen/BRIdkjkvz54PnEEI/EjwXDSIZp86/KKdbafHh1Df/RYGBhn4hbe2+uKC9FnT5UCEdyPz3ai9hQ==
 
-chatgpt@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.npmmirror.com/chatgpt/-/chatgpt-2.0.5.tgz#136da7fe9dd1cf1a2c626be028214f0621734e27"
-  integrity sha512-eVswcmvAfYcYh3TK8ryP7305lnvUJXM4CTLayEtFoS25Ovd9mNsOYJPWYLa/B10+ClEOWpeRe1cLR9VssY6STQ==
+chatgpt@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.npmmirror.com/chatgpt/-/chatgpt-2.1.1.tgz#821a36f6111f0b1e2283afda0dec40b53932e479"
+  integrity sha512-vFSKaDlXUGuBOMDAFkHS7tGuT0NOg7t0Pv0qAN06IcRoThHymDVu+F53p32vSFrFtcNYKSiQZQSgUZRQPbLUZA==
   dependencies:
     eventsource-parser "^0.0.5"
     expiry-map "^2.0.0"
