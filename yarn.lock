@@ -3571,7 +3571,7 @@ tslib@^2.4.1:
 
 tsup@^6.5.0:
   version "6.5.0"
-  resolved "https://registry.npmjs.org/tsup/-/tsup-6.5.0.tgz#1be97481b7a56385b7c40d01bdabb4196f3649cf"
+  resolved "https://registry.npmmirror.com/tsup/-/tsup-6.5.0.tgz#1be97481b7a56385b7c40d01bdabb4196f3649cf"
   integrity sha512-36u82r7rYqRHFkD15R20Cd4ercPkbYmuvRkz3Q1LCm5BsiFNUgpo36zbjVhCOgvjyxNBWNKHsaD5Rl8SykfzNA==
   dependencies:
     bundle-require "^3.1.2"
