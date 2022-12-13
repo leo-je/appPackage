@@ -4,25 +4,16 @@ import { getFormatDateTime } from "../../utils/DateUtils";
 // export const autoWiringComponents = []
 // export const WsServiceComponents = []
 
-
+/**
+ * 
+ * @param componentName 组件名称 如果不传,默认使用类名作为名称key
+ * @returns 
+ */
 const Component = (componentName?: string): ClassDecorator => {
     return (originClass: any) => {
-        addBean(componentName, originClass, new originClass())
+        application.addBean(componentName, originClass, new originClass())
     };
 };
-
-const addBean = (componentName: string, originClass: any, instance: any) => {
-    var _componentName;
-    componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
-    let component = {
-        status: 'wired',
-        value: originClass,
-        instance: instance,
-    };
-    //autoWiringComponents[originClass] = autoWiringComponents[componentName]
-    application.addComponents(componentName, component)
-    console.log(`[${getFormatDateTime()}][info][Component]-load component:${componentName}`, originClass.name)
-}
 
 export function Inject(_constructor: any, propertyName: string): any {
     // 元数据反射 获取当前装饰的元素的类型
@@ -40,15 +31,70 @@ export function Inject(_constructor: any, propertyName: string): any {
     // return (_constructor as any)[propertyName];
 }
 
-const AutoWired = (componentName?: string) => {
-    return (originClass, propertyKey?) => {
-        getComponentInstance(componentName !== null && componentName !== void 0 ? componentName : propertyKey).then(component => {
-            originClass[propertyKey] = component;
-        });
+/**
+ * 
+ * @param componentKey 依赖名称或者类
+ * @returns 
+ */
+const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
+    /**
+     * @param target 属性所属类
+     * @param propertyKey 属性名称
+     */
+    return (target: Object, propertyKey: string) => {
+        const inject = {
+            target,
+            targetClassName: target.constructor.name,
+            propertyKey,
+            componentKey,
+        }
+        // console.log(`\n${inject.targetClassName} need ${inject.componentKey} --- \n${typeof componentKey}\n`)
+
+        if (componentKey && typeof componentKey != 'string') {
+            getComponentInstanceByClazz(componentKey).then(component => {
+                target[propertyKey] = component;
+            }).catch(e => { });
+        } else {
+            getComponentInstanceByName(componentKey !== null && componentKey !== void 0 ? componentKey : propertyKey).then(component => {
+                target[propertyKey] = component;
+            }).catch(e => { });
+        }
+        application.injectInfos.push(inject)
     };
 };
 
-const getComponentInstance = async (componentName) => {
+
+const getComponentInstanceByClazz = async (componentKey) => {
+    let waitTimes = 10;
+    const getComponent = async componentKey => {
+        const autoWiringComponent = application.getComponentByClazz(componentKey);
+        if (autoWiringComponent === undefined || autoWiringComponent.status === 'wiring') {
+            return new Promise((resolve, reject) => {
+                setTimeout(_ => {
+                    if (waitTimes === 0) {
+                        reject(new Error(`component ${componentKey} not found`));
+                        return;
+                    }
+                    waitTimes -= 1;
+                    getComponent(componentKey).then(resolve).catch(reject);
+                }, 500);
+            });
+        } else {
+            return autoWiringComponent
+        }
+
+    };
+    const ComponentClass = (await getComponent(componentKey)).value;
+    let providerInsntance = (await getComponent(componentKey)).instance;
+    if (!providerInsntance) {
+        console.log(`[${__filename}]-AutoWired: new a ${componentKey}`)
+        providerInsntance = new ComponentClass()
+        application.addBean(componentKey, ComponentClass, providerInsntance)
+    }
+    return providerInsntance;
+}
+
+const getComponentInstanceByName = async (componentName) => {
     let waitTimes = 10;
     const getComponent = async componentName => {
         const autoWiringComponent = application.getComponent(componentName);
@@ -63,11 +109,8 @@ const getComponentInstance = async (componentName) => {
                     getComponent(componentName).then(resolve).catch(reject);
                 }, 500);
             });
-        }
-        if (autoWiringComponent.status === 'wired') {
-            return application.getComponent(componentName);
         } else {
-            throw new Error('Unknown Wiring status');
+            return autoWiringComponent
         }
     };
     const ComponentClass = (await getComponent(componentName)).value;
@@ -75,11 +118,11 @@ const getComponentInstance = async (componentName) => {
     if (!providerInsntance) {
         console.log(`[${__filename}]-AutoWired: new a ${componentName}`)
         providerInsntance = new ComponentClass()
-        application.getComponent(componentName).instance = providerInsntance
+        application.addBean(componentName, ComponentClass, providerInsntance)
     }
     return providerInsntance;
 }
 
 export {
-    Component, AutoWired, getComponentInstance, addBean
+    Component, AutoWired, getComponentInstanceByName
 }

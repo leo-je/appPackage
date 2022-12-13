@@ -13,7 +13,9 @@ function Controller(path = ''): ClassDecorator {
     return (targetClass: any) => {
         Reflect.defineMetadata(CONTROLLER_METADATA, path, targetClass);
         console.log(`[${getFormatDateTime()}][info][Controller]-`, "add Controller:", targetClass.name)
-        application.addControllers(targetClass.name, new targetClass())
+        let instance = new targetClass()
+        application.addControllers(targetClass.name, instance)
+        application.addBean(targetClass.name, targetClass, instance)
     };
 }
 

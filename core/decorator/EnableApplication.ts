@@ -10,7 +10,7 @@ export const EnableApplication = (p?: { port?: number, scanPath?: string[] }): C
             }
             if (p.scanPath && p.scanPath.length > 0) {
                 application.scanPath = p.scanPath
-            } 
+            }
         }
         console.log(`========================= start Application========================`)
         // 实例化一个Expres

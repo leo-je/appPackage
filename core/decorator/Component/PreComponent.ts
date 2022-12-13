@@ -1,7 +1,5 @@
 import { application } from "../../ioc/ApplicationContext";
 import { getFormatDateTime } from "../../utils/DateUtils";
-import { addBean } from "./Component";
-
 
 export const preComponent = (index: number = 100): ClassDecorator => {
     return (targetClass: any) => {
@@ -11,6 +9,6 @@ export const preComponent = (index: number = 100): ClassDecorator => {
         console.log(`[${getFormatDateTime()}][info][preComponent]-`, "add preComponent:", targetClass.name)
         const instance = new targetClass();
         application.addPreComponents(targetClass.name, instance)
-        addBean(targetClass.name, targetClass, instance)
+        application.addBean(targetClass.name, targetClass, instance)
     };
 }

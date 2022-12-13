@@ -6,19 +6,35 @@ import { register } from '../decorator/Component/web/register';
 import { registerWs } from '../decorator/Component/WsComponent';
 import { AspectManager } from '../aop/AspectManager';
 
+
+interface InjectInfo {
+    target: object
+    targetClassName: string,
+    componentKey?: string | any
+    propertyKey: string
+}
+
+interface ComponentInfo {
+    className: string
+    componentName: string
+    status: string
+    value: any
+    instance: any,
+}
+
 interface ApplicationInterface {
     app?: Express // Express 实例
     appPort?: number// = 8080
-    preComponents?: Map<string, any> //= new Map(); // 添加Controller之前需要添加的组件集合
-    wsControllers?: Map<string, any> //= new Map();  // ws的controller 结合
-    controllers?: Map<string, any> //= new Map();    // controller 结合
-    components?: Map<string, any> //= new Map();    // 普通组件集合
+    preComponents?: Map<string, ComponentInfo> //= new Map(); // 添加Controller之前需要添加的组件集合
+    wsControllers?: Map<string, ComponentInfo> //= new Map();  // ws的controller 结合
+    controllers?: Map<string, ComponentInfo> //= new Map();    // controller 结合
+    components?: Map<string, ComponentInfo> //= new Map();    // 普通组件集合
     scanPath: string[]
     startTime: Date //= new Date()
     finishStartTime: Date
     isEnableAspect: boolean
     aspectManager: AspectManager
-
+    injectInfos: InjectInfo[]
     addComponents(componentName, component: any): void
     getComponent(componentName): any
     addPreComponents(name: string, con: any)
@@ -31,26 +47,36 @@ class Application implements ApplicationInterface {
 
     app?: Express; // Express 实例
     appPort?: number = 8080;
-    preComponents?: Map<string, any> = new Map(); // 添加Controller之前需要添加的组件集合
-    wsControllers?: Map<string, any> = new Map();  // ws的controller 结合
-    controllers?: Map<string, any> = new Map();    // controller 结合
-    components?: Map<string, any> = new Map();    // 普通组件集合
+    preComponents?: Map<string, ComponentInfo> = new Map(); // 添加Controller之前需要添加的组件集合
+    wsControllers?: Map<string, ComponentInfo> = new Map();  // ws的controller 结合
+    controllers?: Map<string, ComponentInfo> = new Map();    // controller 结合
+    components?: Map<string, ComponentInfo> = new Map();    // 普通组件集合
+    componentsOnKey?: Map<any, ComponentInfo> = new Map();    // 普通组件集合
     scanPath: string[] = ['']
     startTime: Date = new Date()
     finishStartTime: Date
     isEnableAspect = false
     aspectManager: AspectManager = new AspectManager()
+    injectInfos: InjectInfo[] = []
     constructor() {
         // console.log(`init Application`)
     }
 
 
-    public addComponents(componentName, component: any) {
+    public addComponents(componentName, component: ComponentInfo) {
+        if (component.value) {
+            this.componentsOnKey.set(component.value, component)
+        }
         this.components.set(componentName, component)
     }
 
     getComponent = (componentName): any => {
         let component = this.components.get(componentName)
+        return component
+    }
+
+    getComponentByClazz = (componentClazz): any => {
+        let component = this.componentsOnKey.get(componentClazz)
         return component
     }
 
@@ -157,38 +183,68 @@ class Application implements ApplicationInterface {
         })
     }
 
+    /**
+ * 
+ * @param componentName 组件名称
+ * @param originClass 组件class
+ * @param instance 组件实例
+ */
+    public addBean(componentName: string, originClass: any, instance: any) {
+        let _componentName;
+        componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
+        let component = {
+            className: originClass.name,
+            componentName,
+            status: 'wired',
+            value: originClass,
+            instance: instance,
+        };
+        //autoWiringComponents[originClass] = autoWiringComponents[componentName]
+        this.addComponents(componentName, component)
+        console.log(`[${getFormatDateTime()}][info][Component]-load component:${componentName}`, originClass.name)
+    }
+
     public enableAspect() {
         if (this.isEnableAspect) {
             console.log('========================= register Aspect==========================')
             // 注册各个切点方法
             this.aspectManager.registerAspect()
             // 实例属性
-            let arr = [this.preComponents, this.components, this.wsControllers, this.controllers]
-            arr.forEach(components => {
-                components.forEach((instance: any, key: string, map: Map<string, any>) => {
-                    // console.log(key)
-                    // instance.isProxy = true
-                    const proto = Object.getPrototypeOf(instance);
-                    // 方法数组
-                    const methodNameArr = Object.getOwnPropertyNames(proto).filter(
-                        n => n !== 'constructor' && typeof proto[n] === 'function',
-                    );
-                    methodNameArr.forEach(methodName => {
-                        const strArray = ['toString', 'valueOf', '__defineGetter__', '__defineSetter__',
-                            'hasOwnProperty', '__lookupSetter__',
-                            '__lookupGetter__', 'isPrototypeOf',
-                            '__lookupSetter__ ', 'propertyIsEnumerable', 'toLocaleString'];
-                        const hasString = strArray.includes(methodName);
-                        if (hasString) return;
-                        const invokeMethod = this.aspectManager.invoke(instance, methodName)
-                        if (invokeMethod) {
-                            instance[methodName] = invokeMethod
-                        }
-                    })
+            this.components.forEach((component, key: string, map: Map<string, any>) => {
+                // console.log(key)
+                // instance.isProxy = true
+                const instance = component.instance
+                const proto = Object.getPrototypeOf(instance);
+                // 方法数组
+                const methodNameArr = Object.getOwnPropertyNames(proto).filter(
+                    n => n !== 'constructor' && typeof proto[n] === 'function',
+                );
+                methodNameArr.forEach(methodName => {
+                    const strArray = ['toString', 'valueOf', '__defineGetter__', '__defineSetter__',
+                        'hasOwnProperty', '__lookupSetter__',
+                        '__lookupGetter__', 'isPrototypeOf',
+                        '__lookupSetter__ ', 'propertyIsEnumerable', 'toLocaleString'];
+                    const hasString = strArray.includes(methodName);
+                    if (hasString) return;
+                    const invokeMethod = this.aspectManager.invoke(instance, methodName)
+                    if (invokeMethod) {
+                        instance[methodName] = invokeMethod
+                    }
                 })
             })
 
+
         }
+    }
+
+    public addInjectToComponent() {
+        let _this = this
+        this.injectInfos.forEach((injectInfo, index, array) => {
+            this.components.forEach(component => {
+
+
+            })
+        })
     }
 }
 
