@@ -1,7 +1,6 @@
 import { application } from '../../ioc/ApplicationContext';
 import { getFormatDateTime } from '../../utils/DateUtils';
 import expressWS from 'express-ws';
-import { addBean } from './Component';
 
 const WsService_METADATA = 'WsService';
 export const WsService = (path: string = '', name: string = ''): ClassDecorator => {
@@ -10,7 +9,7 @@ export const WsService = (path: string = '', name: string = ''): ClassDecorator 
         console.log(`[${getFormatDateTime()}][info][WsService]-`, "add WsService:", targetClass.name)
         let instance = new targetClass();
         application.addWsControllers(targetClass.name, instance)
-        addBean(name, targetClass, instance)
+        application.addBean(name, targetClass, instance)
     };
 }
 
