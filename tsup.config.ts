@@ -8,7 +8,7 @@ export const tsup: Options = {
   clean: true,
   outExtension({ format }) {
     return {
-      ts: `.${format}.js`,
+      js: `.${format}.js`,
     }
   },
 };

@@ -9,12 +9,14 @@ export class ChatGptService {
 
     constructor() {
         console.log('ChatGptService.constructor')
-        this.loadChatGptApi()
+        this.loadChatGptApi().catch(e => {
+            console.log(e)
+        })
     }
 
-    public loadChatGptApi() {
+    public async loadChatGptApi() {
         let chatGptApi = new ChatGPTAPI({
-            sessionToken:process.env.chatgptSession
+            sessionToken: process.env.chatgptSession
         })
         this.chatGptApi = chatGptApi
     }

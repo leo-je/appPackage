@@ -1,12 +1,12 @@
-import { SSHClient } from 'ssh2'
-const utf8 = require('utf8');
+import { Client } from 'ssh2'
+import utf8 from 'utf8';
 
 export class ssh2Service {
-  ssh: SSHClient = null
+  ssh: Client = null
   constructor(machineConfig, socket) {
     let _this = this
     if (this.ssh) this.ssh = null
-    this.ssh = new SSHClient();
+    this.ssh = new Client();
     const { host, username, password } = machineConfig;
     // 连接成功
     this.ssh.on('ready', function () {

@@ -20,6 +20,7 @@
     "chatgpt": "^2.0.5",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.2",
+    "esm": "^3.2.25",
     "esprima": "^4.0.1",
     "express": "^4.18.1",
     "express-jwt": "^6.1.0",
@@ -44,6 +45,9 @@
   "devDependencies": {
     "@types/mysql": "^2.15.21",
     "@types/node": "^18.7.6",
+    "@types/shelljs": "^0.8.11",
+    "@types/ssh2": "^1.11.6",
+    "@types/utf8": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "eslint": "^7.32.0",

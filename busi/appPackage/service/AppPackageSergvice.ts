@@ -4,7 +4,7 @@ import { config } from '../../../service/config';
 import { WebSocketService } from './WebSocketService';
 import { Request, Response } from "express"
 import { AutoWired, Component } from '@/core';
-import { simpleGit, CleanOptions } from 'simple-git';
+import { simpleGit } from 'simple-git';
 
 let log = ''
 let logHistory = ''

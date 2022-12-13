@@ -1,5 +1,5 @@
 import { EndPoint, WsService } from '@/core';
-const ssh2Service = require('@/service/ssh2Service')
+import {ssh2Service} from '@/service/ssh2Service'
 
 @WsService('', 'webSocketService')
 export class WebSocketService {
