@@ -1,3 +1,6 @@
+import { getTargetId } from "@/core/utils/CommonUtils";
+import { randomUUID } from "crypto";
+import path from "node:path";
 import { application } from "../../ioc/ApplicationContext";
 import { getFormatDateTime } from "../../utils/DateUtils";
 
@@ -10,8 +13,9 @@ import { getFormatDateTime } from "../../utils/DateUtils";
  * @returns 
  */
 const Component = (componentName?: string): ClassDecorator => {
-    return (originClass: any) => {
-        application.addBean(componentName, originClass, new originClass())
+    return (constructor: any) => {
+        getTargetId(constructor)
+        application.addBean(componentName, constructor, new constructor())
     };
 };
 
@@ -38,11 +42,21 @@ export function Inject(_constructor: any, propertyName: string): any {
  */
 const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
     /**
-     * @param target 属性所属类
+     * @param target 属性所属类的prototype
      * @param propertyKey 属性名称
      */
     return (target: Object, propertyKey: string) => {
+        // if (!target.constructor["__uuid"]) {
+        //     let id = randomUUID()
+        //     target.constructor["__uuid"] = id
+        //     console.log(`\nAutoWired.set ${target.constructor.name} target.__uuid:${target.constructor["__uuid"]} typeOf target ${typeof target} ${typeof target.constructor}\n`)
+        // } else {
+        //     console.log(`\nAutoWired.get ${target.constructor.name} target.__uuid:${target.constructor["__uuid"]}\n`)
+        // }
+        // console.log(`\nAutoWired. type of propertyKey ${typeof target.constructor[propertyKey]}\n`)
+        let targetId = getTargetId(target)
         const inject = {
+            targetId,
             target,
             targetClassName: target.constructor.name,
             propertyKey,
@@ -50,16 +64,22 @@ const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
         }
         // console.log(`\n${inject.targetClassName} need ${inject.componentKey} --- \n${typeof componentKey}\n`)
 
-        if (componentKey && typeof componentKey != 'string') {
-            getComponentInstanceByClazz(componentKey).then(component => {
-                target[propertyKey] = component;
-            }).catch(e => { });
-        } else {
-            getComponentInstanceByName(componentKey !== null && componentKey !== void 0 ? componentKey : propertyKey).then(component => {
-                target[propertyKey] = component;
-            }).catch(e => { });
+        // if (componentKey && typeof componentKey != 'string') {
+        //     getComponentInstanceByClazz(componentKey).then(component => {
+        //         target[propertyKey] = component;
+        //     }).catch(e => { });
+        // } else {
+        //     getComponentInstanceByName(componentKey !== null && componentKey !== void 0 ? componentKey : propertyKey).then(component => {
+        //         target[propertyKey] = component;
+        //     }).catch(e => { });
+        // }
+
+        let map = application.injectInfos.get(targetId)
+        if (!map) {
+            map = []
         }
-        application.injectInfos.push(inject)
+        map.push(inject)
+        application.injectInfos.set(targetId, map)
     };
 };
 

@@ -1,10 +1,12 @@
 import { application } from '../../ioc/ApplicationContext';
 import { getFormatDateTime } from '../../utils/DateUtils';
 import expressWS from 'express-ws';
+import { getTargetId } from '@/core/utils/CommonUtils';
 
 const WsService_METADATA = 'WsService';
 export const WsService = (path: string = '', name: string = ''): ClassDecorator => {
     return (targetClass: any) => {
+        getTargetId(targetClass)
         Reflect.defineMetadata(WsService_METADATA, path, targetClass);
         console.log(`[${getFormatDateTime()}][info][WsService]-`, "add WsService:", targetClass.name)
         let instance = new targetClass();

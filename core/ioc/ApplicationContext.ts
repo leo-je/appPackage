@@ -8,6 +8,7 @@ import { AspectManager } from '../aop/AspectManager';
 
 
 interface InjectInfo {
+    targetId: string
     target: object
     targetClassName: string,
     componentKey?: string | any
@@ -34,7 +35,7 @@ interface ApplicationInterface {
     finishStartTime: Date
     isEnableAspect: boolean
     aspectManager: AspectManager
-    injectInfos: InjectInfo[]
+    injectInfos: Map<string, InjectInfo[]>
     addComponents(componentName, component: any): void
     getComponent(componentName): any
     addPreComponents(name: string, con: any)
@@ -57,7 +58,7 @@ class Application implements ApplicationInterface {
     finishStartTime: Date
     isEnableAspect = false
     aspectManager: AspectManager = new AspectManager()
-    injectInfos: InjectInfo[] = []
+    injectInfos: Map<string, InjectInfo[]> = new Map();
     constructor() {
         // console.log(`init Application`)
     }
@@ -238,11 +239,27 @@ class Application implements ApplicationInterface {
     }
 
     public addInjectToComponent() {
+        console.log('========================= add Inject===============================')
         let _this = this
-        this.injectInfos.forEach((injectInfo, index, array) => {
-            this.components.forEach(component => {
+        this.components.forEach((component: ComponentInfo, key, map: Map<string, ComponentInfo>) => {
+            let targetId = component.value["__uuid"]
 
-
+            let ins: InjectInfo[] = this.injectInfos.get(targetId)
+            if (!ins) return
+            ins.forEach(injectInfo => {
+                console.log(`[addInjectToComponent][name]: ${component.componentName} [inject]: ${injectInfo.propertyKey}`)
+                let injectComponent: ComponentInfo = null
+                if (injectInfo.componentKey && typeof injectInfo.componentKey != 'string') {
+                    injectComponent = this.componentsOnKey.get(injectInfo.componentKey)
+                } else {
+                    let injectComponentName = injectInfo.componentKey || injectInfo.propertyKey
+                    injectComponent = this.components.get(injectComponentName)
+                }
+                if (injectComponent) {
+                    component.instance[injectInfo.propertyKey] = injectComponent.instance
+                } else {
+                    console.log(`[addInjectToComponent] fail add inject to ${injectInfo.targetClassName} : ${injectInfo.propertyKey}`)
+                }
             })
         })
     }

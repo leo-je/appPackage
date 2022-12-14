@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "build": "tsup",
-    "dev": "npx tsx app.ts",
+    "dev": "npm exec tsx app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -2,9 +2,13 @@ import { application } from "../ioc/ApplicationContext"
 import { proxify } from "../utils/CommonUtils"
 import { AspectInfo } from "./Interface"
 
+
 export const Aspect = (): ClassDecorator => {
-    return (TargetClass: any) => {
-        application.aspectManager.aspectClassMap.set(TargetClass.name, proxify(new TargetClass()))
+    /**
+     * @param constructor 类构造函数
+     */
+    return (constructor: any) => {
+        application.aspectManager.aspectClassMap.set(constructor.name, proxify(new constructor()))
     }
 }
 
@@ -16,9 +20,9 @@ function createAspect(type: string) {
      * @param index:顺序
      */
     return (param: { exp: string, index?: number }): MethodDecorator => {
-        // 所属类，被注解的方法，方法描述符
+        // 所属类prototype，被注解的方法，方法描述符
         return (target: any, methodName: string, methodDecorator: PropertyDescriptor) => {
-            
+
             let fn = target[methodName]
             const className = target.constructor.name
             const aspectInfo: AspectInfo = {

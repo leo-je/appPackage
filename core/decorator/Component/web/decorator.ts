@@ -2,6 +2,7 @@ import { HttpMethod, Param, Parse } from './utils';
 import { parseScript } from 'esprima';
 import { getFormatDateTime } from '../../../utils/DateUtils';
 import { application } from '../../../ioc/ApplicationContext';
+import { getTargetId } from '@/core/utils/CommonUtils';
 
 
 const CONTROLLER_METADATA = 'controller';
@@ -10,12 +11,15 @@ const PARAM_METADATA = 'param';
 const PARSE_METADATA = 'parse';
 
 function Controller(path = ''): ClassDecorator {
-    return (targetClass: any) => {
-        Reflect.defineMetadata(CONTROLLER_METADATA, path, targetClass);
-        console.log(`[${getFormatDateTime()}][info][Controller]-`, "add Controller:", targetClass.name)
-        let instance = new targetClass()
-        application.addControllers(targetClass.name, instance)
-        application.addBean(targetClass.name, targetClass, instance)
+    return (constructor: any) => {
+        getTargetId(constructor)
+        // console.log(`\nController.get ${targetClass.name} target.__uuid:${getTargetId(targetClass)} typeOf target ${typeof targetClass}\n`)
+        Reflect.defineMetadata(CONTROLLER_METADATA, path, constructor);
+        console.log(`[${getFormatDateTime()}][info][Controller]-`, "add Controller:", constructor.name)
+        let instance = new constructor()
+        // console.log(`\nController.get ${instance.constructor.name} target.__uuid:${instance.constructor["__uuid"]} \n`)
+        application.addControllers(constructor.name, instance)
+        application.addBean(constructor.name, constructor, instance)
     };
 }
 

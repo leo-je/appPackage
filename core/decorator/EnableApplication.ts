@@ -20,6 +20,7 @@ export const EnableApplication = (p?: { port?: number, scanPath?: string[] }): C
         // 1.扫描路径
         application.scanBean().then(() => {
             // 2.添加wsController
+            application.addInjectToComponent()
             application.enableAspect()
             application.LoadWsController();
             // 3.添加前置组件(中间件)

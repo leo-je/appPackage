@@ -1,8 +1,10 @@
+import { getTargetId } from "@/core/utils/CommonUtils";
 import { application } from "../../ioc/ApplicationContext";
 import { getFormatDateTime } from "../../utils/DateUtils";
 
 export const preComponent = (index: number = 100): ClassDecorator => {
     return (targetClass: any) => {
+        getTargetId(targetClass)
         targetClass.prototype.index = index
         targetClass.prototype.name = targetClass.name
         Reflect.defineMetadata('preComponent', targetClass.name, targetClass);
