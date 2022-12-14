@@ -81,7 +81,7 @@ class Application implements ApplicationInterface {
         return component
     }
 
-    public addPreComponents(name, con: any) {
+    public addPreComponents(name:string, con: any) {
         this.preComponents.set(name, con)
     }
     public addWsControllers(name: string, con: any) {
