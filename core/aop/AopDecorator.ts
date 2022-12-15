@@ -1,5 +1,5 @@
 import { application } from "../ioc/ApplicationContext"
-import { proxify } from "../utils/CommonUtils"
+import { log, proxify } from "../utils/CommonUtils"
 import { AspectInfo } from "./Interface"
 
 
@@ -34,9 +34,9 @@ function createAspect(type: string) {
                 index: param.index || 100
             }
             let olds = Reflect.getMetadata(AspectMethodKey, methodDecorator.value) || []
-            // console.log(olds)
+            // log(olds)
             let news = [...olds, aspectInfo]
-            // console.log(news)
+            // log(news)
             // 在此方法上添加aop信息
             Reflect.defineMetadata(AspectMethodKey, news, methodDecorator.value);
 
@@ -48,6 +48,6 @@ export const Before = createAspect('before')
 export const After = createAspect('after')
 
 export const EnableAspect = (): ClassDecorator => (targetClass: any) => {
-    console.log('========================= Enable Aspect============================')
+    log('========================= Enable Aspect============================')
     application.isEnableAspect = true
 }

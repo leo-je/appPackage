@@ -1,6 +1,7 @@
 import { application } from "../ioc/ApplicationContext"
 import { Express } from 'express'
 import express from 'express'
+import { log } from "../utils/CommonUtils"
 
 export const EnableApplication = (p?: { port?: number, scanPath?: string[] }): ClassDecorator => {
     return (targetClass: any) => {
@@ -12,7 +13,7 @@ export const EnableApplication = (p?: { port?: number, scanPath?: string[] }): C
                 application.scanPath = p.scanPath
             }
         }
-        console.log(`========================= start Application========================`)
+        log(`========================= start Application========================`)
         // 实例化一个Expres
         const app: Express = express()
         application.app = app

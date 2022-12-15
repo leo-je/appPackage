@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import { logger } from "./Logger";
 
 export function proxify<T extends object>(obj: T): T {
     let handler = {
@@ -32,4 +33,21 @@ export function getTargetId(target: any | object): string | null {
         }
     }
     return id
+}
+
+
+export const log = (message?: any, optionalParams?: any[]) => {
+    // if (optionalParams)
+    //     console.log(message, optionalParams)
+    // else
+    //     console.log(message)
+    // logger.info(message, ...optionalParams)
+    if (optionalParams)
+        logger.info(message, optionalParams)
+    else
+        logger.info(message)
+}
+
+export const error = (message?: any, ...optionalParams: any[]) => {
+    console.error(message, optionalParams)
 }

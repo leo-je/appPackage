@@ -1,5 +1,6 @@
 import util from 'util'
 import { application } from '../ioc/ApplicationContext'
+import { log } from '../utils/CommonUtils'
 import { AspectMethodKey } from './AopDecorator'
 import { AspectInfo, MethodAspectsInfo } from './Interface'
 
@@ -41,7 +42,7 @@ export class AspectManager {
             return null
         }
         let newFn = async function (...args: any[]) {
-            // console.log('arguments:' + arguments)
+            // log('arguments:' + arguments)
             // before
             for (let b in as.before) {
                 await as.before[b].aspectFn(...args)
@@ -64,9 +65,9 @@ export class AspectManager {
         }
         application.aspectManager.aspectMethodMap.forEach((value, key, map) => {
             // todo:方法匹配优化
-            //console.log(`=========================methodName:${methodName} --- key:${key} =========================`)
+            //log(`=========================methodName:${methodName} --- key:${key} =========================`)
             if (methodName == key) {
-                // console.log('========================= 符合条件 =========================')
+                // log('========================= 符合条件 =========================')
                 for (let i in value) {
                     let ai = value[i]
                     if (ai.type == 'before') {
@@ -94,6 +95,6 @@ export class AspectManager {
 
 
 export function testEnableAspect() {
-    console.log('testEnableAspect:')
+    log('testEnableAspect:')
     //testArr[0]['test']('oldMsg')
 }

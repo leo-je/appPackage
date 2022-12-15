@@ -1,8 +1,5 @@
-import { getTargetId } from "@/core/utils/CommonUtils";
-import { randomUUID } from "crypto";
-import path from "node:path";
+import { getTargetId, log } from "../../utils/CommonUtils";
 import { application } from "../../ioc/ApplicationContext";
-import { getFormatDateTime } from "../../utils/DateUtils";
 
 // export const autoWiringComponents = []
 // export const WsServiceComponents = []
@@ -21,12 +18,12 @@ const Component = (componentName?: string): ClassDecorator => {
 
 export function Inject(_constructor: any, propertyName: string): any {
     // 元数据反射 获取当前装饰的元素的类型
-    // console.log(autoWiringComponents)
+    // log(autoWiringComponents)
     // const propertyType: any = Reflect.getMetadata('design:type', _constructor, propertyName)
     // let providerInsntanceClass = autoWiringComponents[propertyName].value;
     // let providerInsntance = autoWiringComponents[propertyName].instance
     // if (!providerInsntance) {
-    //     console.log(`[${__filename}]-Inject: new a ${propertyName}`)
+    //     log(`[${__filename}]-Inject: new a ${propertyName}`)
     //     providerInsntance = new providerInsntanceClass()
     //     autoWiringComponents[propertyName].instance = providerInsntance
     //     autoWiringComponents[providerInsntanceClass] = autoWiringComponents[propertyName]
@@ -49,11 +46,11 @@ const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
         // if (!target.constructor["__uuid"]) {
         //     let id = randomUUID()
         //     target.constructor["__uuid"] = id
-        //     console.log(`\nAutoWired.set ${target.constructor.name} target.__uuid:${target.constructor["__uuid"]} typeOf target ${typeof target} ${typeof target.constructor}\n`)
+        //     log(`\nAutoWired.set ${target.constructor.name} target.__uuid:${target.constructor["__uuid"]} typeOf target ${typeof target} ${typeof target.constructor}\n`)
         // } else {
-        //     console.log(`\nAutoWired.get ${target.constructor.name} target.__uuid:${target.constructor["__uuid"]}\n`)
+        //     log(`\nAutoWired.get ${target.constructor.name} target.__uuid:${target.constructor["__uuid"]}\n`)
         // }
-        // console.log(`\nAutoWired. type of propertyKey ${typeof target.constructor[propertyKey]}\n`)
+        // log(`\nAutoWired. type of propertyKey ${typeof target.constructor[propertyKey]}\n`)
         let targetId = getTargetId(target)
         const inject = {
             targetId,
@@ -62,7 +59,7 @@ const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
             propertyKey,
             componentKey,
         }
-        // console.log(`\n${inject.targetClassName} need ${inject.componentKey} --- \n${typeof componentKey}\n`)
+        // log(`\n${inject.targetClassName} need ${inject.componentKey} --- \n${typeof componentKey}\n`)
 
         // if (componentKey && typeof componentKey != 'string') {
         //     getComponentInstanceByClazz(componentKey).then(component => {
@@ -107,7 +104,7 @@ const getComponentInstanceByClazz = async (componentKey) => {
     const ComponentClass = (await getComponent(componentKey)).value;
     let providerInsntance = (await getComponent(componentKey)).instance;
     if (!providerInsntance) {
-        console.log(`[${__filename}]-AutoWired: new a ${componentKey}`)
+        log(`[${__filename}]-AutoWired: new a ${componentKey}`)
         providerInsntance = new ComponentClass()
         application.addBean(componentKey, ComponentClass, providerInsntance)
     }
@@ -136,7 +133,7 @@ const getComponentInstanceByName = async (componentName) => {
     const ComponentClass = (await getComponent(componentName)).value;
     let providerInsntance = (await getComponent(componentName)).instance;
     if (!providerInsntance) {
-        console.log(`[${__filename}]-AutoWired: new a ${componentName}`)
+        log(`[${__filename}]-AutoWired: new a ${componentName}`)
         providerInsntance = new ComponentClass()
         application.addBean(componentName, ComponentClass, providerInsntance)
     }
