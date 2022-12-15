@@ -33,7 +33,7 @@ export class AspectManager {
                 let aspectInfos: AdviceInfo[] = Reflect.getMetadata(AspectMethodKey, proto[functionName]);
                 if (aspectInfos) {
                     aspectInfos.forEach(aspectInfo => {
-                        let key = aspectClassInfo.className + '.' + aspectInfo.pointcutName
+                        let key = aspectClassInfo.className + '_' + aspectClassInfo.classId + '.' + aspectInfo.pointcutName
                         let as: AdviceInfo[] = _this.aspectMethodMap.get(key)
                         if (!as) {
                             as = []
@@ -45,7 +45,7 @@ export class AspectManager {
                 let pointcutInfos: PointcutInfo[] = Reflect.getMetadata(AspectPointcutKey, proto[functionName]);
                 if (pointcutInfos) {
                     pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
-                        let key = pointcutInfo.className
+                        let key = pointcutInfo.className + '_' + pointcutInfo.classId
                         let ps: PointcutInfo[] = this.aspectPointcutMap.get(key)
                         if (!ps) {
                             ps = []
@@ -60,7 +60,7 @@ export class AspectManager {
         // aspectPointcutMap
         this.aspectPointcutMap.forEach((pointcutInfos: PointcutInfo[], className: string, map: Map<string, PointcutInfo[]>) => {
             pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
-                let key = className + '.' + pointcutInfo.pointcutName
+                let key = className + '_' + pointcutInfo.classId + '.' + pointcutInfo.pointcutName
                 let adviceInfos: AdviceInfo[] = this.aspectMethodMap.get(key)
                 if (adviceInfos) {
                     pointcutInfo.adviceInfos = adviceInfos

@@ -1,10 +1,12 @@
 export interface AspectClassInfo {
+    classId:string
     className: string
     constructor: FunctionConstructor
     instance: any
 }
 
 export interface PointcutInfo {
+    classId:string
     targetPrototype: any
     className: string
     pointcutName: string
@@ -13,6 +15,7 @@ export interface PointcutInfo {
 }
 
 export interface AdviceInfo {
+    classId:string
     className: string
     pointcutName: string
     type: string

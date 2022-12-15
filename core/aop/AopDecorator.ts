@@ -1,5 +1,5 @@
 import { application } from "../ioc/ApplicationContext"
-import { log, proxify } from "../utils/CommonUtils"
+import { getTargetId, log, proxify } from "../utils/CommonUtils"
 import { AdviceInfo, PointcutInfo } from "./Interface"
 
 
@@ -8,7 +8,9 @@ export const Aspect = (): ClassDecorator => {
      * @param constructor 类构造函数
      */
     return (constructor: any) => {
+        let classId = getTargetId(constructor)
         application.aspectManager.aspectClassArray.push({
+            classId,
             constructor,
             className: constructor.name,
             instance: proxify(new constructor())
@@ -26,9 +28,11 @@ function createAspect(type: string) {
     return (pointcutName: string, index?: number): MethodDecorator => {
         // 所属类prototype，被注解的方法，方法描述符
         return (targetPrototype: any, methodName: string, methodDecorator: PropertyDescriptor) => {
+            let classId = getTargetId(targetPrototype)
             let fn = targetPrototype[methodName]
             const className = targetPrototype.constructor.name
             const aspectInfo: AdviceInfo = {
+                classId,
                 pointcutName,
                 aspectFn: fn,
                 type,
@@ -54,7 +58,9 @@ export const AspectPointcutKey = 'AspectPointcut'
  */
 export const pointcut = (expression: string | string[]): MethodDecorator => {
     return <T>(targetPrototype: Object, methodName: string, methodDecorator: TypedPropertyDescriptor<T>) => {
+        let classId = getTargetId(targetPrototype)
         let pointcutInfo: PointcutInfo = {
+            classId,
             targetPrototype,
             className: targetPrototype.constructor.name,
             expressions: typeof expression == 'string' ? [expression] : expression,
