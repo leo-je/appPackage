@@ -7,7 +7,7 @@ export class ChatGptService {
 
     private chatGptApi: ChatGPTAPI
 
-    constructor() {
+    constructor2() {
         console.log('ChatGptService.constructor')
         this.loadChatGptApi().catch(e => {
             console.log(e)
@@ -27,6 +27,11 @@ export class ChatGptService {
             console.log(`[ChatGptService.loadChatGptApi]- refreshAccessToken fail`)
         }
         this.chatGptApi = chatGptApi
+    }
+
+    public async send2(msg: string) {
+        console.log('send')
+        return msg
     }
 
     public async send(msg: string) {

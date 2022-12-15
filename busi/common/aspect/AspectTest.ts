@@ -7,15 +7,15 @@ class AspectTest {
         console.log('AspectTest constructor')
     }
 
-    @Pointcut('send')
+    @Pointcut('send2')
     public pointcut(){}
 
-    @Before("")
+    @Before("pointcut")
     public b() {
         console.log('======== Before : b ==========')
     }
 
-    @After("")
+    @After("pointcut")
     public a(param) {
         console.log(param)
         console.log('======== After : b ==========')

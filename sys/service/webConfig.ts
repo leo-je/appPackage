@@ -1,10 +1,10 @@
-import { preComponent } from "@/core";
+import { PreComponent } from "@/core";
 import express from 'express'
 import cookieparser from 'cookie-parser'
 import path from "path";
 import { getFormatDateTime } from "@/core/utils/DateUtils";
 
-@preComponent(0)
+@PreComponent(0)
 class WebConfig{
 
     enable(app){

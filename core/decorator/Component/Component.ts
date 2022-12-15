@@ -1,4 +1,4 @@
-import { getTargetId, log } from "../../utils/CommonUtils";
+import { getTargetId, log, proxify } from "../../utils/CommonUtils";
 import { application } from "../../ioc/ApplicationContext";
 
 // export const autoWiringComponents = []
@@ -12,7 +12,7 @@ import { application } from "../../ioc/ApplicationContext";
 const Component = (componentName?: string): ClassDecorator => {
     return (constructor: any) => {
         getTargetId(constructor)
-        application.addBean(componentName, constructor, new constructor())
+        application.addBean(componentName, constructor, proxify(new constructor()))
     };
 };
 

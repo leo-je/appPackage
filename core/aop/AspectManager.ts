@@ -56,11 +56,10 @@ export class AspectManager {
                 }
             })
         })
-
         // aspectPointcutMap
         this.aspectPointcutMap.forEach((pointcutInfos: PointcutInfo[], className: string, map: Map<string, PointcutInfo[]>) => {
             pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
-                let key = className + '_' + pointcutInfo.classId + '.' + pointcutInfo.pointcutName
+                let key = pointcutInfo.className + '_' + pointcutInfo.classId + '.' + pointcutInfo.pointcutName
                 let adviceInfos: AdviceInfo[] = this.aspectMethodMap.get(key)
                 if (adviceInfos) {
                     pointcutInfo.adviceInfos = adviceInfos
@@ -107,8 +106,7 @@ export class AspectManager {
                 let expressions = pointcutInfo.expressions
                 expressions.forEach(expression => {
                     if (new RegExp(expression).test(methodName)) {
-                        // log("========================= 符合条件 =========================")
-                        // log(instance.constructor.name + '-' + methodName)
+                        log('[pointcut]' + pointcutInfo.pointcutName + ': ' + instance.constructor.name + '-' + methodName)
                         isPointcut = true
                     }
                 })
@@ -137,12 +135,4 @@ export class AspectManager {
         });
         return as;
     }
-}
-
-
-
-
-export function testEnableAspect() {
-    log('testEnableAspect:')
-    //testArr[0]['test']('oldMsg')
 }
