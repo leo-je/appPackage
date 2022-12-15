@@ -7,8 +7,9 @@ import {
   ROUTE_METADATA,
   PARAM_METADATA,
   PARSE_METADATA,
-} from './decorator';
+} from './ControllerMethodDecorator';
 import { RouteType, handlerFactory } from './utils';
+import { log } from '../../../utils/CommonUtils';
 
 function register(
   controllerStore: Map<string, any>,
@@ -24,7 +25,7 @@ function register(
       CONTROLLER_METADATA,
       instance.constructor,
     );
-    console.log(`[${time}][info][register]-controller:`, key, controllerRootPath)
+    log(`[register]-controller: ${key} ${controllerRootPath}`)
     // 实例属性
     const proto = Object.getPrototypeOf(instance);
     // 方法数组
@@ -38,7 +39,7 @@ function register(
       );
       if (!routeMetadata) return;
       const { type, path } = routeMetadata;
-      console.log(`[${time}][info][register]-load ${type.toUpperCase()}:${path}`)
+      log(`[register]-load ${type.toUpperCase()}:${path}`)
       const handler = handlerFactory(
         instance,
         functionName,
@@ -52,4 +53,4 @@ function register(
   app.use(rootPath, router);
 }
 
-export {register} ;
+export { register };

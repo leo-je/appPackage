@@ -130,6 +130,7 @@
   "resolved" "https://registry.npmmirror.com/@tsconfig/node16/-/node16-1.0.3.tgz"
   "version" "1.0.3"
 
+<<<<<<< HEAD
 "@types/body-parser@*":
   "integrity" "sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g=="
   "resolved" "https://registry.npmmirror.com/@types/body-parser/-/body-parser-1.19.2.tgz"
@@ -152,6 +153,8 @@
   dependencies:
     "@types/express" "*"
 
+=======
+>>>>>>> c6cbd6a8009018bc423102e9bc1bb567972925c1
 "@types/debug@^4.0.0":
   "integrity" "sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg=="
   "resolved" "https://registry.npmmirror.com/@types/debug/-/debug-4.1.7.tgz"
@@ -159,6 +162,7 @@
   dependencies:
     "@types/ms" "*"
 
+<<<<<<< HEAD
 "@types/express-serve-static-core@^4.17.18":
   "integrity" "sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q=="
   "resolved" "https://registry.npmmirror.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.31.tgz"
@@ -186,6 +190,8 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
+=======
+>>>>>>> c6cbd6a8009018bc423102e9bc1bb567972925c1
 "@types/json-schema@^7.0.9":
   "integrity" "sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ=="
   "resolved" "https://registry.npmmirror.com/@types/json-schema/-/json-schema-7.0.11.tgz"
@@ -202,16 +208,6 @@
   "version" "3.0.10"
   dependencies:
     "@types/unist" "*"
-
-"@types/mime@*":
-  "integrity" "sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA=="
-  "resolved" "https://registry.npmmirror.com/@types/mime/-/mime-3.0.1.tgz"
-  "version" "3.0.1"
-
-"@types/minimatch@*":
-  "integrity" "sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA=="
-  "resolved" "https://registry.npmjs.org/@types/minimatch/-/minimatch-5.1.2.tgz"
-  "version" "5.1.2"
 
 "@types/ms@*":
   "integrity" "sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA=="
@@ -230,6 +226,7 @@
   "resolved" "https://registry.npmmirror.com/@types/node/-/node-18.11.13.tgz"
   "version" "18.11.13"
 
+<<<<<<< HEAD
 "@types/qs@*":
   "integrity" "sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw=="
   "resolved" "https://registry.npmmirror.com/@types/qs/-/qs-6.9.7.tgz"
@@ -240,11 +237,14 @@
   "resolved" "https://registry.npmmirror.com/@types/range-parser/-/range-parser-1.2.4.tgz"
   "version" "1.2.4"
 
+=======
+>>>>>>> c6cbd6a8009018bc423102e9bc1bb567972925c1
 "@types/semver@^7.3.12":
   "integrity" "sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw=="
   "resolved" "https://registry.npmmirror.com/@types/semver/-/semver-7.3.13.tgz"
   "version" "7.3.13"
 
+<<<<<<< HEAD
 "@types/serve-static@*":
   "integrity" "sha512-z5xyF6uh8CbjAu9760KDKsH2FcDxZ2tFCsA4HIMWE6IkiYMXfVoa+4f9KX+FN0ZLsaMw1WNG2ETLA6N+/YA+cg=="
   "resolved" "https://registry.npmmirror.com/@types/serve-static/-/serve-static-1.15.0.tgz"
@@ -268,6 +268,8 @@
   dependencies:
     "@types/node" "*"
 
+=======
+>>>>>>> c6cbd6a8009018bc423102e9bc1bb567972925c1
 "@types/strip-bom@^3.0.0":
   "integrity" "sha512-xevGOReSYGM7g/kUBZzPqCrR/KYAo+F0yiPc85WFTJa0MSLtyFTVTU6cJu/aV4mid7IffDIWqo69THF2o4JiEQ=="
   "resolved" "https://registry.npmmirror.com/@types/strip-bom/-/strip-bom-3.0.0.tgz"
@@ -3654,10 +3656,17 @@ tsup@^6.5.0:
     sucrase "^3.20.3"
     tree-kill "^1.2.2"
 
+<<<<<<< HEAD
 tsutils@^3.21.0:
   version "3.21.0"
   resolved "https://registry.npmmirror.com/tsutils/-/tsutils-3.21.0.tgz#b48717d394cea6c1e096983eed58e9d61715b623"
   integrity sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==
+=======
+express@^4.13.3:
+  version "4.18.2"
+  resolved "https://registry.npmmirror.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
+  integrity sha512-5/PsL6iGPdfQ/lKM1UuielYgv3BUoJfz1aUwU9vHZ+J7gyvwdQXFEBIEIaxeGf0GIcreATNyBExtalisDbuMqQ==
+>>>>>>> c6cbd6a8009018bc423102e9bc1bb567972925c1
   dependencies:
     tslib "^1.8.1"
 

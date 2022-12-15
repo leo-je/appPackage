@@ -1,14 +1,9 @@
-import type { Options } from "tsup";
+import type { Options } from 'tsup'
 
 export const tsup: Options = {
-  entry: ["*.ts","core/**/*.ts","busi/**/*.ts","sys/**/*.ts"],
-  format: ["esm"],
+  entry: ['*.ts', 'core/**/*.ts', 'busi/**/*.ts', 'sys/**/*.ts'],
+  format: ['esm'],
   // dts: true,
   // splitting: true,
-  clean: true,
-  outExtension({ format }) {
-    return {
-      js: `.${format}.js`,
-    }
-  },
-};
+  clean: true
+}

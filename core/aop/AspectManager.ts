@@ -1,33 +1,70 @@
 import util from 'util'
 import { application } from '../ioc/ApplicationContext'
-import { AspectMethodKey } from './AopDecorator'
-import { AspectInfo, MethodAspectsInfo } from './Interface'
+import { log } from '../utils/CommonUtils'
+import { AspectMethodKey, AspectPointcutKey } from './AopDecorator'
+import { AdviceInfo, AspectClassInfo, MethodAdvicesInfo, PointcutInfo } from './Interface'
 
 
 export class AspectManager {
-    aspectClassMap: Map<string, any> = new Map()
-    aspectMethodMap: Map<string, AspectInfo[]> = new Map()
+
+    /**
+     * class集合
+     */
+    aspectClassArray: AspectClassInfo[] = []
+    /**
+     * [className:PointcutInfo[]]
+     */
+    aspectPointcutMap: Map<string, PointcutInfo[]> = new Map()
+    /**
+     * [className.PointcutName:AdviceInfo[]]
+     */
+    aspectMethodMap: Map<string, AdviceInfo[]> = new Map()
 
     public registerAspect() {
         let _this = this
-        this.aspectClassMap.forEach((instance: any, key: string, map: Map<string, any>) => {
+        this.aspectClassArray.forEach((aspectClassInfo: AspectClassInfo, index: number, array: AspectClassInfo[]) => {
             // 实例属性
-            const proto = Object.getPrototypeOf(instance);
+            const proto = Object.getPrototypeOf(aspectClassInfo.instance);
             // 方法数组
             const functionNameArr = Object.getOwnPropertyNames(proto).filter(
                 n => n !== 'constructor' && typeof proto[n] === 'function',
             );
             functionNameArr.forEach(functionName => {
-                let aspectInfos: AspectInfo[] = Reflect.getMetadata(AspectMethodKey, proto[functionName]);
-                if (!aspectInfos) return;
-                aspectInfos.forEach(aspectInfo => {
-                    let as = _this.aspectMethodMap.get(aspectInfo.aspectExp)
-                    if (!as) {
-                        as = []
-                    }
-                    as.push(aspectInfo)
-                    _this.aspectMethodMap.set(aspectInfo.aspectExp, as)
-                })
+                let aspectInfos: AdviceInfo[] = Reflect.getMetadata(AspectMethodKey, proto[functionName]);
+                if (aspectInfos) {
+                    aspectInfos.forEach(aspectInfo => {
+                        let key = aspectClassInfo.className + '.' + aspectInfo.pointcutName
+                        let as: AdviceInfo[] = _this.aspectMethodMap.get(key)
+                        if (!as) {
+                            as = []
+                        }
+                        as.push(aspectInfo)
+                        _this.aspectMethodMap.set(key, as)
+                    })
+                }
+                let pointcutInfos: PointcutInfo[] = Reflect.getMetadata(AspectPointcutKey, proto[functionName]);
+                if (pointcutInfos) {
+                    pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
+                        let key = pointcutInfo.className
+                        let ps: PointcutInfo[] = this.aspectPointcutMap.get(key)
+                        if (!ps) {
+                            ps = []
+                        }
+                        ps.push(pointcutInfo)
+                        _this.aspectPointcutMap.set(key, ps)
+                    })
+                }
+            })
+        })
+
+        // aspectPointcutMap
+        this.aspectPointcutMap.forEach((pointcutInfos: PointcutInfo[], className: string, map: Map<string, PointcutInfo[]>) => {
+            pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
+                let key = className + '.' + pointcutInfo.pointcutName
+                let adviceInfos: AdviceInfo[] = this.aspectMethodMap.get(key)
+                if (adviceInfos) {
+                    pointcutInfo.adviceInfos = adviceInfos
+                }
             })
         })
     }
@@ -41,7 +78,7 @@ export class AspectManager {
             return null
         }
         let newFn = async function (...args: any[]) {
-            // console.log('arguments:' + arguments)
+            // log('arguments:' + arguments)
             // before
             for (let b in as.before) {
                 await as.before[b].aspectFn(...args)
@@ -58,26 +95,38 @@ export class AspectManager {
     }
 
     public getMethodAspectsInfo(instance: any, methodName: string) {
-        let as: MethodAspectsInfo = {
+        let as: MethodAdvicesInfo = {
             before: new Array(),
             after: new Array()
         }
-        application.aspectManager.aspectMethodMap.forEach((value, key, map) => {
-            // todo:方法匹配优化
-            //console.log(`=========================methodName:${methodName} --- key:${key} =========================`)
-            if (methodName == key) {
-                // console.log('========================= 符合条件 =========================')
-                for (let i in value) {
-                    let ai = value[i]
-                    if (ai.type == 'before') {
-                        as.before.push(ai)
+        this.aspectPointcutMap.forEach((pointcutInfos: PointcutInfo[], className_PointcutName: string, map: Map<string, PointcutInfo[]>) => {
+            pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
+                // todo:方法匹配优化
+                //log(`=========================methodName:${methodName} --- key:${key} =========================`)
+                let isPointcut = false
+                let expressions = pointcutInfo.expressions
+                expressions.forEach(expression => {
+                    if (new RegExp(expression).test(methodName)) {
+                        // log("========================= 符合条件 =========================")
+                        // log(instance.constructor.name + '-' + methodName)
+                        isPointcut = true
                     }
-                    if (ai.type == 'after') {
-                        as.after.push(ai)
+                })
+                if (isPointcut) {
+                    // log('========================= 符合条件 =========================')
+                    for (let i in pointcutInfo.adviceInfos) {
+                        let ai = pointcutInfo.adviceInfos[i]
+                        if (ai.type == 'before') {
+                            as.before.push(ai)
+                        }
+                        if (ai.type == 'after') {
+                            as.after.push(ai)
+                        }
                     }
                 }
-            }
+            })
         })
+
         // 根据index排序
         // 从小到大的排序 
         as.after.sort((Acomponent, Bcomponent) => {
@@ -94,6 +143,6 @@ export class AspectManager {
 
 
 export function testEnableAspect() {
-    console.log('testEnableAspect:')
+    log('testEnableAspect:')
     //testArr[0]['test']('oldMsg')
 }

@@ -1,15 +1,17 @@
 import { application } from '../../ioc/ApplicationContext';
 import { getFormatDateTime } from '../../utils/DateUtils';
 import expressWS from 'express-ws';
+import { getTargetId, log } from '../../utils/CommonUtils';
 
 const WsService_METADATA = 'WsService';
 export const WsService = (path: string = '', name: string = ''): ClassDecorator => {
-    return (targetClass: any) => {
-        Reflect.defineMetadata(WsService_METADATA, path, targetClass);
-        console.log(`[${getFormatDateTime()}][info][WsService]-`, "add WsService:", targetClass.name)
-        let instance = new targetClass();
-        application.addWsControllers(targetClass.name, instance)
-        application.addBean(name, targetClass, instance)
+    return (constructor: any) => {
+        getTargetId(constructor)
+        Reflect.defineMetadata(WsService_METADATA, path, constructor);
+        log(`[WsService]- add WsService: ${constructor.name}`,)
+        let instance = new constructor();
+        application.addWsControllers(constructor.name, instance)
+        application.addBean(name, constructor, instance)
     };
 }
 
@@ -43,7 +45,7 @@ export function registerWs(
             WsService_METADATA,
             instance.constructor,
         );
-        console.log(`[${time}][info][registerWs]-WsService:`, controllerRootPath)
+        log(`[registerWs]-WsService: ${controllerRootPath}`)
         // 实例属性
         const proto = Object.getPrototypeOf(instance);
         // 方法数组
@@ -57,7 +59,7 @@ export function registerWs(
             );
             if (!routeMetadata) return;
             const { type, path } = routeMetadata;
-            console.log(`[${time}][info][registerWs]-load ${type.toUpperCase()}:${path}`)
+            log(`[registerWs]-load ${type.toUpperCase()}:${path}`)
 
             wsArr[wsArr.length] = {
                 path: controllerRootPath + path, handler: createWsHandler(instance,

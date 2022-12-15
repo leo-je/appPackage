@@ -5,9 +5,11 @@ import path from 'path'
 import { register } from '../decorator/Component/web/register';
 import { registerWs } from '../decorator/Component/WsComponent';
 import { AspectManager } from '../aop/AspectManager';
+import { log } from '../utils/CommonUtils';
 
 
 interface InjectInfo {
+    targetId: string
     target: object
     targetClassName: string,
     componentKey?: string | any
@@ -34,7 +36,7 @@ interface ApplicationInterface {
     finishStartTime: Date
     isEnableAspect: boolean
     aspectManager: AspectManager
-    injectInfos: InjectInfo[]
+    injectInfos: Map<string, InjectInfo[]>
     addComponents(componentName, component: any): void
     getComponent(componentName): any
     addPreComponents(name: string, con: any)
@@ -57,13 +59,12 @@ class Application implements ApplicationInterface {
     finishStartTime: Date
     isEnableAspect = false
     aspectManager: AspectManager = new AspectManager()
-    injectInfos: InjectInfo[] = []
+    injectInfos: Map<string, InjectInfo[]> = new Map();
     constructor() {
-        // console.log(`init Application`)
+        // log(`init Application`)
     }
 
-
-    public addComponents(componentName, component: ComponentInfo) {
+    public async addComponents(componentName, component: ComponentInfo) {
         if (component.value) {
             this.componentsOnKey.set(component.value, component)
         }
@@ -80,23 +81,23 @@ class Application implements ApplicationInterface {
         return component
     }
 
-    public addPreComponents(name, con: any) {
+    public async addPreComponents(name: string, con: any) {
         this.preComponents.set(name, con)
     }
-    public addWsControllers(name: string, con: any) {
+    public async addWsControllers(name: string, con: any) {
         this.wsControllers.set(name, con)
     }
-    public addControllers(name: string, con: any) {
+    public async addControllers(name: string, con: any) {
         this.controllers.set(name, con)
     }
     public async scanBean() {
-        console.log(`========================= scan allComponent========================`)
+        log(`========================= scan allComponent========================`)
         // 项目路口
         let rootPath = process.cwd()
         await Promise.all(this.scanPath.map(async p => {
             await this.readDir((rootPath + "/" + p).replace('//', '/'), rootPath);
         })).then(result => {
-            // console.log('scan finish')
+            // log('scan finish')
         }).catch(err => {
 
         })
@@ -104,13 +105,13 @@ class Application implements ApplicationInterface {
     }
     public async readDir(dirPath: string, _rootPath: string) {
         try {
-            // console.log(dirPath)
+            // log(dirPath)
             let b = fs.existsSync(dirPath)
             if (!b) return
             let files = fs.readdirSync(dirPath)
             for (let i in files) {
                 let fileName = files[i]
-                // console.log(fileName)
+                // log(fileName)
                 let _path = path.join(dirPath, fileName)
                 try {
                     let stat = fs.statSync(_path);
@@ -120,13 +121,13 @@ class Application implements ApplicationInterface {
                         } else if (/\.(js|ts|mjs)$/.test(fileName)) {
                             // this.requireComponent(`@${_path.replace(_rootPath, '')}`, fileName)
                             // this.requireComponent(`${_path}`, fileName)
-                            // console.log(`========> import ${_path}`)
+                            // log(`========> import ${_path}`)
                             await import(_path)
                         }
                     } else if (/(\.git|ui|dist|core|node_modules)/.test(fileName)) {
 
                     } else if (stat.isDirectory()) {
-                        // console.log("isDirectory")
+                        // log("isDirectory")
                         await this.readDir(_path, _rootPath)
                     }
                 } catch (e) {
@@ -140,34 +141,37 @@ class Application implements ApplicationInterface {
     }
 
     public requireComponent(filePath: string, className: string) {
-        // console.log(`========> import ${filePath}`)
+        // log(`========> import ${filePath}`)
         // require(filePath)
     }
 
     public start(): Express {
         let port = this.appPort
         this.app.listen(port, () => {
-            console.log(`[${getFormatDateTime()}][info][app]:`, `service app listening at \nhttp://0.0.0.0:${port}\nhttp://127.0.0.1:${port}\nhttp://localhost:${port}`)
+            log(`[Application] Application listening at: `)
+            log(`[Application] http://0.0.0.0:${port}`)
+            log(`[Application] http://127.0.0.1:${port}`)
+            log(`[Application] http://localhost:${port}`)
         })
         this.finishStartTime = new Date()
-        console.log(`========================= finish start ============================`)
+        log(`========================= finish start ============================`)
         return this.app
     }
 
     public LoadController(): void {
-        console.log(`========================= Load Controller =========================`)
+        log(`========================= Load Controller =========================`)
         register(this.controllers, '/', this.app);
     }
 
     public LoadWsController(): void {
-        console.log(`========================= Load WsController========================`)
+        log(`========================= Load WsController========================`)
         registerWs(this.app)
     }
     public loadPreComponents(): void {
-        console.log(`========================= load preComponent========================`)
+        log(`========================= load preComponent========================`)
         let array = []
         for (let [key, value] of this.preComponents.entries()) {
-            // console.log(key)
+            // log(key)
             array.push(value)
         }
         // 从小到大的排序 
@@ -176,7 +180,7 @@ class Application implements ApplicationInterface {
         });
         //
         array.forEach(component => {
-            console.log(`[${getFormatDateTime()}][info][preComponent]-`, "load preComponent:", component.name)
+            log(`[preComponent]- load preComponent: ${component.name}`)
             if (component && component.enable) {
                 component.enable(this.app)
             }
@@ -189,7 +193,7 @@ class Application implements ApplicationInterface {
  * @param originClass 组件class
  * @param instance 组件实例
  */
-    public addBean(componentName: string, originClass: any, instance: any) {
+    public async addBean(componentName: string, originClass: any, instance: any) {
         let _componentName;
         componentName = ((_componentName = componentName) !== null && _componentName !== void 0 ? _componentName : originClass.name);
         let component = {
@@ -201,52 +205,80 @@ class Application implements ApplicationInterface {
         };
         //autoWiringComponents[originClass] = autoWiringComponents[componentName]
         this.addComponents(componentName, component)
-        console.log(`[${getFormatDateTime()}][info][Component]-load component:${componentName}`, originClass.name)
+        log(`[Component]-load component:${componentName} ${originClass.name}`)
     }
 
     public enableAspect() {
         if (this.isEnableAspect) {
-            console.log('========================= register Aspect==========================')
+            log('========================= register Aspect==========================')
             // 注册各个切点方法
             this.aspectManager.registerAspect()
             // 实例属性
-            this.components.forEach((component, key: string, map: Map<string, any>) => {
-                // console.log(key)
-                // instance.isProxy = true
-                const instance = component.instance
-                const proto = Object.getPrototypeOf(instance);
-                // 方法数组
-                const methodNameArr = Object.getOwnPropertyNames(proto).filter(
-                    n => n !== 'constructor' && typeof proto[n] === 'function',
-                );
-                methodNameArr.forEach(methodName => {
-                    const strArray = ['toString', 'valueOf', '__defineGetter__', '__defineSetter__',
-                        'hasOwnProperty', '__lookupSetter__',
-                        '__lookupGetter__', 'isPrototypeOf',
-                        '__lookupSetter__ ', 'propertyIsEnumerable', 'toLocaleString'];
-                    const hasString = strArray.includes(methodName);
-                    if (hasString) return;
-                    const invokeMethod = this.aspectManager.invoke(instance, methodName)
-                    if (invokeMethod) {
-                        instance[methodName] = invokeMethod
-                    }
-                })
+            this.components.forEach((component: ComponentInfo, _key: string, _map: Map<string, any>) => {
+                this.proxyMethod(component)
             })
-
-
         }
     }
 
+    private async proxyMethod(component: ComponentInfo) {
+        // log(key)
+        // instance.isProxy = true
+        const instance = component.instance
+        const proto = Object.getPrototypeOf(instance);
+        // 方法数组
+        const methodNameArr = Object.getOwnPropertyNames(proto).filter(
+            n => n !== 'constructor' && typeof proto[n] === 'function',
+        );
+        const proxy = async (methodName) => {
+            const strArray = ['toString', 'valueOf', '__defineGetter__', '__defineSetter__',
+                'hasOwnProperty', '__lookupSetter__',
+                '__lookupGetter__', 'isPrototypeOf',
+                '__lookupSetter__ ', 'propertyIsEnumerable', 'toLocaleString'];
+            const hasString = strArray.includes(methodName);
+            if (hasString) return;
+            const invokeMethod = this.aspectManager.invoke(instance, methodName)
+            if (invokeMethod) {
+                instance[methodName] = invokeMethod
+            }
+        }
+        methodNameArr.forEach(methodName => {
+            proxy(methodName)
+        })
+    }
+
     public addInjectToComponent() {
-        let _this = this
-        this.injectInfos.forEach((injectInfo, index, array) => {
-            this.components.forEach(component => {
+        log('========================= add Inject===============================')
+        this.components.forEach((component: ComponentInfo, _key, _map: Map<string, ComponentInfo>) => {
+            let targetId = component.value["__uuid"]
 
-
+            let ins: InjectInfo[] = this.injectInfos.get(targetId)
+            if (!ins) return
+            ins.forEach((injectInfo: InjectInfo) => {
+                this.setInject(component, injectInfo)
             })
         })
     }
+
+    public async setInject(component: ComponentInfo, injectInfo: InjectInfo) {
+        let type = 'name'
+        let injectComponent: ComponentInfo = null
+        if (injectInfo.componentKey && typeof injectInfo.componentKey != 'string') {
+            type = 'class'
+            // log(`${injectInfo.componentKey['__uuid']}`)
+            // log(`${injectInfo.componentKey.prototype.constructor['__uuid']}`)
+            injectComponent = this.componentsOnKey.get(injectInfo.componentKey)
+        } else {
+            let injectComponentName = injectInfo.componentKey || injectInfo.propertyKey
+            injectComponent = this.components.get(injectComponentName)
+        }
+        if (injectComponent) {
+            log(`[addInjectToComponent][name]: ${component.componentName} [inject]: <${type}> ${injectInfo.propertyKey}`)
+            component.instance[injectInfo.propertyKey] = injectComponent.instance
+        } else {
+            log(`[addInjectToComponent] fail add inject to ${injectInfo.targetClassName} : ${injectInfo.propertyKey}`)
+        }
+    }
 }
 
-console.log('========================= new Application==========================')
+log('========================= new Application==========================')
 export const application = new Application()
