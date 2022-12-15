@@ -1,6 +1,6 @@
 import { application } from "../ioc/ApplicationContext"
 import { log, proxify } from "../utils/CommonUtils"
-import { AspectInfo } from "./Interface"
+import { AdviceInfo, PointcutInfo } from "./Interface"
 
 
 export const Aspect = (): ClassDecorator => {
@@ -8,7 +8,11 @@ export const Aspect = (): ClassDecorator => {
      * @param constructor 类构造函数
      */
     return (constructor: any) => {
-        application.aspectManager.aspectClassMap.set(constructor.name, proxify(new constructor()))
+        application.aspectManager.aspectClassArray.push({
+            constructor,
+            className: constructor.name,
+            instance: proxify(new constructor())
+        })
     }
 }
 
@@ -19,19 +23,18 @@ function createAspect(type: string) {
      * @param exp:切点表达式<pr>
      * @param index:顺序
      */
-    return (param: { exp: string, index?: number }): MethodDecorator => {
+    return (pointcutName: string, index?: number): MethodDecorator => {
         // 所属类prototype，被注解的方法，方法描述符
-        return (target: any, methodName: string, methodDecorator: PropertyDescriptor) => {
-
-            let fn = target[methodName]
-            const className = target.constructor.name
-            const aspectInfo: AspectInfo = {
-                aspectExp: param.exp,
+        return (targetPrototype: any, methodName: string, methodDecorator: PropertyDescriptor) => {
+            let fn = targetPrototype[methodName]
+            const className = targetPrototype.constructor.name
+            const aspectInfo: AdviceInfo = {
+                pointcutName,
                 aspectFn: fn,
                 type,
                 className,
-                target,
-                index: param.index || 100
+                targetPrototype,
+                index: index || 100
             }
             let olds = Reflect.getMetadata(AspectMethodKey, methodDecorator.value) || []
             // log(olds)
@@ -44,8 +47,29 @@ function createAspect(type: string) {
     }
 }
 
-export const Before = createAspect('before')
-export const After = createAspect('after')
+export const AspectPointcutKey = 'AspectPointcut'
+/**
+ * 
+ * @param expression 切点表达式
+ */
+export const pointcut = (expression: string | string[]): MethodDecorator => {
+    return <T>(targetPrototype: Object, methodName: string, methodDecorator: TypedPropertyDescriptor<T>) => {
+        let pointcutInfo: PointcutInfo = {
+            targetPrototype,
+            className: targetPrototype.constructor.name,
+            expressions: typeof expression == 'string' ? [expression] : expression,
+            adviceInfos: [],
+            pointcutName: methodName
+        }
+        let olds = Reflect.getMetadata(AspectMethodKey, methodDecorator.value) || []
+        // log(olds)
+        let news = [...olds, pointcutInfo]
+        Reflect.defineMetadata(AspectPointcutKey, news, methodDecorator.value);
+    }
+}
+
+export const before = createAspect('before')
+export const after = createAspect('after')
 
 export const EnableAspect = (): ClassDecorator => (targetClass: any) => {
     log('========================= Enable Aspect============================')

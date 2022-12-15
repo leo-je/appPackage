@@ -5,13 +5,13 @@ import { getTargetId, log } from '../../utils/CommonUtils';
 
 const WsService_METADATA = 'WsService';
 export const WsService = (path: string = '', name: string = ''): ClassDecorator => {
-    return (targetClass: any) => {
-        getTargetId(targetClass)
-        Reflect.defineMetadata(WsService_METADATA, path, targetClass);
-        log(`[WsService]- add WsService: ${targetClass.name}`,)
-        let instance = new targetClass();
-        application.addWsControllers(targetClass.name, instance)
-        application.addBean(name, targetClass, instance)
+    return (constructor: any) => {
+        getTargetId(constructor)
+        Reflect.defineMetadata(WsService_METADATA, path, constructor);
+        log(`[WsService]- add WsService: ${constructor.name}`,)
+        let instance = new constructor();
+        application.addWsControllers(constructor.name, instance)
+        application.addBean(name, constructor, instance)
     };
 }
 
