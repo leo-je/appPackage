@@ -56,7 +56,7 @@ export const AspectPointcutKey = 'AspectPointcut'
  * 
  * @param expression 切点表达式
  */
-export const pointcut = (expression: string | string[]): MethodDecorator => {
+export const Pointcut = (expression: string | string[]): MethodDecorator => {
     return <T>(targetPrototype: Object, methodName: string, methodDecorator: TypedPropertyDescriptor<T>) => {
         let classId = getTargetId(targetPrototype)
         let pointcutInfo: PointcutInfo = {
@@ -74,8 +74,8 @@ export const pointcut = (expression: string | string[]): MethodDecorator => {
     }
 }
 
-export const before = createAspect('before')
-export const after = createAspect('after')
+export const Before = createAspect('before')
+export const After = createAspect('after')
 
 export const EnableAspect = (): ClassDecorator => (targetClass: any) => {
     log('========================= Enable Aspect============================')
