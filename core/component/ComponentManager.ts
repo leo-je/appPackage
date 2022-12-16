@@ -97,7 +97,7 @@ export class ComponentManager {
             injectComponent = this.componentsOnName.get(injectComponentName)
         }
         if (injectComponent) {
-            log(`[addInjectToComponent][name]: ${component.componentName} [inject]: <${type}> ${injectInfo.propertyKey}`)
+            log(`[addInjectToComponent][name]: ${component.className} [inject]: <${type}> ${injectInfo.propertyKey}`)
             component.instance[injectInfo.propertyKey] = injectComponent.instance
         } else {
             log(`[addInjectToComponent] fail add inject to ${injectInfo.targetClassName} : ${injectInfo.propertyKey}`)

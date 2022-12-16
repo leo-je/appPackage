@@ -1,5 +1,4 @@
-
-import { Controller, Get } from '../../core/decorator/Component/web/decorator';
+import { Controller, Get } from "@/core";
 
 @Controller("/test")
 export default class TestController {
