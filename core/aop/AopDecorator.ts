@@ -1,4 +1,4 @@
-import { application } from "../ioc/ApplicationContext"
+import { application } from "../application/ApplicationContext"
 import { getTargetId, log, proxify } from "../utils/CommonUtils"
 import { AdviceInfo, PointcutInfo } from "./Interface"
 

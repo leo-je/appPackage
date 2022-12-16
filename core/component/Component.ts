@@ -1,5 +1,5 @@
-import { getTargetId, log, proxify } from "../../utils/CommonUtils";
-import { application } from "../../ioc/ApplicationContext";
+import { getTargetId, log, proxify } from "../utils/CommonUtils";
+import { application } from "../application/ApplicationContext";
 
 // export const autoWiringComponents = []
 // export const WsServiceComponents = []
@@ -11,8 +11,11 @@ import { application } from "../../ioc/ApplicationContext";
  */
 const Component = (componentName?: string): ClassDecorator => {
     return (constructor: any) => {
-        getTargetId(constructor)
-        application.addBean(componentName, constructor, proxify(new constructor()))
+        let id = getTargetId(constructor)
+        if (!componentName) {
+            componentName = constructor.name + '_' + id
+        }
+        application.componentManager.addBean(componentName, constructor, proxify(new constructor()))
     };
 };
 
@@ -71,12 +74,12 @@ const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
         //     }).catch(e => { });
         // }
 
-        let map = application.injectInfos.get(targetId)
+        let map = application.componentManager.injectInfos.get(targetId)
         if (!map) {
             map = []
         }
         map.push(inject)
-        application.injectInfos.set(targetId, map)
+        application.componentManager.injectInfos.set(targetId, map)
     };
 };
 
@@ -84,7 +87,7 @@ const AutoWired = <T>(componentKey?: string | any): PropertyDecorator => {
 const getComponentInstanceByClazz = async (componentKey) => {
     let waitTimes = 10;
     const getComponent = async componentKey => {
-        const autoWiringComponent = application.getComponentByClazz(componentKey);
+        const autoWiringComponent = application.componentManager.getComponentByClazz(componentKey);
         if (autoWiringComponent === undefined || autoWiringComponent.status === 'wiring') {
             return new Promise((resolve, reject) => {
                 setTimeout(_ => {
@@ -106,7 +109,7 @@ const getComponentInstanceByClazz = async (componentKey) => {
     if (!providerInsntance) {
         log(`[${__filename}]-AutoWired: new a ${componentKey}`)
         providerInsntance = new ComponentClass()
-        application.addBean(componentKey, ComponentClass, providerInsntance)
+        application.componentManager.addBean(componentKey, ComponentClass, providerInsntance)
     }
     return providerInsntance;
 }
@@ -114,7 +117,7 @@ const getComponentInstanceByClazz = async (componentKey) => {
 const getComponentInstanceByName = async (componentName) => {
     let waitTimes = 10;
     const getComponent = async componentName => {
-        const autoWiringComponent = application.getComponent(componentName);
+        const autoWiringComponent = application.componentManager.getComponent(componentName);
         if (autoWiringComponent === undefined || autoWiringComponent.status === 'wiring') {
             return new Promise((resolve, reject) => {
                 setTimeout(_ => {
@@ -135,7 +138,7 @@ const getComponentInstanceByName = async (componentName) => {
     if (!providerInsntance) {
         log(`[${__filename}]-AutoWired: new a ${componentName}`)
         providerInsntance = new ComponentClass()
-        application.addBean(componentName, ComponentClass, providerInsntance)
+        application.componentManager.addBean(componentName, ComponentClass, providerInsntance)
     }
     return providerInsntance;
 }

@@ -1,32 +1,32 @@
-import { Component } from "@/core";
+import { Component, error, log, logger } from "@/core";
 import { getFormatDateTime } from "@/core/utils/DateUtils";
-import { ChatGPTAPI } from 'chatgpt'
+import { ChatGPTAPIBrowser } from 'chatgpt'
 
 @Component('chatGptService')
 export class ChatGptService {
 
-    private chatGptApi: ChatGPTAPI
+    private chatGptApi: ChatGPTAPIBrowser
 
-    constructor2() {
-        console.log('ChatGptService.constructor')
+    constructor() {
+        log('ChatGptService.constructor')
         this.loadChatGptApi().catch(e => {
             console.log(e)
         })
     }
 
     public async loadChatGptApi() {
-        let chatGptApi = new ChatGPTAPI({
-            sessionToken: process.env.chatgptSession,
-            clearanceToken: process.env.chatgptClearanceToken || '',
-            userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
-        })
         try {
-            let auth = await chatGptApi.ensureAuth()
-            console.log(`[ChatGptService.loadChatGptApi]-auth:${auth}`)
+            const api = new ChatGPTAPIBrowser({
+                email: process.env.OPENAI_EMAIL,
+                password: process.env.OPENAI_PASSWORD
+              })
+              await api.init()
+              this.chatGptApi = api
         } catch (e) {
-            console.log(`[ChatGptService.loadChatGptApi]- refreshAccessToken fail`)
+            error(e)
+            log(`[ChatGptService.loadChatGptApi]- refreshAccessToken fail`)
         }
-        this.chatGptApi = chatGptApi
+        
     }
 
     public async send2(msg: string) {

@@ -1,49 +1,9 @@
 import { HttpMethod, Param, Parse } from './utils';
-import { parseScript } from 'esprima';
-import { getFormatDateTime } from '../../../utils/DateUtils';
-import { application } from '../../../ioc/ApplicationContext';
-import { getTargetId } from '@/core/utils/CommonUtils';
-
 
 const CONTROLLER_METADATA = 'controller';
 const ROUTE_METADATA = 'method';
 const PARAM_METADATA = 'param';
 const PARSE_METADATA = 'parse';
-
-function Controller(path = ''): ClassDecorator {
-    return (constructor: any) => {
-        getTargetId(constructor)
-        // console.log(`\nController.get ${targetClass.name} target.__uuid:${getTargetId(targetClass)} typeOf target ${typeof targetClass}\n`)
-        Reflect.defineMetadata(CONTROLLER_METADATA, path, constructor);
-        console.log(`[${getFormatDateTime()}][info][Controller]-`, "add Controller:", constructor.name)
-        let instance = new constructor()
-        // console.log(`\nController.get ${instance.constructor.name} target.__uuid:${instance.constructor["__uuid"]} \n`)
-        application.addControllers(constructor.name, instance)
-        application.addBean(constructor.name, constructor, instance)
-    };
-}
-
-// newable
-function ClassDecorator<T extends new (...args: any[]) => any>(Constor: T) {
-    return class CtrlCls extends Constor {
-        constructor(...args: any[]) {
-            super(args);
-
-            const clsAst = parseScript(Constor.toString());
-            const node = clsAst.body[0];
-
-            if (node.type === 'FunctionDeclaration') {
-                // 拿到函数的参数
-                const funParams = node.params;
-                funParams.forEach(param => {
-                    // 注入
-                    // this[param.name] = Reflect.getMetadata()
-                    // this[param.name] = new SomeService()
-                });
-            }
-        }
-    } as any;
-}
 
 function createMethodDecorator(method: HttpMethod = 'get') {
     return (path = '/'): MethodDecorator =>
@@ -90,7 +50,6 @@ export {
     ROUTE_METADATA,
     PARAM_METADATA,
     PARSE_METADATA,
-    Controller,
     createMethodDecorator,
     createParamDecorator,
     Parse

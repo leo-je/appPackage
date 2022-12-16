@@ -1,9 +1,9 @@
-import { After, Aspect, Before, Pointcut } from '@/core'
+import { After, Aspect, Before, log, Pointcut } from '@/core'
 
 @Aspect()
 class AspectTest {
   constructor () {
-    console.log('AspectTest constructor')
+    log('AspectTest constructor')
   }
 
     @Pointcut('send2')
@@ -11,12 +11,12 @@ class AspectTest {
 
     @Before('pointcut')
     public b () {
-      console.log('======== Before : b ==========')
+      log('======== Before : b ==========')
     }
 
     @After('pointcut')
     public a (param) {
-      console.log(param)
-      console.log('======== After : b ==========')
+      log(param)
+      log('======== After : b ==========')
     }
 }

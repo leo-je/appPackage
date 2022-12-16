@@ -1,14 +1,14 @@
-import { PreComponent } from "@/core";
+import { log, PreComponent } from "@/core";
+import { Express } from 'express'
 import express from 'express'
 import cookieparser from 'cookie-parser'
 import path from "path";
-import { getFormatDateTime } from "@/core/utils/DateUtils";
 
 @PreComponent(0)
-class WebConfig{
+class WebConfig {
 
-    enable(app){
-        console.log(`[${getFormatDateTime()}][info][WebConfig]-`, "enable WebConfig")
+    enable(app: Express) {
+        log(`[WebConfig]- "enable WebConfig`)
         app.use(cookieparser());
         // 中间件
         app.use(express.json({ limit: '5mb' }));

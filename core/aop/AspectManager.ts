@@ -1,5 +1,5 @@
+import { ComponentInfo } from 'core/application/Interface'
 import util from 'util'
-import { application } from '../ioc/ApplicationContext'
 import { log } from '../utils/CommonUtils'
 import { AspectMethodKey, AspectPointcutKey } from './AopDecorator'
 import { AdviceInfo, AspectClassInfo, MethodAdvicesInfo, PointcutInfo } from './Interface'
@@ -98,7 +98,7 @@ export class AspectManager {
             before: new Array(),
             after: new Array()
         }
-        this.aspectPointcutMap.forEach((pointcutInfos: PointcutInfo[], className_PointcutName: string, map: Map<string, PointcutInfo[]>) => {
+        this.aspectPointcutMap.forEach((pointcutInfos: PointcutInfo[], _className_PointcutName: string, _map: Map<string, PointcutInfo[]>) => {
             pointcutInfos.forEach((pointcutInfo: PointcutInfo, index: number, array: PointcutInfo[]) => {
                 // todo:方法匹配优化
                 //log(`=========================methodName:${methodName} --- key:${key} =========================`)
@@ -134,5 +134,44 @@ export class AspectManager {
             return Acomponent.index - Bcomponent.index;
         });
         return as;
+    }
+
+
+    public enableAspect(isEnableAspect: boolean, componentsOnName: Map<string, ComponentInfo>) {
+        if (isEnableAspect) {
+            log('========================= register Aspect==========================')
+            // 注册各个切点方法
+            this.registerAspect()
+            // 实例属性
+            componentsOnName.forEach((component: ComponentInfo, _key: string, _map: Map<string, any>) => {
+                this.proxyMethod(component)
+            })
+        }
+    }
+
+    private async proxyMethod(component: ComponentInfo) {
+        // log(key)
+        // instance.isProxy = true
+        const instance = component.instance
+        const proto = Object.getPrototypeOf(instance);
+        // 方法数组
+        const methodNameArr = Object.getOwnPropertyNames(proto).filter(
+            n => n !== 'constructor' && typeof proto[n] === 'function',
+        );
+        const proxy = async (methodName) => {
+            const strArray = ['toString', 'valueOf', '__defineGetter__', '__defineSetter__',
+                'hasOwnProperty', '__lookupSetter__',
+                '__lookupGetter__', 'isPrototypeOf',
+                '__lookupSetter__ ', 'propertyIsEnumerable', 'toLocaleString'];
+            const hasString = strArray.includes(methodName);
+            if (hasString) return;
+            const invokeMethod = this.invoke(instance, methodName)
+            if (invokeMethod) {
+                instance[methodName] = invokeMethod
+            }
+        }
+        methodNameArr.forEach(methodName => {
+            proxy(methodName)
+        })
     }
 }

@@ -37,7 +37,7 @@ export function getTargetId(target: any | object): string | null {
 
 export const log = (message?: any, optionalParams?: any[]) => {
     // if (optionalParams)
-    //     console.log(message, optionalParams)
+    // console.log(message, optionalParams)
     // else
     //     console.log(message)
     // logger.info(message, ...optionalParams)
@@ -48,5 +48,5 @@ export const log = (message?: any, optionalParams?: any[]) => {
 }
 
 export const error = (message?: any, ...optionalParams: any[]) => {
-    console.error(message, optionalParams)
+    logger.error(message, optionalParams)
 }
