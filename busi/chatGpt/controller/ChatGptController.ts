@@ -1,7 +1,7 @@
 import { AutoWired, Controller, Get, Query } from "@/core";
 import { ChatGptService } from "../service/ChatGptService";
 
-@Controller('/api/chatgpt')
+//@Controller('/api/chatgpt')
 class ChatGptController{
 
     @AutoWired('chatGptService')

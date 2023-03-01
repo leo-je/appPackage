@@ -2,7 +2,7 @@ import { Component, error, log, logger } from "@/core";
 import { getFormatDateTime } from "@/core/utils/DateUtils";
 import { ChatGPTAPIBrowser } from 'chatgpt'
 
-@Component('chatGptService')
+//@Component('chatGptService')
 export class ChatGptService {
 
     private chatGptApi: ChatGPTAPIBrowser

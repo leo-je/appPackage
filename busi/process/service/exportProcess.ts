@@ -118,7 +118,7 @@ function getKeyValuseForInsert(e) {
     //
     if (type == '1' || type == '') {
       // 处理单引号
-      values += `'${e[key].replace(/\'/g, '\'\'').replace(/\\n/g, "\\\\n")}',`;
+      values += `'${e[key].replace(/\'/g, '\'\'').replace(/\\n/g, "\\\\n").replace(/\\"/g, '\\\\"')}',`;
     } else if (type == '2') {
       if (time === 'Invalid date') {
         // 处理单引号
