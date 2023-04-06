@@ -1,0 +1,1 @@
+{"appPackage":{"shData":{"beforeSh":"echo '开始执行123'\n","afterSh":"echo '结束执行4444'"}}}

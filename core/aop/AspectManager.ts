@@ -1,4 +1,4 @@
-import { ComponentInfo } from 'core/application/Interface'
+import { ComponentInfo } from 'core/Interface'
 import util from 'util'
 import { log } from '../utils/CommonUtils'
 import { AspectMethodKey, AspectPointcutKey } from './AopDecorator'

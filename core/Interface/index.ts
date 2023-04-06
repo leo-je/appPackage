@@ -1,7 +1,7 @@
 import { ComponentManager } from 'core/component/ComponentManager';
 import { ControllerManager } from 'core/web/ControllerManager';
 import { WebsocketManager } from 'core/ws/WebsocketManager';
-import { Express } from 'express'
+import express from 'express'
 import { AspectManager } from '../aop/AspectManager';
 
 export interface InjectInfo {
@@ -21,7 +21,7 @@ export interface ComponentInfo {
 }
 
 export interface ApplicationInterface {
-    app?: Express // Express 实例
+    app?: express.Express // Express 实例
     appPort?: number// = 8080
     scanPath: string[]
     startTime: Date //= new Date()
@@ -31,7 +31,7 @@ export interface ApplicationInterface {
     controllerManager: ControllerManager
     componentManager: ComponentManager
     WebsocketManager: WebsocketManager
-    start(): Express
+    start(): express.Express
     applicationStart(p?: { port?: number, scanPath?: string[] })
 }
 

@@ -4,20 +4,28 @@ import { application } from "../application/ApplicationContext";
 // export const autoWiringComponents = []
 // export const WsServiceComponents = []
 
+
+
 /**
  * 
  * @param componentName 组件名称 如果不传,默认使用类名作为名称key
  * @returns 
  */
-const Component = (componentName?: string): ClassDecorator => {
-    return (constructor: any) => {
-        let id = getTargetId(constructor)
-        if (!componentName) {
-            componentName = constructor.name + '_' + id
-        }
-        application.componentManager.addBean(componentName, constructor, proxify(new constructor()))
-    };
-};
+function createComponent(type: string) {
+    return (componentName?: string): ClassDecorator => {
+        return (constructor: any) => {
+            let id = getTargetId(constructor, type)
+            if (!componentName) {
+                componentName = constructor.name + '_' + id
+            }
+            application.componentManager.addBean(componentName, constructor, proxify(new constructor()))
+        };
+    }
+}
+
+export const Component = createComponent('component')
+
+export const Service = createComponent('service')
 
 export function Inject(_constructor: any, propertyName: string): any {
     // 元数据反射 获取当前装饰的元素的类型
@@ -144,5 +152,5 @@ const getComponentInstanceByName = async (componentName) => {
 }
 
 export {
-    Component, AutoWired, getComponentInstanceByName
+    AutoWired, getComponentInstanceByName
 }

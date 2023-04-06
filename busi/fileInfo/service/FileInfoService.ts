@@ -61,7 +61,7 @@ export class FileInfoService {
 
 
 
-  downFile = (request: Request, response: Response) => {
+  public downFile(request: Request, response: Response) {
     let pathName = request.params.fileName
     // 防止中文乱码
     pathName = decodeURI(pathName)

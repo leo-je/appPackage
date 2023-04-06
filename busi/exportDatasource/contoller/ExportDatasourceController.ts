@@ -9,7 +9,8 @@ class ExportDatasourceController {
     private exportDatasourceService: ExportDatasourceService
 
     @Post('/query')
-    public query(req, res) {
-        this.exportDatasourceService.query(req, res)
+    public async query(req, res) {
+        let data =  await this.exportDatasourceService.query(req, res)
+        return data;
     }
 }

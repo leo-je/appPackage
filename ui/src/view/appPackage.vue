@@ -14,7 +14,7 @@
         </div>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="8">
         <div style="margin-left: 10px;">
           <el-button type="primary" @click="packageUatApp">uat打包</el-button>
           <el-button type="primary" @click="packageDebugApp">debug打包</el-button>
@@ -25,6 +25,7 @@
               <el-col :span="4">-->
           <el-button type="primary" @click="openLogWindows">查看日志</el-button>
           <!-- <el-button type="primary" @click="openSSHWindows">打开cmd</el-button> -->
+          <el-button type="primary" @click="openShWindows">脚本设置</el-button>
         </div>
       </el-col>
       <!-- <el-col :span="11"></el-col> -->
@@ -38,7 +39,7 @@
             <el-table-column prop="fileName" label="文件名" width="240">
               <template #default="scope">
                 <el-button text size="small" @click.prevent="down(scope.$index, tableData)">{{
-                    tableData[scope.$index]["fileName"]
+                  tableData[scope.$index]["fileName"]
                 }}</el-button>
               </template>
             </el-table-column>
@@ -59,6 +60,40 @@
 
     <el-dialog v-model="sshDialogVisible" :append-to-body=true title="cmd" width="80%" @opened="onSShOpened">
       <div id="terminal" ref="terminalRef"></div>
+    </el-dialog>
+
+    <el-dialog v-model="shDialogVisible" :append-to-body=true title="脚本设置" width="60%">
+      <div id="shWindows">
+        <div id="">1.拉取分支</div>
+        <div id="pre">
+          <div>2.前置执行:</div>
+          <div>
+            <el-input :id="'beforeSh'" v-model="beforeSh" :autosize="{ minRows: 2, maxRows: 25 }" type="textarea"
+              placeholder :input-style="{
+                'background-color': '#554a4a',
+                color: 'white',
+                'font-size': '14px',
+                'font-weight': '400',
+                'font-family': 'monospace'
+              }"></el-input>
+          </div>
+        </div>
+        <div id="">3.执行run.sh脚本</div>
+        <div id="">4.执行打包程序脚本</div>
+        <div id="after">
+          <div>5.后置执行:</div>
+          <div>
+            <el-input :id="'afterSh'" v-model="afterSh" :autosize="{ minRows: 2, maxRows: 25 }" type="textarea"
+              placeholder :input-style="{
+                'background-color': '#554a4a',
+                color: 'white',
+                'font-size': '14px',
+                'font-weight': '400',
+                'font-family': 'monospace'
+              }"></el-input>
+          </div>
+        </div>
+      </div>
     </el-dialog>
 
     <el-dialog v-model="dialogVisible" :append-to-body=true title="日志" width="60%" @opened="onOpened">
@@ -102,9 +137,12 @@ export default defineComponent({
       tableData: ref([]),
       dialogVisible: ref(false),
       sshDialogVisible: ref(false),
+      shDialogVisible: ref(false),
       packageLog: ref(""),
       branch: ref("develop"),
-      allBranch: ref<BranchInfo[]>([])
+      allBranch: ref<BranchInfo[]>([]),
+      beforeSh: ref(""),
+      afterSh: ref(""),
     };
   },
   components: {},
@@ -116,8 +154,22 @@ export default defineComponent({
     this.getLog();
     // this.initTerm();
     this.getAllBranch()
+    this.getShData()
   },
   methods: {
+    getShData() {
+      let _this = this;
+      http('get', '/api/getShData').then(data => {
+        if (data) {
+          if (data.beforeSh) {
+            this.beforeSh = data.beforeSh;
+          }
+          if (data.afterSh) {
+            this.afterSh = data.afterSh;
+          }
+        }
+      })
+    },
     initTerm() {
       const t = document.getElementById("terminal")
       if (!term && t) {
@@ -153,6 +205,9 @@ export default defineComponent({
     openSSHWindows() {
       let _this = this;
       this.sshDialogVisible = true;
+    },
+    openShWindows() {
+      this.shDialogVisible = true;
     },
     onSShOpened() {
       this.initTerm()
@@ -193,7 +248,7 @@ export default defineComponent({
     packageUatApp() {
       let _this = this;
       console.log(_this.branch);
-      http("post", "/api/packageUatApp", { branch: _this.branch }).then(
+      http("post", "/api/packageUatApp", { branch: _this.branch,shData:{beforeSh:this.beforeSh,afterSh:this.afterSh} }).then(
         function (data) {
           console.log(data);
           ElMessage(data.msg);
@@ -203,7 +258,7 @@ export default defineComponent({
     packageDebugApp() {
       let _this = this;
       console.log(_this.branch);
-      http("post", "/api/packageDebugApp", { branch: _this.branch }).then(
+      http("post", "/api/packageDebugApp", { branch: _this.branch,shData:{beforeSh:this.beforeSh,afterSh:this.afterSh} }).then(
         function (data) {
           console.log(data);
           ElMessage(data.msg);
@@ -212,7 +267,7 @@ export default defineComponent({
     },
     packageProdApp() {
       let _this = this;
-      http("post", "/api/packageProdApp", { branch: _this.branch }).then(
+      http("post", "/api/packageProdApp", { branch: _this.branch,shData:{beforeSh:this.beforeSh,afterSh:this.afterSh} }).then(
         function (data) {
           console.log(data);
           ElMessage(data.msg);

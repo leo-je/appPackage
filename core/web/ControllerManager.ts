@@ -1,5 +1,5 @@
 import { log } from "core/utils/CommonUtils";
-import { Express, Router } from 'express';
+import express from 'express'
 import { CONTROLLER_METADATA, ROUTE_METADATA, PARAM_METADATA, PARSE_METADATA } from "./ControllerMethodDecorator";
 import { handlerFactory, RouteType } from "./utils";
 
@@ -11,7 +11,7 @@ export class ControllerManager {
      * value:controllerInstance
      */
     controllers?: Map<string, any> = new Map();  // controller 结合
-    router: Router
+    router: express.Router
 
 
     public async addControllers(name: string, con: any) {
@@ -25,9 +25,9 @@ export class ControllerManager {
 
     public register(
         rootPath: string,
-        app: Express,
+        app: express.Express,
     ) {
-        const router = Router();
+        const router = express.Router();
         this.router = router
         this.controllers.forEach((instance, key: string, map: Map<string, any>) => {
             // 获取Controller注解的入参--路径

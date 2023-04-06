@@ -37,4 +37,9 @@ class AppPackageController {
         return this.appPackageSergvice.getAllBranch()
     }
 
+    @Get("/getShData")
+    getShData() {
+        return this.appPackageSergvice.getShData()
+    }
+
 }

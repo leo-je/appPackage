@@ -13,7 +13,7 @@ export function proxify<T extends object>(obj: T): T {
 }
 
 
-export function getTargetId(target: any | object): string | null {
+export function getTargetId(target: any | object, pre?: string): string | null {
     if (!target) return null
     let type = typeof target
     let id = null
@@ -21,6 +21,9 @@ export function getTargetId(target: any | object): string | null {
         id = target.constructor['__uuid']
         if (!id) {
             id = randomUUID()
+            if (pre) {
+                id = pre + '_' + id
+            }
             target.constructor['__uuid'] = id
         }
     }
@@ -28,6 +31,9 @@ export function getTargetId(target: any | object): string | null {
         id = target['__uuid']
         if (!id) {
             id = randomUUID()
+            if (pre) {
+                id = pre + '_' + id
+            }
             target['__uuid'] = id
         }
     }

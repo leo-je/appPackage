@@ -28,7 +28,7 @@ export class WebSocketService {
     wsssh(ws, req) {
         let _this = this
         console.log('/api/wsssh')
-        ssh2Service.createNewServer({
+        new ssh2Service({
             host: '127.0.0.1',
             username: 'shengte',
             password: '1992229',

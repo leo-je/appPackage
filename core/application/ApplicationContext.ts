@@ -1,5 +1,4 @@
 import 'reflect-metadata'
-import { Express } from 'express'
 import express from 'express'
 import fs from 'fs';
 import path from 'path'
@@ -10,10 +9,11 @@ import { ControllerManager } from 'core/web/ControllerManager';
 import { ComponentManager } from 'core/component/ComponentManager';
 import { WebsocketManager } from 'core/ws/WebsocketManager';
 import { ApplicationInterface } from 'core/Interface';
+import { ConfigManager } from 'core/component/config/ConfigManager';
 
 
 class Application implements ApplicationInterface {
-    app?: Express; // Express 实例
+    app?: express.Express; // Express 实例
     appPort?: number = 8080;
     scanPath: string[] = ['']
     startTime: Date = new Date()
@@ -23,6 +23,7 @@ class Application implements ApplicationInterface {
     controllerManager: ControllerManager = new ControllerManager()
     componentManager: ComponentManager = new ComponentManager()
     WebsocketManager: WebsocketManager = new WebsocketManager()
+    configManager: ConfigManager = new ConfigManager()
 
     public async scanBean() {
         log(`========================= scan allComponent========================`)
@@ -37,7 +38,7 @@ class Application implements ApplicationInterface {
         })
         return true;
     }
-    
+
     public async readDir(dirPath: string, _rootPath: string) {
         try {
             // log(dirPath)
@@ -72,7 +73,7 @@ class Application implements ApplicationInterface {
 
     }
 
-    public start(): Express {
+    public start(): express.Express {
         let port = this.appPort
         this.app.listen(port, () => {
             log(`[Application] Application listening at: `)
@@ -86,6 +87,11 @@ class Application implements ApplicationInterface {
     }
 
     public applicationStart(p?: { port?: number, scanPath?: string[] }) {
+
+        log(`========================= start Application========================`)
+        log(`========================= read Application config =================`)
+        this.configManager.init()
+        this.appPort = this.configManager.config.service.port
         if (p) {
             if (p.port) {
                 application.appPort = p.port
@@ -94,13 +100,13 @@ class Application implements ApplicationInterface {
                 application.scanPath = p.scanPath
             }
         }
-        log(`========================= start Application========================`)
         // 实例化一个Expres
-        const app: Express = express()
+        const app: express.Express = express()
         this.app = app
 
         // 1.扫描路径
         this.scanBean().then(() => {
+            this.configManager.loadConfig(this.componentManager.componentsOnKey);
             // 2.添加wsController
             this.componentManager.addInjectToComponent()
             this.aspectManager.enableAspect(this.isEnableAspect, this.componentManager.componentsOnName);

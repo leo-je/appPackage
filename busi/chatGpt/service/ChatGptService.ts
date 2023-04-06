@@ -51,7 +51,7 @@ export class ChatGptService {
 
 
     public async conversation(msg: string) {
-        let conversation = await this.chatGptApi.getConversation();
+        let conversation = null;//await this.chatGptApi.getConversation();
         if (!conversation) {
             return {
                 status: -1,

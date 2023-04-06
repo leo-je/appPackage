@@ -13,8 +13,8 @@ class FileInfoController {
     }
 
     @Get("/down/:fileName")
-    downFile(req, res) {
-        this.fileInfoService.downFile(req, res)
+    async downFile(req, res) {
+       await this.fileInfoService.downFile(req, res)
     }
 
     @Post("/delete/:fileName")

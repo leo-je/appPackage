@@ -66,12 +66,12 @@ export class ExportDatasourceService {
 
     }
 
-    response.send({
+    return {
       data: json,
       pageInfo: {
         total: count
       }
-    })
+    }
   }
 }
 
