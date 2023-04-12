@@ -1,4 +1,4 @@
-import { Component, error, log, logger } from "@/core";
+import { error, log } from "@/core";
 import { getFormatDateTime } from "@/core/utils/DateUtils";
 import { ChatGPTAPIBrowser } from 'chatgpt'
 
@@ -19,14 +19,14 @@ export class ChatGptService {
             const api = new ChatGPTAPIBrowser({
                 email: process.env.OPENAI_EMAIL,
                 password: process.env.OPENAI_PASSWORD
-              })
-              await api.init()
-              this.chatGptApi = api
+            })
+            await api.init()
+            this.chatGptApi = api
         } catch (e) {
             error(e)
             log(`[ChatGptService.loadChatGptApi]- refreshAccessToken fail`)
         }
-        
+
     }
 
     public async send2(msg: string) {

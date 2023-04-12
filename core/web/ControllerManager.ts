@@ -1,4 +1,4 @@
-import { log } from "core/utils/CommonUtils";
+import { log } from "../utils/CommonUtils";
 import express from 'express'
 import { CONTROLLER_METADATA, ROUTE_METADATA, PARAM_METADATA, PARSE_METADATA } from "./ControllerMethodDecorator";
 import { handlerFactory, RouteType } from "./utils";

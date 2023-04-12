@@ -5,11 +5,11 @@ import path from 'path'
 
 import { AspectManager } from '../aop/AspectManager';
 import { log } from '../utils/CommonUtils';
-import { ControllerManager } from 'core/web/ControllerManager';
-import { ComponentManager } from 'core/component/ComponentManager';
-import { WebsocketManager } from 'core/ws/WebsocketManager';
-import { ApplicationInterface } from 'core/Interface';
-import { ConfigManager } from 'core/component/config/ConfigManager';
+import { ControllerManager } from '../web/ControllerManager';
+import { ComponentManager } from '../component/ComponentManager';
+import { WebsocketManager } from '../ws/WebsocketManager';
+import { ApplicationInterface } from '../Interface';
+import { ConfigManager } from '../component/config/ConfigManager';
 
 
 class Application implements ApplicationInterface {

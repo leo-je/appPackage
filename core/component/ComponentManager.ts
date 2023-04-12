@@ -1,5 +1,5 @@
-import { ComponentInfo, InjectInfo } from "core/Interface";
-import { log } from "core/utils/CommonUtils";
+import { ComponentInfo, InjectInfo } from "../Interface";
+import { log } from "../utils/CommonUtils";
 
 
 export class ComponentManager {

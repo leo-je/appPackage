@@ -1,6 +1,6 @@
-import { ComponentManager } from 'core/component/ComponentManager';
-import { ControllerManager } from 'core/web/ControllerManager';
-import { WebsocketManager } from 'core/ws/WebsocketManager';
+import { ComponentManager } from '../component/ComponentManager';
+import { ControllerManager } from '../web/ControllerManager';
+import { WebsocketManager } from '../ws/WebsocketManager';
 import express from 'express'
 import { AspectManager } from '../aop/AspectManager';
 

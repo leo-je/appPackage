@@ -1,8 +1,8 @@
 import { ConfigInfo, ValueInfo } from "./Config";
 import fs from 'fs';
 import yaml from 'js-yaml';
-import { log } from "core/utils/CommonUtils";
-import { ComponentInfo } from "core/Interface";
+import { log } from "../../utils/CommonUtils";
+import { ComponentInfo } from "../../Interface";
 
 export class ConfigManager {
     private defConfigFileName = 'Application'

@@ -1,5 +1,5 @@
-import { ComponentInfo, WsRouteType } from "core/Interface";
-import { log } from "core/utils/CommonUtils";
+import { ComponentInfo, WsRouteType } from "../Interface";
+import { log } from "../utils/CommonUtils";
 import expressWS from 'express-ws';
 import { WsService_METADATA } from "./WsService";
 

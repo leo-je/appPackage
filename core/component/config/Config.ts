@@ -1,6 +1,5 @@
-import { application } from "core/application/ApplicationContext"
-import { getTargetId } from "core/utils/CommonUtils"
-import { isPropertyDeclaration } from "typescript"
+import { application } from "../../application/ApplicationContext"
+import { getTargetId } from "../../utils/CommonUtils"
 
 export interface ConfigInfo {
     targetId: string,

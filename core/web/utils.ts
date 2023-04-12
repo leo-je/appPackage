@@ -42,8 +42,11 @@ export function handlerFactory(
       const args = extractParameters(req, res, next, paramList, parseList);
       // const result = await func(...args);
       const result = await instance[functionName](...args);
-      if (result)
+      if (result){
         res.send(result);
+      }else{
+        next()
+      }
     } catch (err) {
       next(err);
     }
