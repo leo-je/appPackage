@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken'
 import { Express } from 'express'
 import { UserService } from '../../busi/user/service/UserService'
 import { config } from '../../service/config'
-import { AutoWired, Component, PreComponent } from '@/core';
-import { getFormatDateTime } from '@/core/utils/DateUtils';
+import { AutoWired, Component, PreComponent } from "@ohuo_ozn/nea";
+import { getFormatDateTime } from "@ohuo_ozn/nea";
 
 @PreComponent()
 export class JwtService {

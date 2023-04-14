@@ -1,7 +1,7 @@
 
 import { Request, Response } from "express"
 import moment from "moment";
-import { AutoWired, Component } from "@/core";
+import { AutoWired, Component } from "@ohuo_ozn/nea";
 import { MysqlService } from "@/sys/service/MysqlService";
 
 const headers = {

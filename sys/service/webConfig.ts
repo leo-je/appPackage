@@ -1,4 +1,4 @@
-import { log, PreComponent } from "@/core";
+import { log, PreComponent } from "@ohuo_ozn/nea";
 import { Express } from 'express'
 import express from 'express'
 import cookieparser from 'cookie-parser'

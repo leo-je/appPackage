@@ -1,5 +1,5 @@
-import { error, log } from "@/core";
-import { getFormatDateTime } from "@/core/utils/DateUtils";
+import { error, log } from "@ohuo_ozn/nea";
+import { getFormatDateTime } from "@ohuo_ozn/nea";
 import { ChatGPTAPIBrowser } from 'chatgpt'
 
 //@Component('chatGptService')

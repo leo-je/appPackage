@@ -1,4 +1,4 @@
-import { PreComponent, PreComponentInterface } from "@/core";
+import { PreComponent, PreComponentInterface } from "@ohuo_ozn/nea";
 import { Express } from "express";
 
 import fs from 'fs';

@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Get, Post } from "@/core";
+import { AutoWired, Controller, Get, Post } from "@ohuo_ozn/nea";
 import { AppPackageSergvice } from "../service/AppPackageSergvice";
 
 

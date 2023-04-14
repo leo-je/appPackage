@@ -1,4 +1,4 @@
-import { Component } from "@/core"
+import { Component } from "@ohuo_ozn/nea";
 
 @Component("userService")
 export class UserService {

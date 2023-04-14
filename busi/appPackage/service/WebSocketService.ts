@@ -1,4 +1,4 @@
-import { EndPoint, WsService } from '@/core';
+import { EndPoint, WsService } from "@ohuo_ozn/nea";
 import {ssh2Service} from '@/service/ssh2Service'
 
 @WsService('', 'webSocketService')

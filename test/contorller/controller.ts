@@ -1,4 +1,4 @@
-import { Controller, Get } from "@/core";
+import { Controller, Get } from "@ohuo_ozn/nea";
 
 @Controller("/test")
 export default class TestController {

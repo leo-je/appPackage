@@ -1,4 +1,4 @@
-import { error, log, PreComponent, PreComponentInterface, Value } from '@/core';
+import { error, log, PreComponent, PreComponentInterface, Value } from "@ohuo_ozn/nea";
 import fs from 'fs';
 import path from 'path';
 const sqlite3 = require('sqlite3').verbose();

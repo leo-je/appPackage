@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Get, Query } from "@/core";
+import { AutoWired, Controller, Get, Query } from "@ohuo_ozn/nea";
 import { ChatGptService } from "../service/ChatGptService";
 
 //@Controller('/api/chatgpt')

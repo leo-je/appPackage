@@ -1,4 +1,4 @@
-import { After, Aspect, Before, log, Pointcut } from '@/core'
+import { After, Aspect, Before, log, Pointcut } from "@ohuo_ozn/nea";
 
 @Aspect()
 class AspectTest {

@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Post } from "@/core";
+import { AutoWired, Controller, Post } from "@ohuo_ozn/nea";
 import { ExportDatasourceService } from "../service/ExportDatasourceService";
 
 
