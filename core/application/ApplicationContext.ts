@@ -122,5 +122,6 @@ class Application implements ApplicationInterface {
     }
 }
 
+log('\n\n-' + new Date())
 log('========================= new Application==========================')
 export const application = new Application()

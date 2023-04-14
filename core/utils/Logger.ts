@@ -1,4 +1,6 @@
 import log4js from 'log4js'; // 加载log4js模块
+import dotenv from 'dotenv'
+dotenv.config();
 
 let appName = process.env.appName || 'app'
 
@@ -9,11 +11,15 @@ let categoriesAppenders = [appName]
 appenders[appName] = { type: "console" }
 
 // 2.文件
-let isUseLogFile = process.env.useLogFile || true
+let useLogFile = process.env.useLogFile
+let isUseLogFile = true
+if (useLogFile === 'false') {
+    isUseLogFile = false
+}
 if (isUseLogFile) {
     let filename = process.env.logFilePath || "logger.log"
     appenders['file'] = { type: "file", filename }
-    categoriesAppenders.push['file']
+    categoriesAppenders.push('file')
 }
 
 

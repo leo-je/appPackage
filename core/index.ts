@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 export * from './web/ControllerMethodDecorator'
 export * from './web/Controller'
 export * from './component/Component'
