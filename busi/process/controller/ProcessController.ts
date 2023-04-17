@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { ExportProcess } from '../service/ExportProcess';
-import { Controller, Post ,AutoWired, Inject} from "@ohuo_ozn/nea";
+import { Controller, Post ,AutoWired, Inject} from "nea-boot";
 
 
 

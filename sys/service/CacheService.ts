@@ -1,4 +1,4 @@
-import { PreComponent, PreComponentInterface } from "@ohuo_ozn/nea";
+import { PreComponent, PreComponentInterface } from "nea-boot";
 import { Express } from "express";
 
 import fs from 'fs';

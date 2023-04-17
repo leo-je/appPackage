@@ -5,7 +5,7 @@ import fs from 'fs'
 import path from 'path'
 import { mime } from './mime'
 import { config } from '../../../service/config'
-import { Component } from "@ohuo_ozn/nea";
+import { Component } from "nea-boot";
 
 const headers = {
   'Access-Control-Allow-Origin': '*', // 允许跨域

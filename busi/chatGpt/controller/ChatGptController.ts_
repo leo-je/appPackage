@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Get, Query } from "@ohuo_ozn/nea";
+import { AutoWired, Controller, Get, Query } from "nea-boot";
 import { ChatGptService } from "../service/ChatGptService";
 
 //@Controller('/api/chatgpt')

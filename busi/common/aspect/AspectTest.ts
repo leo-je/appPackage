@@ -1,4 +1,4 @@
-import { After, Aspect, Before, log, Pointcut } from "@ohuo_ozn/nea";
+import { After, Aspect, Before, log, Pointcut } from "nea-boot";
 
 @Aspect()
 class AspectTest {

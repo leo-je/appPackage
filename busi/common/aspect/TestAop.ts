@@ -1,4 +1,4 @@
-import { Controller, Get } from "@ohuo_ozn/nea";
+import { Controller, Get } from "nea-boot";
 
 
 @Controller('/api/aop')

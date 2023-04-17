@@ -1,4 +1,4 @@
-import { Component } from "@ohuo_ozn/nea";
+import { Component } from "nea-boot";
 
 @Component("userService")
 export class UserService {

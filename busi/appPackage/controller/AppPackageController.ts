@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Get, Post } from "@ohuo_ozn/nea";
+import { AutoWired, Controller, Get, Post } from "nea-boot";
 import { AppPackageSergvice } from "../service/AppPackageSergvice";
 
 

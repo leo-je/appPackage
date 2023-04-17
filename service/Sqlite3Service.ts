@@ -1,4 +1,4 @@
-import { error, log, PreComponent, PreComponentInterface, Value } from "@ohuo_ozn/nea";
+import { error, log, PreComponent, PreComponentInterface, Value } from "nea-boot";
 import fs from 'fs';
 import path from 'path';
 const sqlite3 = require('sqlite3').verbose();

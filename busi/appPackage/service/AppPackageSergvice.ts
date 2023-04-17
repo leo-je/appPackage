@@ -3,7 +3,7 @@ import { exec, cd } from 'shelljs';
 import { config } from '../../../service/config';
 import { WebSocketService } from './WebSocketService';
 import { Request, Response } from "express"
-import { AutoWired, Component } from "@ohuo_ozn/nea";
+import { AutoWired, Component } from "nea-boot";
 import { simpleGit } from 'simple-git';
 import { CacheService } from '@/sys/service/CacheService';
 

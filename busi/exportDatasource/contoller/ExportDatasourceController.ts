@@ -1,4 +1,4 @@
-import { AutoWired, Controller, Post } from "@ohuo_ozn/nea";
+import { AutoWired, Controller, Post } from "nea-boot";
 import { ExportDatasourceService } from "../service/ExportDatasourceService";
 
 

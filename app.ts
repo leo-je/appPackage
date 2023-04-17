@@ -1,4 +1,4 @@
-import { EnableAspect, EnableApplication } from '@ohuo_ozn/nea'
+import { EnableAspect, EnableApplication } from 'nea-boot'
 import 'module-alias/register.js'
 
 @EnableAspect()

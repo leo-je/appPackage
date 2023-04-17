@@ -1,4 +1,4 @@
-import { EndPoint, WsService } from "@ohuo_ozn/nea";
+import { EndPoint, WsService } from "nea-boot";
 import {ssh2Service} from '@/service/ssh2Service'
 
 @WsService('', 'webSocketService')

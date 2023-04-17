@@ -1,5 +1,5 @@
-import { error, log } from "@ohuo_ozn/nea";
-import { getFormatDateTime } from "@ohuo_ozn/nea";
+import { error, log } from "nea-boot";
+import { getFormatDateTime } from "nea-boot";
 import { ChatGPTAPIBrowser } from 'chatgpt'
 
 //@Component('chatGptService')
