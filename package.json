@@ -29,7 +29,7 @@
     "module-alias": "^2.2.2",
     "moment": "^2.29.4",
     "mysql": "^2.18.1",
-    "nea-boot": "^1.0.0",
+    "nea-boot": "^1.0.9",
     "node-xlsx": "^0.21.0",
     "puppeteer": "^19.4.0",
     "reflect-metadata": "^0.1.13",
