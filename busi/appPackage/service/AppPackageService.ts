@@ -13,8 +13,8 @@ let isProcess = false
 let childProcess = null
 let childProcessId = null
 
-@Component("appPackageSergvice")
-export class AppPackageSergvice {
+@Component("appPackageService")
+export class AppPackageService {
 
     @AutoWired('webSocketService')
     private webSocketService: WebSocketService

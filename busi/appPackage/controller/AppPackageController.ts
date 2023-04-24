@@ -1,45 +1,45 @@
 import { AutoWired, Controller, Get, Post } from "nea-boot";
-import { AppPackageSergvice } from "../service/AppPackageSergvice";
+import { AppPackageService } from "../service/AppPackageService";
 
 
 @Controller("/api")
 class AppPackageController {
 
-    @AutoWired("appPackageSergvice")
-    private appPackageSergvice: AppPackageSergvice;
+    @AutoWired("appPackageService")
+    private appPackageService: AppPackageService;
 
     @Post('/packageUatApp')
     packageUatApp(req, res) {
-        this.appPackageSergvice.packageUatApp(req, res);
+        this.appPackageService.packageUatApp(req, res);
     }
     @Post('/getPackageLog')
     getPackageLog(req, res) {
-        this.appPackageSergvice.getPackageLog(req, res);
+        this.appPackageService.getPackageLog(req, res);
     }
 
     @Post('/packageProdApp')
     packageProdApp(req, res) {
-        this.appPackageSergvice.packageProdApp(req, res);
+        this.appPackageService.packageProdApp(req, res);
     }
 
     @Post('/packageDebugApp')
     packageDebugApp(req, res) {
-        this.appPackageSergvice.packageDebugApp(req, res);
+        this.appPackageService.packageDebugApp(req, res);
     }
 
     @Post("/cancelPackageApp")
     cancelPackageApp(req, res) {
-        this.appPackageSergvice.cancelPackageApp(req, res)
+        this.appPackageService.cancelPackageApp(req, res)
     }
 
     @Get("/getAllBranch")
     getAllBranch(req, res) {
-        return this.appPackageSergvice.getAllBranch()
+        return this.appPackageService.getAllBranch()
     }
 
     @Get("/getShData")
     getShData() {
-        return this.appPackageSergvice.getShData()
+        return this.appPackageService.getShData()
     }
 
 }
