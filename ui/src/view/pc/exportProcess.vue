@@ -55,7 +55,7 @@
 import { defineComponent, ref } from "vue";
 import { ElMessage } from 'element-plus';
 
-import http from "../utils/http";
+import http from "../../utils/http";
 
 export default defineComponent({
   setup() {

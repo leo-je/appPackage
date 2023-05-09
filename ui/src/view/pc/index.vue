@@ -7,9 +7,9 @@
           <el-menu :default-active="activeIndex" @select="handleSelect" :router="true">
             <el-sub-menu index="1">
               <template #title><i class="el-icon-message"></i>导航一</template>
-              <el-menu-item index="/appPackage">APP打包</el-menu-item>
-              <el-menu-item index="/exportProcess">流程导出</el-menu-item>
-              <el-menu-item index="/exportDataSource">数据源导出</el-menu-item>
+              <el-menu-item index="/pc/appPackage">APP打包</el-menu-item>
+              <el-menu-item index="/pc/exportProcess">流程导出</el-menu-item>
+              <el-menu-item index="/pc/exportDataSource">数据源导出</el-menu-item>
             </el-sub-menu>
           </el-menu>
         </el-aside>

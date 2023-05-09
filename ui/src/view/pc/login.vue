@@ -4,7 +4,7 @@
     <div class="login_box">
       <!-- 头像区域 -->
       <div class="avatar_box">
-        <img src="../assets/logo.png" />
+        <img src="../../assets/logo.png" />
       </div>
       <!-- 登录表单区域 -->
       <el-form label-width="0px" class="login_form">
@@ -32,7 +32,7 @@
 <script lang="ts">
 import { ElMessage } from 'element-plus';
 import { defineComponent, ref } from 'vue';
-import http from "../utils/http";
+import http from "../../utils/http";
 
 export default defineComponent({
   setup() {

@@ -57,7 +57,7 @@
 import { defineComponent, ref } from "vue";
 import { ElMessage } from 'element-plus';
 import moment from "moment";
-import http from "../utils/http";
+import http from "../../utils/http";
 
 class DataSource {
   id?: string

@@ -111,7 +111,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import http from "../utils/http";
+import http from "../../utils/http";
 import moment from "moment";
 import { ElMessage } from "element-plus";
 import { Terminal } from "xterm";
