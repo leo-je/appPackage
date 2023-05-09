@@ -14,7 +14,7 @@ class FileInfoController {
 
     @Get("/down/:fileName")
     async downFile(req, res) {
-        this.fileInfoService.downFile(req, res)
+        return this.fileInfoService.downFile(req, res)
     }
 
     @Post("/delete/:fileName")

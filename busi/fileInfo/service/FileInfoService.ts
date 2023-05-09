@@ -85,55 +85,57 @@ export class FileInfoService {
       response.end()
     }
 
-    fs.stat(filePath, (err, stats) => {
-      // 未找到文件
-      if (err) {
-        headers['Content-Type'] = 'text/html'
-        response.writeHead(404, headers)
-        response.end("<h1>404 Not Found</h1>")
+    let stats = fs.statSync(filePath);
+
+    // 未找到文件
+    if (!stats) {
+      throw new Error(`File ${filePath} does not exist`)
+    }
+
+    // 文件
+    if (stats && stats.isFile()) {
+      let data = fs.readFileSync(filePath);
+      if (data) {
+        console.log('send file')
+        console.log(data)
+        headers['Content-Type'] = 'application/octet-stream'
+        // this.send(response, 200, headers, data)
+        return data
+      } else {
+        throw new Error(`file not found`)
       }
+    }
 
-      // 文件
-      if (!err && stats.isFile()) {
-        fs.readFile(filePath, (err, data) => {
-          if (err) {
-            response.writeHead(500, headers)
-            response.end('<h1>500 Server Error</h1>')
-          }
-
-          response.writeHead(200, headers);
-          response.end(data)
-        })
-      }
-
-      // 目录
-      if (!err && stats.isDirectory()) {
-        var html = '<head><meta charset="utf-8" /></head>'
-
-        fs.readdir(filePath, (err, files) => {
-          if (err) {
-
-            html += `<div>读取路径失败！</div>`
-            response.writeHead(404, headers)
-            response.end(html)
-
-          } else {
-            headers['Content-Type'] = 'text/html'
-            response.writeHead(200, headers)
-
-            for (var file of files) {
-              if (file === 'index.html') {
-                response.end(file)
-                break
-              }
-
-              html += `<div><a href="${file}">${file}</a></div>`
+    // 目录
+    else if (stats && stats.isDirectory()) {
+      var html = '<head><meta charset="utf-8" /></head>'
+      fs.readdir(filePath, (err, files) => {
+        if (err) {
+          html += `<div>读取路径失败！</div>`
+          this.send(response,404, headers,html)
+        } else {
+          headers['Content-Type'] = 'text/html'
+          response.writeHead(200, headers)
+          for (var file of files) {
+            if (file === 'index.html') {
+              response.end(file)
+              break
             }
-            response.end(html)
+            html += `<div><a href="${file}">${file}</a></div>`
           }
-        })
-      }
-    })
+          response.end(html)
+        }
+      })
+    }
+  }
+
+  public send(response, status, headers, data) {
+    try {
+      response.writeHead(200, headers);
+      response.end(data)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   delete = (req: Request, response: Response) => {
