@@ -74,7 +74,7 @@ export default defineComponent({
 #left-aside{
   z-index: 100;
   position: absolute;
-  height: 90%;
+  height: 85%;
 }
 .el-aside {
   background-color: #d3dce6;
