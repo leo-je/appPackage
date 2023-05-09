@@ -14,7 +14,7 @@ export default defineComponent({
     let pathname = window.location.pathname
     let token = sessionStorage.getItem("access-user")
     if (!token) {
-      this.$router.push({ path: "/login" });
+      this.$router.push({ path: "/pccomm/login" });
     } else
       this.$router.push({ path: pathname || "/" });
   }

@@ -54,8 +54,13 @@ const routerInfos: Array<RouterInfo> = [
         componentPath: '../view/pc/401.vue',
     },
     {
-        path: '/login',
-        name: 'login',
+        path: '/mbcomm/login',
+        name: 'mb-login',
+        componentPath: '../view/mb/login.vue',
+    },
+    {
+        path: '/pccomm/login',
+        name: 'pc-login',
         componentPath: '../view/pc/login.vue',
     }
 
@@ -95,9 +100,7 @@ let router = createRouter({
 
 router.beforeEach((to, from, next) => {
     let path = null
-    if (to.path === '/login' || to.path === '/401') {
-        //next()
-    } else if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+    if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
         if (to.path.indexOf('/pc') !== -1) {
             path = to.path.replace('/pc', '/mb')
         } else {
