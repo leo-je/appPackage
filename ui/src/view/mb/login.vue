@@ -97,7 +97,7 @@ export default defineComponent({
 }
 .login_box {
   // 宽450像素
-  width: 95%;
+  width: 90%;
   // 高300像素
   height: 300px;
   // 背景颜色
