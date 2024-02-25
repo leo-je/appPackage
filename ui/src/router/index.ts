@@ -23,6 +23,11 @@ const routerInfos: Array<RouterInfo> = [
                 path: '/exportDataSource',
                 name: 'exportDataSource',
                 componentPath: '../view/exportDataSource.vue',
+            },
+            {
+                path: '/gantt',
+                name: 'GSTC',
+                componentPath: '../view/gantt.vue',
             }
         ]
     },

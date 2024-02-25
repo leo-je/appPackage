@@ -10,6 +10,7 @@
               <el-menu-item index="/appPackage">APP打包</el-menu-item>
               <el-menu-item index="/exportProcess">流程导出</el-menu-item>
               <el-menu-item index="/exportDataSource">数据源导出</el-menu-item>
+              <el-menu-item index="/gantt">甘特图</el-menu-item>
             </el-sub-menu>
           </el-menu>
         </el-aside>
